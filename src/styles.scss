@@ -1,20 +1,14 @@
+// theme
 @use "@angular/material" as mat;
-// beginning custom
-@use "./styles/colors";
 @use "./styles/spacing";
 @use "./styles/typography";
 @use "./styles/breakpoints";
-// end custom
-@include mat.core();
 
-$fila-conferencia-primary: mat.define-palette(mat.$indigo-palette);
-$fila-conferencia-accent: mat.define-palette(
-  mat.$pink-palette,
-  A200,
-  A100,
-  A400
-);
+@include mat.core();
+$fila-conferencia-primary: mat.define-palette(mat.$green-palette, 700);
+$fila-conferencia-accent: mat.define-palette(mat.$light-green-palette, A400);
 $fila-conferencia-warn: mat.define-palette(mat.$red-palette);
+
 $fila-conferencia-theme: mat.define-light-theme(
   (
     color: (
@@ -22,12 +16,46 @@ $fila-conferencia-theme: mat.define-light-theme(
       accent: $fila-conferencia-accent,
       warn: $fila-conferencia-warn,
     ),
-    typography: mat.define-typography-config(),
-    density: 0,
   )
 );
 @include mat.all-component-themes($fila-conferencia-theme);
 
+// tokens
+:root {
+  /* Brand */
+  --color-primary: #{mat.get-color-from-palette($fila-conferencia-primary)};
+  --color-primary-hover: #{mat.get-color-from-palette(
+      $fila-conferencia-primary,
+      darker
+    )};
+  --color-accent: #{mat.get-color-from-palette($fila-conferencia-accent)};
+  --color-warn: #{mat.get-color-from-palette($fila-conferencia-warn)};
+
+  /* Surfaces */
+  --color-bg: #f5f7fa;
+  --color-surface: #ffffff;
+  --color-border: rgba(0, 0, 0, 0.12);
+
+  /* Text */
+  --color-text-primary: rgba(0, 0, 0, 0.87);
+  --color-text-secondary: rgba(0, 0, 0, 0.6);
+
+  /* Contrast */
+  --color-on-primary: #{mat.get-color-from-palette(
+      $fila-conferencia-primary,
+      default-contrast
+    )};
+  --color-on-accent: #{mat.get-color-from-palette(
+      $fila-conferencia-accent,
+      default-contrast
+    )};
+  --color-on-warn: #{mat.get-color-from-palette(
+      $fila-conferencia-warn,
+      default-contrast
+    )};
+}
+
+// custom scss
 html,
 body {
   height: 100%;

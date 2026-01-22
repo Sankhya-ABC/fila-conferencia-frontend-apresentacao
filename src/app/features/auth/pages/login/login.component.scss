@@ -26,6 +26,7 @@
 
   h1 {
     font-size: $font-2xl;
+    color: var(--color-primary);
     margin: 0;
   }
 
@@ -52,8 +53,8 @@
 .overlay {
   position: absolute;
   inset: 0;
-  background: rgba(0, 0, 0, 0.45);
-  color: #fff;
+  background: var(--color-primary);
+  color: var(--color-surface);
   display: flex;
   flex-direction: column;
   justify-content: center;
