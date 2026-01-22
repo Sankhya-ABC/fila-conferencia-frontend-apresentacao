@@ -1,12 +1,12 @@
-import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router, NavigationEnd } from '@angular/router';
-import { filter } from 'rxjs';
+import { Component } from '@angular/core';
+import { NavigationEnd, Router } from '@angular/router';
+import { filter } from 'rxjs/operators';
 
-import { MatToolbarModule } from '@angular/material/toolbar';
-import { MatMenuModule } from '@angular/material/menu';
-import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatToolbarModule } from '@angular/material/toolbar';
 
 @Component({
   selector: 'app-header',
@@ -23,17 +23,23 @@ import { MatButtonModule } from '@angular/material/button';
 })
 export class HeaderComponent {
   title = '';
+  showHeader = true;
 
   constructor(private router: Router) {
     this.router.events
-      .pipe(filter((event) => event instanceof NavigationEnd))
-      .subscribe(() => {
-        const route = this.router.routerState.snapshot.root;
-        this.title = this.getRouteTitle(route);
+      .pipe(
+        filter(
+          (event): event is NavigationEnd => event instanceof NavigationEnd,
+        ),
+      )
+      .subscribe((event) => {
+        this.showHeader = !event.urlAfterRedirects.startsWith('/login');
+        this.title = this.getRouteTitle();
       });
   }
 
-  private getRouteTitle(route: any): string {
+  private getRouteTitle(): string {
+    let route = this.router.routerState.snapshot.root;
     while (route.firstChild) {
       route = route.firstChild;
     }
