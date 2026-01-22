@@ -1,27 +1,95 @@
-<section class="page">
-  <mat-card class="table-card">
-    <table mat-table [dataSource]="data">
-      <ng-container matColumnDef="pedido">
-        <th mat-header-cell *matHeaderCellDef>Pedido</th>
-        <td mat-cell *matCellDef="let row">{{ row.pedido }}</td>
-      </ng-container>
+<div class="filtro-container">
+  <mat-form-field appearance="fill">
+    <mat-label>Status</mat-label>
+    <mat-select
+      [value]="statusFilter"
+      (selectionChange)="onStatusChange($event)"
+    >
+      <mat-option *ngFor="let s of statusOptions" [value]="s">{{
+        s
+      }}</mat-option>
+    </mat-select>
+  </mat-form-field>
 
-      <ng-container matColumnDef="cliente">
-        <th mat-header-cell *matHeaderCellDef>Cliente</th>
-        <td mat-cell *matCellDef="let row">{{ row.cliente }}</td>
-      </ng-container>
+  <mat-form-field appearance="fill">
+    <mat-label>Tipo Movimento</mat-label>
+    <mat-select (selectionChange)="onTipoMovimentoChange($event)">
+      <mat-option [value]="undefined">Todos</mat-option>
+      <mat-option *ngFor="let t of tipoMovimentoOptions" [value]="t">{{
+        t
+      }}</mat-option>
+    </mat-select>
+  </mat-form-field>
 
-      <ng-container matColumnDef="status">
-        <th mat-header-cell *matHeaderCellDef>Status</th>
-        <td mat-cell *matCellDef="let row">
-          <span class="status" [class.ok]="row.status === 'OK'">
-            {{ row.status }}
-          </span>
-        </td>
-      </ng-container>
+  <mat-form-field appearance="fill">
+    <mat-label>Tipo Operação</mat-label>
+    <mat-select (selectionChange)="onTipoOperacaoChange($event)">
+      <mat-option [value]="undefined">Todos</mat-option>
+      <mat-option *ngFor="let t of tipoOperacaoOptions" [value]="t">{{
+        t
+      }}</mat-option>
+    </mat-select>
+  </mat-form-field>
 
-      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-    </table>
-  </mat-card>
-</section>
+  <mat-form-field appearance="fill">
+    <mat-label>Tipo Entrega</mat-label>
+    <mat-select (selectionChange)="onTipoEntregaChange($event)">
+      <mat-option [value]="undefined">Todos</mat-option>
+      <mat-option *ngFor="let t of tipoEntregaOptions" [value]="t">{{
+        t
+      }}</mat-option>
+    </mat-select>
+  </mat-form-field>
+</div>
+
+<mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+  <ng-container matColumnDef="status">
+    <mat-header-cell *matHeaderCellDef>Status</mat-header-cell>
+    <mat-cell *matCellDef="let element">{{ element.status }}</mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="numeroNota">
+    <mat-header-cell *matHeaderCellDef>Número Nota</mat-header-cell>
+    <mat-cell *matCellDef="let element">{{ element.numeroNota }}</mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="tipoMovimento">
+    <mat-header-cell *matHeaderCellDef>Tipo Movimento</mat-header-cell>
+    <mat-cell *matCellDef="let element">{{ element.tipoMovimento }}</mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="tipoOperacao">
+    <mat-header-cell *matHeaderCellDef>Tipo Operação</mat-header-cell>
+    <mat-cell *matCellDef="let element">{{ element.tipoOperacao }}</mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="tipoEntrega">
+    <mat-header-cell *matHeaderCellDef>Tipo Entrega</mat-header-cell>
+    <mat-cell *matCellDef="let element">{{ element.tipoEntrega }}</mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="nomeParceiro">
+    <mat-header-cell *matHeaderCellDef>Parceiro</mat-header-cell>
+    <mat-cell *matCellDef="let element">{{ element.nomeParceiro }}</mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="valorNota">
+    <mat-header-cell *matHeaderCellDef>Valor</mat-header-cell>
+    <mat-cell *matCellDef="let element">{{ element.valorNota }}</mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="dataMovimento">
+    <mat-header-cell *matHeaderCellDef>Data</mat-header-cell>
+    <mat-cell *matCellDef="let element">{{
+      element.dataMovimento | date: "shortDate"
+    }}</mat-cell>
+  </ng-container>
+
+  <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+  <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
+</mat-table>
+
+<mat-paginator
+  [pageSizeOptions]="[5, 10, 20]"
+  showFirstLastButtons
+></mat-paginator>

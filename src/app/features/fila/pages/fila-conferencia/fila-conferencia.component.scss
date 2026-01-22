@@ -1,20 +1,14 @@
 @use "../../../../../styles/spacing" as *;
+@use "../../../../../styles/typography" as *;
+@use "../../../../../styles/breakpoints" as *;
 
-.page {
-  padding: $space-24;
+.filtro-container {
+  display: flex;
+  gap: $space-15;
+  flex-wrap: wrap;
+  margin-bottom: $space-15;
 }
 
-.table-card {
-  overflow-x: auto;
-}
-
-.status {
-  padding: $space-6 $space-12;
-  border-radius: 6px;
-  background: var(--color-warn);
-  color: #fff;
-
-  &.ok {
-    background: var(--color-accent);
-  }
+mat-form-field {
+  width: 200px;
 }
