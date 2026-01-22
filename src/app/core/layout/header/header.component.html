@@ -1,0 +1,26 @@
+<mat-toolbar class="header">
+  <span class="title">{{ title }}</span>
+
+  <span class="spacer"></span>
+
+  <button mat-icon-button [matMenuTriggerFor]="menu" class="avatar-button">
+    <span class="avatar">AS</span>
+  </button>
+
+  <mat-menu #menu="matMenu">
+    <button mat-menu-item>
+      <mat-icon>person</mat-icon>
+      <span>Ver perfil</span>
+    </button>
+
+    <button mat-menu-item (click)="toggleTheme()">
+      <mat-icon>dark_mode</mat-icon>
+      <span>Alterar tema</span>
+    </button>
+
+    <button mat-menu-item (click)="logout()">
+      <mat-icon>logout</mat-icon>
+      <span>Sair</span>
+    </button>
+  </mat-menu>
+</mat-toolbar>
