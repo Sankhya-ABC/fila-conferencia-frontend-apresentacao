@@ -8,10 +8,10 @@
   padding: 0 $space-24;
 }
 
-.title {
-  font-size: $font-xl;
+h2 {
+  font-size: $font-xl !important;
   color: var(--color-primary);
-  font-weight: 500;
+  font-weight: bold !important;
 }
 
 .spacer {
@@ -26,8 +26,8 @@
 }
 
 .avatar {
-  width: 36px;
-  height: 36px;
+  width: 46px;
+  height: 46px;
   border-radius: 50%;
   background: var(--color-primary);
   color: #fff;

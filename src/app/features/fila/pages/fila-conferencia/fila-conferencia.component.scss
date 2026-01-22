@@ -5,11 +5,10 @@
 .filtros-container {
   display: flex;
   flex-wrap: wrap;
-  gap: $space-15;
-  margin-bottom: $space-15;
-}
+  gap: $space-16;
 
-.filtros-container mat-form-field {
-  flex: 1 1 calc(25% - #{$space-15});
-  min-width: 200px;
+  mat-form-field {
+    box-sizing: border-box;
+    flex: 0 0 calc(25% - $space-12);
+  }
 }

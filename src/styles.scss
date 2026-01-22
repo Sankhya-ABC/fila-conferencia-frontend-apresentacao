@@ -55,7 +55,7 @@ $fila-conferencia-theme: mat.define-light-theme(
     )};
 }
 
-// custom scss
+// basic
 html,
 body {
   height: 100%;
@@ -71,7 +71,7 @@ body {
 // label
 mat-error {
   font-size: typography.$font-xs;
-  margin-bottom: 9px;
+  margin-bottom: spacing.$space-9;
 }
 
 // scrolls
@@ -82,13 +82,13 @@ mat-error {
 
 ::-webkit-scrollbar-track {
   background: rgba(0, 0, 0, 0.05);
-  border-radius: 6px;
+  border-radius: spacing.$space-6;
 }
 
 ::-webkit-scrollbar-thumb {
   background-color: var(--color-primary);
-  border-radius: 6px;
-  border: 3px solid rgba(0, 0, 0, 0);
+  border-radius: spacing.$space-6;
+  border: spacing.$space-3 solid rgba(0, 0, 0, 0);
   background-clip: padding-box;
 }
 
@@ -109,11 +109,13 @@ mat-error {
   mat-header-cell,
   mat-cell {
     min-width: 110px;
-    padding: 8px;
+    padding: spacing.$space-9;
     box-sizing: border-box;
+    font-size: typography.$font-sm;
   }
 
   mat-header-cell {
     color: var(--color-primary);
+    font-weight: 600;
   }
 }
