@@ -2,13 +2,17 @@
 @use "../../../../../styles/typography" as *;
 @use "../../../../../styles/breakpoints" as *;
 
-.filtro-container {
+.filtros-container {
   display: flex;
-  gap: $space-15;
   flex-wrap: wrap;
+  gap: $space-15;
   margin-bottom: $space-15;
 }
 
 mat-form-field {
   width: 200px;
+}
+
+mat-table {
+  width: 100%;
 }

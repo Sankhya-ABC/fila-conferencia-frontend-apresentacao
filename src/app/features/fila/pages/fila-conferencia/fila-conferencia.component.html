@@ -1,4 +1,4 @@
-<div class="filtro-container">
+<div class="filtros-container">
   <mat-form-field appearance="fill">
     <mat-label>Status</mat-label>
     <mat-select
@@ -48,9 +48,31 @@
     <mat-cell *matCellDef="let element">{{ element.status }}</mat-cell>
   </ng-container>
 
+  <ng-container matColumnDef="idEmpresa">
+    <mat-header-cell *matHeaderCellDef>Empresa</mat-header-cell>
+    <mat-cell *matCellDef="let element">{{ element.idEmpresa }}</mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="numeroModial">
+    <mat-header-cell *matHeaderCellDef>Número Modial</mat-header-cell>
+    <mat-cell *matCellDef="let element">{{ element.numeroModial }}</mat-cell>
+  </ng-container>
+
   <ng-container matColumnDef="numeroNota">
     <mat-header-cell *matHeaderCellDef>Número Nota</mat-header-cell>
     <mat-cell *matCellDef="let element">{{ element.numeroNota }}</mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="numeroUnico">
+    <mat-header-cell *matHeaderCellDef>Número Único</mat-header-cell>
+    <mat-cell *matCellDef="let element">{{ element.numeroUnico }}</mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="dataMovimento">
+    <mat-header-cell *matHeaderCellDef>Data Movimento</mat-header-cell>
+    <mat-cell *matCellDef="let element">{{
+      element.dataMovimento | date: "short"
+    }}</mat-cell>
   </ng-container>
 
   <ng-container matColumnDef="tipoMovimento">
@@ -73,15 +95,37 @@
     <mat-cell *matCellDef="let element">{{ element.nomeParceiro }}</mat-cell>
   </ng-container>
 
+  <ng-container matColumnDef="numeroParceiro">
+    <mat-header-cell *matHeaderCellDef>Número Parceiro</mat-header-cell>
+    <mat-cell *matCellDef="let element">{{ element.numeroParceiro }}</mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="numeroVendedor">
+    <mat-header-cell *matHeaderCellDef>Número Vendedor</mat-header-cell>
+    <mat-cell *matCellDef="let element">{{ element.numeroVendedor }}</mat-cell>
+  </ng-container>
+
   <ng-container matColumnDef="valorNota">
-    <mat-header-cell *matHeaderCellDef>Valor</mat-header-cell>
+    <mat-header-cell *matHeaderCellDef>Valor Nota</mat-header-cell>
     <mat-cell *matCellDef="let element">{{ element.valorNota }}</mat-cell>
   </ng-container>
 
-  <ng-container matColumnDef="dataMovimento">
-    <mat-header-cell *matHeaderCellDef>Data</mat-header-cell>
+  <ng-container matColumnDef="volume">
+    <mat-header-cell *matHeaderCellDef>Volume</mat-header-cell>
+    <mat-cell *matCellDef="let element">{{ element.volume }}</mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="idUsuarioInclusao">
+    <mat-header-cell *matHeaderCellDef>Usuário Inclusão</mat-header-cell>
     <mat-cell *matCellDef="let element">{{
-      element.dataMovimento | date: "shortDate"
+      element.idUsuarioInclusao
+    }}</mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="idUsuarioAlteracao">
+    <mat-header-cell *matHeaderCellDef>Usuário Alteração</mat-header-cell>
+    <mat-cell *matCellDef="let element">{{
+      element.idUsuarioAlteracao
     }}</mat-cell>
   </ng-container>
 

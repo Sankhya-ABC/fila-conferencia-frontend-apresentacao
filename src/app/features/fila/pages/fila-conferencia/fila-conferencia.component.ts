@@ -1,6 +1,8 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatSelectChange, MatSelectModule } from '@angular/material/select';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
@@ -18,24 +20,34 @@ import { FilaConferenciaService } from './fila-conferencia.service';
   standalone: true,
   imports: [
     CommonModule,
+    FormsModule,
     MatTableModule,
     MatPaginatorModule,
     MatFormFieldModule,
     MatSelectModule,
+    MatInputModule,
   ],
   templateUrl: './fila-conferencia.component.html',
   styleUrls: ['./fila-conferencia.component.scss'],
 })
-export class FilaConferenciaComponent implements OnInit {
+export class FilaConferenciaComponent implements OnInit, AfterViewInit {
   displayedColumns: string[] = [
     'status',
+    'idEmpresa',
+    'numeroModial',
     'numeroNota',
+    'numeroUnico',
+    'dataMovimento',
     'tipoMovimento',
     'tipoOperacao',
     'tipoEntrega',
     'nomeParceiro',
+    'numeroParceiro',
+    'numeroVendedor',
     'valorNota',
-    'dataMovimento',
+    'volume',
+    'idUsuarioInclusao',
+    'idUsuarioAlteracao',
   ];
 
   dataSource = new MatTableDataSource<FilaConferenciaDTO>([]);
@@ -61,7 +73,7 @@ export class FilaConferenciaComponent implements OnInit {
   }
 
   ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator; // paginator setado depois do view init
+    this.dataSource.paginator = this.paginator;
   }
 
   applyFilter() {
@@ -81,7 +93,7 @@ export class FilaConferenciaComponent implements OnInit {
         !this.tipoEntregaFilter || data.tipoEntrega === this.tipoEntregaFilter;
       return statusOk && tipoMovOk && tipoOpOk && tipoEntOk;
     };
-    this.dataSource.filter = '' + Math.random(); // força atualização da tabela
+    this.dataSource.filter = '' + Math.random();
   }
 
   onStatusChange(event: MatSelectChange) {
