@@ -1,0 +1,20 @@
+@use "../../../../../styles/spacing" as *;
+
+.page {
+  padding: $space-24;
+}
+
+.table-card {
+  overflow-x: auto;
+}
+
+.status {
+  padding: $space-6 $space-12;
+  border-radius: 6px;
+  background: var(--color-warn);
+  color: #fff;
+
+  &.ok {
+    background: var(--color-accent);
+  }
+}
