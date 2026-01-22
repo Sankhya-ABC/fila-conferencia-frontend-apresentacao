@@ -1,13 +1,42 @@
-@use "styles/colors";
-@use "styles/spacing";
-@use "styles/typography";
-@use "styles/breakpoints";
+@use "@angular/material" as mat;
+// beginning custom
+@use "./styles/colors";
+@use "./styles/spacing";
+@use "./styles/typography";
+@use "./styles/breakpoints";
+// end custom
+@include mat.core();
+
+$fila-conferencia-primary: mat.define-palette(mat.$indigo-palette);
+$fila-conferencia-accent: mat.define-palette(
+  mat.$pink-palette,
+  A200,
+  A100,
+  A400
+);
+$fila-conferencia-warn: mat.define-palette(mat.$red-palette);
+$fila-conferencia-theme: mat.define-light-theme(
+  (
+    color: (
+      primary: $fila-conferencia-primary,
+      accent: $fila-conferencia-accent,
+      warn: $fila-conferencia-warn,
+    ),
+    typography: mat.define-typography-config(),
+    density: 0,
+  )
+);
+@include mat.all-component-themes($fila-conferencia-theme);
 
 html,
 body {
+  height: 100%;
+}
+body {
   margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+  // custom
   padding: 0;
   background: var(--color-bg);
   color: var(--color-text-primary);
-  font-family: Roboto, "Helvetica Neue", sans-serif;
 }

@@ -1,17 +1,90 @@
 @use "../../../../../styles/spacing" as *;
+@use "../../../../../styles/typography" as *;
+@use "../../../../../styles/breakpoints" as *;
 
-.login-container {
+.login-page {
+  display: flex;
   height: 100vh;
+}
+
+// form
+.login-form {
+  flex: 1;
   display: flex;
   align-items: center;
   justify-content: center;
+  background: var(--color-surface);
 }
 
-.login-card {
+.form-wrapper {
   width: 100%;
   max-width: 360px;
   padding: $space-24;
   display: flex;
   flex-direction: column;
-  gap: $space-18;
+  gap: $space-3;
+
+  h1 {
+    font-size: $font-2xl;
+    margin: 0;
+  }
+
+  .subtitle {
+    font-size: $font-sm;
+    color: var(--color-text-secondary);
+    margin-bottom: $space-12;
+  }
+
+  button {
+    height: 40px;
+  }
+}
+
+// image
+.login-image {
+  flex: 1;
+  background-image: url("/assets/images/fila-conferencia.jpg");
+  background-size: cover;
+  background-position: center;
+  position: relative;
+}
+
+.overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: $space-30;
+
+  h2 {
+    font-size: $font-xl;
+    margin-bottom: $space-9;
+  }
+
+  p {
+    font-size: $font-sm;
+    max-width: 300px;
+  }
+}
+
+// mobile
+@media (max-width: $mobile) {
+  .login-page {
+    flex-direction: column;
+  }
+
+  .login-image {
+    height: 180px;
+  }
+
+  .overlay {
+    justify-content: flex-end;
+  }
+
+  .login-form {
+    flex: none;
+  }
 }
