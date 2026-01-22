@@ -1,13 +1,19 @@
 import { CommonModule } from '@angular/common';
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatNativeDateModule, MatOptionModule } from '@angular/material/core';
+import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
-import { MatSelectChange, MatSelectModule } from '@angular/material/select';
+import { MatSelectModule } from '@angular/material/select';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
+import { Observable, map, startWith } from 'rxjs';
 import {
   FilaConferenciaDTO,
+  ParceiroDTO,
   Status,
   TipoEntrega,
   TipoMovimento,
@@ -21,16 +27,25 @@ import { FilaConferenciaService } from './fila-conferencia.service';
   imports: [
     CommonModule,
     FormsModule,
+    ReactiveFormsModule,
     MatTableModule,
     MatPaginatorModule,
     MatFormFieldModule,
-    MatSelectModule,
     MatInputModule,
+    MatSelectModule,
+    MatOptionModule,
+    MatAutocompleteModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    MatIconModule,
   ],
   templateUrl: './fila-conferencia.component.html',
   styleUrls: ['./fila-conferencia.component.scss'],
 })
-export class FilaConferenciaComponent implements OnInit, AfterViewInit {
+export class FilaConferenciaComponent implements OnInit {
+  constructor(private service: FilaConferenciaService) {}
+
+  // tabela
   displayedColumns: string[] = [
     'status',
     'idEmpresa',
@@ -49,31 +64,64 @@ export class FilaConferenciaComponent implements OnInit, AfterViewInit {
     'idUsuarioInclusao',
     'idUsuarioAlteracao',
   ];
-
   dataSource = new MatTableDataSource<FilaConferenciaDTO>([]);
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
 
+  // filtros
   statusFilter = Status.TODOS;
   tipoMovimentoFilter?: TipoMovimento;
   tipoOperacaoFilter?: TipoOperacao;
   tipoEntregaFilter?: TipoEntrega;
+  numeroModialFilter = '';
+  numeroNotaFilter = '';
+  numeroUnicoFilter = '';
+  parceiroCtrl = new FormControl('');
+  parceiroSelecionado?: ParceiroDTO;
+  dataInicioFilter?: Date;
+  dataFimFilter?: Date;
 
+  // selects
   statusOptions = Object.values(Status);
   tipoMovimentoOptions = Object.values(TipoMovimento);
   tipoOperacaoOptions = Object.values(TipoOperacao);
   tipoEntregaOptions = Object.values(TipoEntrega);
 
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
-
-  constructor(private service: FilaConferenciaService) {}
+  // autocomplete
+  parceiros: ParceiroDTO[] = [];
+  filteredParceiros$!: Observable<ParceiroDTO[]>;
 
   ngOnInit(): void {
     this.service.getFila().subscribe((dados) => {
       this.dataSource.data = dados;
+      this.dataSource.paginator = this.paginator;
+    });
+
+    this.service.getParceiros().subscribe((data: any) => {
+      this.parceiros = data;
+      this.filteredParceiros$ = this.parceiroCtrl.valueChanges.pipe(
+        startWith(''),
+        map((value) => this._filterParceiros(value ?? '')),
+      );
     });
   }
 
-  ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator;
+  private _filterParceiros(value: string | ParceiroDTO): ParceiroDTO[] {
+    const filterValue =
+      typeof value === 'string'
+        ? value.toLowerCase()
+        : value.nome.toLowerCase();
+    return this.parceiros.filter((p) =>
+      p.nome.toLowerCase().includes(filterValue),
+    );
+  }
+
+  displayParceiro(parceiro: ParceiroDTO): string {
+    return parceiro ? parceiro.nome : '';
+  }
+
+  onParceiroSelected(parceiro: ParceiroDTO) {
+    this.parceiroSelecionado = parceiro;
+    this.applyFilter();
   }
 
   applyFilter() {
@@ -91,28 +139,61 @@ export class FilaConferenciaComponent implements OnInit, AfterViewInit {
         data.tipoOperacao === this.tipoOperacaoFilter;
       const tipoEntOk =
         !this.tipoEntregaFilter || data.tipoEntrega === this.tipoEntregaFilter;
-      return statusOk && tipoMovOk && tipoOpOk && tipoEntOk;
+
+      const modialOk =
+        !this.numeroModialFilter ||
+        data.numeroModial.includes(this.numeroModialFilter);
+      const notaOk =
+        !this.numeroNotaFilter ||
+        data.numeroNota.includes(this.numeroNotaFilter);
+      const unicoOk =
+        !this.numeroUnicoFilter ||
+        data.numeroUnico.includes(this.numeroUnicoFilter);
+      const parceiroOk =
+        !this.parceiroSelecionado ||
+        data.nomeParceiro === this.parceiroSelecionado.nome;
+
+      const dataInicioOk =
+        !this.dataInicioFilter ||
+        new Date(data.dataMovimento) >= this.dataInicioFilter;
+      const dataFimOk =
+        !this.dataFimFilter ||
+        new Date(data.dataMovimento) <= this.dataFimFilter;
+
+      return (
+        statusOk &&
+        tipoMovOk &&
+        tipoOpOk &&
+        tipoEntOk &&
+        modialOk &&
+        notaOk &&
+        unicoOk &&
+        parceiroOk &&
+        dataInicioOk &&
+        dataFimOk
+      );
     };
+
     this.dataSource.filter = '' + Math.random();
   }
 
-  onStatusChange(event: MatSelectChange) {
-    this.statusFilter = event.value;
+  onStatusChange(value: any) {
+    this.statusFilter = value;
     this.applyFilter();
   }
 
-  onTipoMovimentoChange(event: MatSelectChange) {
-    this.tipoMovimentoFilter = event.value;
+  onTipoMovimentoChange(value: any) {
+    this.tipoMovimentoFilter = value;
     this.applyFilter();
   }
 
-  onTipoOperacaoChange(event: MatSelectChange) {
-    this.tipoOperacaoFilter = event.value;
+  onTipoOperacaoChange(value: any) {
+    this.tipoOperacaoFilter = value;
     this.applyFilter();
   }
 
-  onTipoEntregaChange(event: MatSelectChange) {
-    this.tipoEntregaFilter = event.value;
+  onTipoEntregaChange(value: any) {
+    this.tipoEntregaFilter = value;
     this.applyFilter();
   }
 }

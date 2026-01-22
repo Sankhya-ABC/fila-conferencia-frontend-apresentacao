@@ -9,22 +9,7 @@
   margin-bottom: $space-15;
 }
 
-mat-form-field {
-  width: 200px;
-}
-
-.table-container {
-  width: 100%;
-  overflow-x: auto;
-}
-
-mat-table {
-  min-width: 100%;
-}
-
-mat-header-cell,
-mat-cell {
-  min-width: 110px;
-  padding: 8px;
-  box-sizing: border-box;
+.filtros-container mat-form-field {
+  flex: 1 1 calc(25% - #{$space-15});
+  min-width: 200px;
 }

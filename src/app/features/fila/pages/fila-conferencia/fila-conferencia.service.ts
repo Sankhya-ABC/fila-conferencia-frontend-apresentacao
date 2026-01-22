@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import {
   FilaConferenciaDTO,
+  ParceiroDTO,
   Status,
   TipoEntrega,
   TipoMovimento,
@@ -12,7 +13,7 @@ import {
   providedIn: 'root',
 })
 export class FilaConferenciaService {
-  private dados: FilaConferenciaDTO[] = [
+  private filaConferencias: FilaConferenciaDTO[] = [
     {
       status: Status.AGUARDANDO_CONFERENCIA,
       idEmpresa: '123',
@@ -52,6 +53,16 @@ export class FilaConferenciaService {
   ];
 
   getFila(): Observable<FilaConferenciaDTO[]> {
-    return of(this.dados);
+    return of(this.filaConferencias);
+  }
+
+  private parceiros: ParceiroDTO[] = [
+    { id: '1', nome: 'Empresa A', cpfCnpj: '12345678901' },
+    { id: '2', nome: 'Empresa B', cpfCnpj: '98765432100' },
+    { id: '3', nome: 'Empresa C', cpfCnpj: '11122233344' },
+  ];
+
+  getParceiros(): Observable<ParceiroDTO[]> {
+    return of(this.parceiros);
   }
 }

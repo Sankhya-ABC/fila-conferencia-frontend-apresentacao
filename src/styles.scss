@@ -63,7 +63,6 @@ body {
 body {
   margin: 0;
   font-family: Roboto, "Helvetica Neue", sans-serif;
-  // custom
   padding: 0;
   background: var(--color-bg);
   color: var(--color-text-primary);
@@ -96,4 +95,25 @@ mat-error {
 * {
   scrollbar-width: auto;
   scrollbar-color: var(--color-primary) rgba(0, 0, 0, 0.05);
+}
+
+// table
+.table-container {
+  width: 100%;
+  overflow-x: auto;
+
+  mat-table {
+    min-width: 100%;
+  }
+
+  mat-header-cell,
+  mat-cell {
+    min-width: 110px;
+    padding: 8px;
+    box-sizing: border-box;
+  }
+
+  mat-header-cell {
+    color: var(--color-primary);
+  }
 }

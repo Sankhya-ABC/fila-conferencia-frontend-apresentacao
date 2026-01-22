@@ -39,3 +39,9 @@ export interface FilaConferenciaDTO {
   idUsuarioInclusao: string;
   idUsuarioAlteracao: string;
 }
+
+export interface ParceiroDTO {
+  id: string;
+  nome: string;
+  cpfCnpj: string;
+}
