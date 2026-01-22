@@ -22,7 +22,7 @@ $fila-conferencia-theme: mat.define-light-theme(
 
 // tokens
 :root {
-  /* Brand */
+  // brand
   --color-primary: #{mat.get-color-from-palette($fila-conferencia-primary)};
   --color-primary-hover: #{mat.get-color-from-palette(
       $fila-conferencia-primary,
@@ -31,16 +31,16 @@ $fila-conferencia-theme: mat.define-light-theme(
   --color-accent: #{mat.get-color-from-palette($fila-conferencia-accent)};
   --color-warn: #{mat.get-color-from-palette($fila-conferencia-warn)};
 
-  /* Surfaces */
+  // surfaces
   --color-bg: #f5f7fa;
   --color-surface: #ffffff;
   --color-border: rgba(0, 0, 0, 0.12);
 
-  /* Text */
+  // text
   --color-text-primary: rgba(0, 0, 0, 0.87);
   --color-text-secondary: rgba(0, 0, 0, 0.6);
 
-  /* Contrast */
+  // contrast
   --color-on-primary: #{mat.get-color-from-palette(
       $fila-conferencia-primary,
       default-contrast
@@ -67,4 +67,9 @@ body {
   padding: 0;
   background: var(--color-bg);
   color: var(--color-text-primary);
+}
+
+mat-error {
+  font-size: typography.$font-xs;
+  margin-bottom: 9px;
 }

@@ -1,4 +1,4 @@
-<div class="login-page">
+<form class="login-page" [formGroup]="form" (ngSubmit)="onSubmit()">
   <div class="login-form">
     <div class="form-wrapper">
       <h1>Login</h1>
@@ -6,15 +6,28 @@
 
       <mat-form-field appearance="outline">
         <mat-label>Usuário</mat-label>
-        <input matInput />
+        <input matInput formControlName="username" />
+        <mat-error *ngIf="form.controls.username.invalid">
+          Usuário obrigatório
+        </mat-error>
       </mat-form-field>
 
       <mat-form-field appearance="outline">
         <mat-label>Senha</mat-label>
-        <input matInput type="password" />
+        <input matInput type="password" formControlName="password" />
+        <mat-error *ngIf="form.controls.password.invalid">
+          Senha obrigatória
+        </mat-error>
       </mat-form-field>
 
-      <button mat-raised-button color="primary">Entrar</button>
+      <button
+        mat-raised-button
+        color="primary"
+        type="submit"
+        [disabled]="form.invalid || loading"
+      >
+        {{ loading ? "Entrando..." : "Entrar" }}
+      </button>
     </div>
   </div>
 
@@ -24,4 +37,4 @@
       <p>Agilidade, controle e precisão na expedição</p>
     </div>
   </div>
-</div>
+</form>
