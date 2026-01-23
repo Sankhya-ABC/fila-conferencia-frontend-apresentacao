@@ -1,35 +1,6 @@
 <!-- Filtros -->
-<div class="filtros-container">
-  <mat-form-field appearance="outline">
-    <mat-label>Número Modial</mat-label>
-    <input matInput [(ngModel)]="numeroModialFilter" (input)="applyFilter()" />
-  </mat-form-field>
-
-  <mat-form-field appearance="outline">
-    <mat-label>Número Nota</mat-label>
-    <input matInput [(ngModel)]="numeroNotaFilter" (input)="applyFilter()" />
-  </mat-form-field>
-
-  <mat-form-field appearance="outline">
-    <mat-label>Número Único</mat-label>
-    <input matInput [(ngModel)]="numeroUnicoFilter" (input)="applyFilter()" />
-  </mat-form-field>
-
-  <mat-form-field appearance="outline">
-    <mat-label>Parceiro</mat-label>
-    <input matInput [formControl]="parceiroCtrl" [matAutocomplete]="auto" />
-    <mat-autocomplete
-      #auto="matAutocomplete"
-      [displayWith]="displayParceiro.bind(this)"
-      (optionSelected)="onParceiroSelected($event.option.value)"
-    >
-      <mat-option *ngFor="let p of filteredParceiros$ | async" [value]="p">
-        {{ p.nome }} - {{ p.cpfCnpj }}
-      </mat-option>
-    </mat-autocomplete>
-  </mat-form-field>
-
-  <mat-form-field appearance="outline">
+<div class="filtros-container grid">
+  <mat-form-field appearance="outline" class="xs-12 sm-6 md-4 lg-3 xl-2">
     <mat-label>Status</mat-label>
     <mat-select
       [value]="statusFilter"
@@ -42,43 +13,22 @@
     </mat-select>
   </mat-form-field>
 
-  <mat-form-field appearance="outline">
-    <mat-label>Tipo Movimento</mat-label>
-    <mat-select (selectionChange)="onTipoMovimentoChange($event.value)">
-      <mat-option [value]="undefined">Todos</mat-option>
-      <mat-option *ngFor="let t of tipoMovimentoOptions" [value]="t">{{
-        t
-      }}</mat-option>
-    </mat-select>
+  <mat-form-field appearance="outline" class="xs-12 sm-6 md-4 lg-3 xl-2">
+    <mat-label>Número Modial</mat-label>
+    <input matInput [(ngModel)]="numeroModialFilter" (input)="applyFilter()" />
   </mat-form-field>
 
-  <mat-form-field appearance="outline">
-    <mat-label>Tipo Operação</mat-label>
-    <mat-select
-      [value]="tipoOperacaoFilter"
-      (selectionChange)="onTipoOperacaoChange($event.value)"
-    >
-      <mat-option [value]="undefined">Todos</mat-option>
-      <mat-option *ngFor="let t of tipoOperacaoOptions" [value]="t">{{
-        t
-      }}</mat-option>
-    </mat-select>
+  <mat-form-field appearance="outline" class="xs-12 sm-6 md-4 lg-3 xl-2">
+    <mat-label>Número Nota</mat-label>
+    <input matInput [(ngModel)]="numeroNotaFilter" (input)="applyFilter()" />
   </mat-form-field>
 
-  <mat-form-field appearance="outline">
-    <mat-label>Tipo Entrega</mat-label>
-    <mat-select
-      [value]="tipoEntregaFilter"
-      (selectionChange)="onTipoEntregaChange($event.value)"
-    >
-      <mat-option [value]="undefined">Todos</mat-option>
-      <mat-option *ngFor="let t of tipoEntregaOptions" [value]="t">{{
-        t
-      }}</mat-option>
-    </mat-select>
+  <mat-form-field appearance="outline" class="xs-12 sm-6 md-4 lg-3 xl-2">
+    <mat-label>Número Único</mat-label>
+    <input matInput [(ngModel)]="numeroUnicoFilter" (input)="applyFilter()" />
   </mat-form-field>
 
-  <mat-form-field appearance="outline">
+  <mat-form-field appearance="outline" class="xs-12 sm-6 md-4 lg-3 xl-2">
     <mat-label>Data Início</mat-label>
     <input
       matInput
@@ -93,7 +43,7 @@
     <mat-datepicker #pickerInicio></mat-datepicker>
   </mat-form-field>
 
-  <mat-form-field appearance="outline">
+  <mat-form-field appearance="outline" class="xs-12 sm-6 md-4 lg-3 xl-2">
     <mat-label>Data Fim</mat-label>
     <input
       matInput
@@ -105,7 +55,62 @@
     <mat-datepicker #pickerFim></mat-datepicker>
   </mat-form-field>
 
-  <button mat-raised-button color="warn" (click)="onLimparCampos()">
+  <mat-form-field appearance="outline" class="xs-12 sm-12 md-8 lg-6 xl-4">
+    <mat-label>Parceiro</mat-label>
+    <input matInput [formControl]="parceiroCtrl" [matAutocomplete]="auto" />
+    <mat-autocomplete
+      #auto="matAutocomplete"
+      [displayWith]="displayParceiro.bind(this)"
+      (optionSelected)="onParceiroSelected($event.option.value)"
+    >
+      <mat-option *ngFor="let p of filteredParceiros$ | async" [value]="p">
+        {{ p.nome }} - {{ p.cpfCnpj }}
+      </mat-option>
+    </mat-autocomplete>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" class="xs-12 sm-6 md-4 lg-3 xl-2">
+    <mat-label>Tipo Movimento</mat-label>
+    <mat-select (selectionChange)="onTipoMovimentoChange($event.value)">
+      <mat-option [value]="undefined">Todos</mat-option>
+      <mat-option *ngFor="let t of tipoMovimentoOptions" [value]="t">{{
+        t
+      }}</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" class="xs-12 sm-6 md-4 lg-3 xl-2">
+    <mat-label>Tipo Operação</mat-label>
+    <mat-select
+      [value]="tipoOperacaoFilter"
+      (selectionChange)="onTipoOperacaoChange($event.value)"
+    >
+      <mat-option [value]="undefined">Todos</mat-option>
+      <mat-option *ngFor="let t of tipoOperacaoOptions" [value]="t">{{
+        t
+      }}</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" class="xs-12 sm-6 md-4 lg-3 xl-2">
+    <mat-label>Tipo Entrega</mat-label>
+    <mat-select
+      [value]="tipoEntregaFilter"
+      (selectionChange)="onTipoEntregaChange($event.value)"
+    >
+      <mat-option [value]="undefined">Todos</mat-option>
+      <mat-option *ngFor="let t of tipoEntregaOptions" [value]="t">{{
+        t
+      }}</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <button
+    mat-raised-button
+    color="warn"
+    (click)="onLimparCampos()"
+    class="xs-12 sm-6 md-4 lg-3 xl-2"
+  >
     Limpar campos
   </button>
 </div>
