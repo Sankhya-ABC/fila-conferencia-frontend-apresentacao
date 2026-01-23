@@ -1,8 +1,11 @@
-// theme
 @use "@angular/material" as mat;
+@use "./styles/breakpoints";
 @use "./styles/spacing";
 @use "./styles/typography";
-@use "./styles/breakpoints";
+@use "./styles/basic";
+@use "./styles/form";
+@use "./styles/grid";
+@use "./styles/table";
 
 @include mat.core();
 $fila-conferencia-primary: mat.define-palette(mat.$green-palette, 700);
@@ -20,7 +23,6 @@ $fila-conferencia-theme: mat.define-light-theme(
 );
 @include mat.all-component-themes($fila-conferencia-theme);
 
-// tokens
 :root {
   // brand
   --color-primary: #{mat.get-color-from-palette($fila-conferencia-primary)};
@@ -54,193 +56,6 @@ $fila-conferencia-theme: mat.define-light-theme(
       default-contrast
     )};
 
-  // form-field
+  // form
   --mat-form-field-container-height: 40px;
-}
-
-// basic
-html,
-body {
-  height: 100%;
-}
-body {
-  margin: 0;
-  font-family: Roboto, "Helvetica Neue", sans-serif;
-  padding: 0;
-  background: var(--color-bg);
-  color: var(--color-text-primary);
-}
-
-p,
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  margin: 0;
-  padding: 0;
-}
-
-button {
-  height: 40px !important;
-}
-
-// label
-mat-error {
-  font-size: typography.$font-xs;
-  margin-bottom: spacing.$space-9;
-}
-
-// scrolls
-::-webkit-scrollbar {
-  width: 12px;
-  height: 12px;
-}
-
-::-webkit-scrollbar-track {
-  background: rgba(0, 0, 0, 0.05);
-  border-radius: spacing.$space-6;
-}
-
-::-webkit-scrollbar-thumb {
-  background-color: var(--color-primary);
-  border-radius: spacing.$space-6;
-  border: spacing.$space-3 solid rgba(0, 0, 0, 0);
-  background-clip: padding-box;
-}
-
-* {
-  scrollbar-width: auto;
-  scrollbar-color: var(--color-primary) rgba(0, 0, 0, 0.05);
-}
-
-// table
-.table-container {
-  width: 100%;
-  overflow-x: auto;
-  display: block;
-
-  mat-table {
-    min-width: 100%;
-    border-top: spacing.$space-4 solid var(--color-primary);
-    table-layout: auto;
-    border-collapse: collapse;
-  }
-
-  mat-header-row,
-  mat-row {
-    display: table-row;
-  }
-
-  mat-header-cell,
-  mat-cell {
-    display: table-cell;
-    padding: spacing.$space-9;
-    min-width: 111px;
-    box-sizing: border-box;
-    font-size: typography.$font-sm;
-    vertical-align: middle;
-  }
-
-  mat-header-cell {
-    color: var(--color-primary);
-  }
-
-  .mat-column-acoes {
-    min-width: max-content;
-    width: auto;
-
-    mat-cell,
-    mat-header-cell {
-      white-space: nowrap;
-    }
-
-    .acoes-container {
-      display: flex;
-      gap: spacing.$space-9;
-
-      button {
-        padding: 0;
-        width: typography.$font-3xl !important;
-        height: typography.$font-3xl !important;
-        display: flex;
-        cursor: pointer;
-        background-color: transparent;
-        border: none;
-
-        .mat-icon {
-          font-size: typography.$font-2xl;
-        }
-      }
-    }
-  }
-}
-
-// tooltip
-.tooltip {
-  font-size: typography.$font-xs;
-}
-
-// form-field
-mat-form-field {
-  margin-bottom: 0;
-}
-
-.mat-mdc-form-field-infix {
-  min-height: 40px;
-  padding: 0 !important;
-  display: flex;
-  align-items: center;
-}
-
-.mat-mdc-form-field-error-wrapper {
-  mat-error {
-    margin: 0;
-  }
-}
-
-// grid
-.grid {
-  display: grid;
-  grid-template-columns: repeat(12, 1fr);
-  gap: 16px;
-}
-
-@for $i from 1 through 12 {
-  .xs-#{$i} {
-    grid-column: span $i;
-  }
-}
-
-@media (min-width: breakpoints.$sm) {
-  @for $i from 1 through 12 {
-    .sm-#{$i} {
-      grid-column: span $i;
-    }
-  }
-}
-
-@media (min-width: breakpoints.$md) {
-  @for $i from 1 through 12 {
-    .md-#{$i} {
-      grid-column: span $i;
-    }
-  }
-}
-
-@media (min-width: breakpoints.$lg) {
-  @for $i from 1 through 12 {
-    .lg-#{$i} {
-      grid-column: span $i;
-    }
-  }
-}
-
-@media (min-width: breakpoints.$xl) {
-  @for $i from 1 through 12 {
-    .xl-#{$i} {
-      grid-column: span $i;
-    }
-  }
 }
