@@ -1,6 +1,6 @@
 <!-- Filtros -->
-<div class="filtros-container">
-  <mat-form-field appearance="fill">
+<div class="filtros-container grid">
+  <mat-form-field appearance="fill" class="xs-12 sm-6 md-4 lg-3 xl-2">
     <mat-label>Status</mat-label>
     <mat-select
       [value]="statusFilter"
@@ -12,22 +12,22 @@
     </mat-select>
   </mat-form-field>
 
-  <mat-form-field appearance="fill">
+  <mat-form-field appearance="fill" class="xs-12 sm-6 md-4 lg-3 xl-2">
     <mat-label>Número Modial</mat-label>
     <input matInput [(ngModel)]="numeroModialFilter" (input)="applyFilter()" />
   </mat-form-field>
 
-  <mat-form-field appearance="fill">
+  <mat-form-field appearance="fill" class="xs-12 sm-6 md-4 lg-3 xl-2">
     <mat-label>Número Nota</mat-label>
     <input matInput [(ngModel)]="numeroNotaFilter" (input)="applyFilter()" />
   </mat-form-field>
 
-  <mat-form-field appearance="fill">
+  <mat-form-field appearance="fill" class="xs-12 sm-6 md-4 lg-3 xl-2">
     <mat-label>Número Único</mat-label>
     <input matInput [(ngModel)]="numeroUnicoFilter" (input)="applyFilter()" />
   </mat-form-field>
 
-  <mat-form-field appearance="fill">
+  <mat-form-field appearance="fill" class="xs-12 sm-6 md-4 lg-3 xl-2">
     <mat-label>Tipo Movimento</mat-label>
     <mat-select (selectionChange)="onTipoMovimentoChange($event.value)">
       <mat-option [value]="undefined">Todos</mat-option>
@@ -37,7 +37,7 @@
     </mat-select>
   </mat-form-field>
 
-  <mat-form-field appearance="fill">
+  <mat-form-field appearance="fill" class="xs-12 sm-6 md-4 lg-3 xl-2">
     <mat-label>Tipo Operação</mat-label>
     <mat-select (selectionChange)="onTipoOperacaoChange($event.value)">
       <mat-option [value]="undefined">Todos</mat-option>
@@ -47,7 +47,7 @@
     </mat-select>
   </mat-form-field>
 
-  <mat-form-field appearance="fill">
+  <mat-form-field appearance="fill" class="xs-12 sm-6 md-4 lg-3 xl-2">
     <mat-label>Tipo Entrega</mat-label>
     <mat-select (selectionChange)="onTipoEntregaChange($event.value)">
       <mat-option [value]="undefined">Todos</mat-option>
@@ -57,7 +57,7 @@
     </mat-select>
   </mat-form-field>
 
-  <mat-form-field appearance="fill">
+  <mat-form-field appearance="fill" class="xs-12 sm-6 md-4 lg-3 xl-2">
     <mat-label>Parceiro</mat-label>
     <input matInput [formControl]="parceiroCtrl" [matAutocomplete]="auto" />
     <mat-autocomplete
@@ -71,7 +71,7 @@
     </mat-autocomplete>
   </mat-form-field>
 
-  <mat-form-field appearance="fill">
+  <mat-form-field appearance="fill" class="xs-12 sm-6 md-4 lg-3 xl-2">
     <mat-label>Data Início</mat-label>
     <input
       matInput
@@ -86,7 +86,7 @@
     <mat-datepicker #pickerInicio></mat-datepicker>
   </mat-form-field>
 
-  <mat-form-field appearance="fill">
+  <mat-form-field appearance="fill" class="xs-12 sm-6 md-4 lg-3 xl-2">
     <mat-label>Data Fim</mat-label>
     <input
       matInput

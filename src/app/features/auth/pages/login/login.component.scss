@@ -72,7 +72,7 @@
 }
 
 // mobile
-@media (max-width: $mobile) {
+@media (max-width: $sm) {
   .login-page {
     flex-direction: column;
   }

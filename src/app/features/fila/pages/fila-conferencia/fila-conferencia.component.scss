@@ -3,13 +3,8 @@
 @use "../../../../../styles/breakpoints" as *;
 
 .filtros-container {
-  display: flex;
-  flex-wrap: wrap;
-  gap: $space-16;
-
   mat-form-field {
-    box-sizing: border-box;
-    flex: 0 0 calc(25% - $space-12);
+    width: 100%;
   }
 
   margin-bottom: $space-30;

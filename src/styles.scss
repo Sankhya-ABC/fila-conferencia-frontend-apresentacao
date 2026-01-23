@@ -200,3 +200,48 @@ mat-form-field {
 //     padding-bottom: 1px;
 //   }
 // }
+
+// grid
+.grid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 16px;
+}
+
+@for $i from 1 through 12 {
+  .xs-#{$i} {
+    grid-column: span $i;
+  }
+}
+
+@media (min-width: breakpoints.$sm) {
+  @for $i from 1 through 12 {
+    .sm-#{$i} {
+      grid-column: span $i;
+    }
+  }
+}
+
+@media (min-width: breakpoints.$md) {
+  @for $i from 1 through 12 {
+    .md-#{$i} {
+      grid-column: span $i;
+    }
+  }
+}
+
+@media (min-width: breakpoints.$lg) {
+  @for $i from 1 through 12 {
+    .lg-#{$i} {
+      grid-column: span $i;
+    }
+  }
+}
+
+@media (min-width: breakpoints.$xl) {
+  @for $i from 1 through 12 {
+    .xl-#{$i} {
+      grid-column: span $i;
+    }
+  }
+}
