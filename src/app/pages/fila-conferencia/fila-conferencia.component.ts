@@ -50,6 +50,8 @@ import { MatButtonModule } from '@angular/material/button';
 export class FilaConferenciaComponent implements OnInit {
   constructor(private service: FilaConferenciaService) {}
 
+  Status = Status;
+
   // tabela
   displayedColumns: string[] = [
     'acoes',

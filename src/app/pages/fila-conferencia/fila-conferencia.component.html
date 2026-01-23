@@ -127,6 +127,7 @@
             matTooltip="Separar"
             matTooltipClass="tooltip"
             (click)="onSeparar(e)"
+            [disabled]="e.status !== Status.AGUARDANDO_CONFERENCIA"
           >
             <mat-icon fontSet="material-symbols-outlined">
               deployed_code
@@ -137,6 +138,7 @@
             matTooltip="Imprimir Etiqueta"
             matTooltipClass="tooltip"
             (click)="onImprimirEtiqueta(e)"
+            [disabled]="e.status !== Status.FINALIZADA"
           >
             <mat-icon>print</mat-icon>
           </button>

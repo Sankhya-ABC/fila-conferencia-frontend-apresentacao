@@ -3,6 +3,7 @@ export enum Status {
   EM_ANDAMENTO = 'Em Andamento',
   AGUARDANDO_RECONTAGEM = 'Aguardando Recontagem',
   RECONTAGEM_EM_ANDAMENTO = 'Recontagem em Andamento',
+  FINALIZADA = 'Finalizada',
 }
 
 export enum TipoMovimento {

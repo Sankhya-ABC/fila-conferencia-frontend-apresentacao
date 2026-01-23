@@ -50,6 +50,24 @@ export class FilaConferenciaService {
       idUsuarioInclusao: 'U003',
       idUsuarioAlteracao: 'U004',
     },
+    {
+      status: Status.FINALIZADA,
+      idEmpresa: '456',
+      numeroModial: 'MOD003',
+      numeroNota: 'NF003',
+      numeroUnico: 'UN003',
+      dataMovimento: new Date(),
+      tipoMovimento: TipoMovimento.PEDIDO_VENDA,
+      tipoOperacao: TipoOperacao.NOTA_FISCAL_PRODUTO,
+      tipoEntrega: TipoEntrega.TRANSPORTADORA,
+      nomeParceiro: 'Roger Kyle',
+      numeroParceiro: 'P003',
+      numeroVendedor: 'V003',
+      valorNota: '900.00',
+      volume: 'Caixa 30x25x15',
+      idUsuarioInclusao: 'U003',
+      idUsuarioAlteracao: 'U004',
+    },
   ];
 
   getFila(): Observable<FilaConferenciaDTO[]> {
