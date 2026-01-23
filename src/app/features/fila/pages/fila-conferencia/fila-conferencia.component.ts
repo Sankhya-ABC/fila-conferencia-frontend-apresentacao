@@ -201,12 +201,8 @@ export class FilaConferenciaComponent implements OnInit {
   }
 
   // ações
-  onSeparacao(fila: FilaConferenciaDTO) {
+  onSeparar(fila: FilaConferenciaDTO) {
     console.log('Separação clicada', fila);
-  }
-
-  onEmpacotar(fila: FilaConferenciaDTO) {
-    console.log('Empacotar clicado', fila);
   }
 
   onImprimirEtiqueta(fila: FilaConferenciaDTO) {
