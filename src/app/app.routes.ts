@@ -13,4 +13,9 @@ export const routes: Routes = [
     title: 'Fila de Conferência',
     component: FilaConferenciaComponent,
   },
+  {
+    path: '',
+    redirectTo: '/fila-conferencia',
+    pathMatch: 'full',
+  },
 ];

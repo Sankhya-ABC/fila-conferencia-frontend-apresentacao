@@ -47,6 +47,7 @@ export class FilaConferenciaComponent implements OnInit {
 
   // tabela
   displayedColumns: string[] = [
+    'acoes',
     'status',
     'idEmpresa',
     'numeroModial',
@@ -195,5 +196,18 @@ export class FilaConferenciaComponent implements OnInit {
   onTipoEntregaChange(value: any) {
     this.tipoEntregaFilter = value;
     this.applyFilter();
+  }
+
+  // ações
+  onSeparacao(fila: FilaConferenciaDTO) {
+    console.log('Separação clicada', fila);
+  }
+
+  onEmpacotar(fila: FilaConferenciaDTO) {
+    console.log('Empacotar clicado', fila);
+  }
+
+  onImprimirEtiqueta(fila: FilaConferenciaDTO) {
+    console.log('Imprimir etiqueta clicado', fila);
   }
 }

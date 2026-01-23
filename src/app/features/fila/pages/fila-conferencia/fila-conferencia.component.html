@@ -102,6 +102,35 @@
 <!-- Tabela -->
 <div class="table-container">
   <mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+    <ng-container matColumnDef="acoes">
+      <mat-header-cell *matHeaderCellDef>Ações</mat-header-cell>
+      <mat-cell *matCellDef="let e">
+        <div class="acoes-container">
+          <button
+            mat-icon-button
+            matTooltip="Separação"
+            (click)="onSeparacao(e)"
+          >
+            <mat-icon>call_split</mat-icon>
+          </button>
+          <button
+            mat-icon-button
+            matTooltip="Empacotar"
+            (click)="onEmpacotar(e)"
+          >
+            <mat-icon>inventory_2</mat-icon>
+          </button>
+          <button
+            mat-icon-button
+            matTooltip="Imprimir Etiqueta"
+            (click)="onImprimirEtiqueta(e)"
+          >
+            <mat-icon>print</mat-icon>
+          </button>
+        </div>
+      </mat-cell>
+    </ng-container>
+
     <ng-container matColumnDef="status"
       ><mat-header-cell *matHeaderCellDef>Status</mat-header-cell
       ><mat-cell *matCellDef="let e">{{ e.status }}</mat-cell></ng-container

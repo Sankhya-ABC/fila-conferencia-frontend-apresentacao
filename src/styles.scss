@@ -101,21 +101,45 @@ mat-error {
 .table-container {
   width: 100%;
   overflow-x: auto;
+  display: block;
 
   mat-table {
     min-width: 100%;
     border-top: spacing.$space-4 solid var(--color-primary);
+    table-layout: auto;
+    border-collapse: collapse;
+  }
+
+  mat-header-row,
+  mat-row {
+    display: table-row;
   }
 
   mat-header-cell,
   mat-cell {
-    min-width: 110px;
+    display: table-cell;
     padding: spacing.$space-9;
+    min-width: 110px;
     box-sizing: border-box;
     font-size: typography.$font-sm;
   }
 
   mat-header-cell {
     color: var(--color-primary);
+  }
+
+  .mat-column-acoes {
+    min-width: max-content;
+    width: auto;
+
+    mat-cell,
+    mat-header-cell {
+      white-space: nowrap;
+    }
+
+    .acoes-container {
+      display: flex;
+      gap: spacing.$space-6;
+    }
   }
 }
