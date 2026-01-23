@@ -1,5 +1,4 @@
 export enum Status {
-  TODOS = 'Todos',
   AGUARDANDO_CONFERENCIA = 'Aguardando Conferência',
   EM_ANDAMENTO = 'Em Andamento',
   AGUARDANDO_RECONTAGEM = 'Aguardando Recontagem',

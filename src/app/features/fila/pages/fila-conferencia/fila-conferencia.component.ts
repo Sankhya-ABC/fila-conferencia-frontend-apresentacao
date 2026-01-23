@@ -21,6 +21,7 @@ import {
 } from './fila-conferencia.model';
 import { FilaConferenciaService } from './fila-conferencia.service';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'app-fila-conferencia',
@@ -40,6 +41,8 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     MatNativeDateModule,
     MatIconModule,
     MatTooltipModule,
+    CommonModule,
+    MatButtonModule,
   ],
   templateUrl: './fila-conferencia.component.html',
   styleUrls: ['./fila-conferencia.component.scss'],
@@ -127,13 +130,28 @@ export class FilaConferenciaComponent implements OnInit {
     this.applyFilter();
   }
 
+  // filtros
+  onLimparCampos(): void {
+    this.statusFilter = undefined;
+    this.numeroModialFilter = undefined;
+    this.numeroNotaFilter = undefined;
+    this.numeroUnicoFilter = undefined;
+
+    this.tipoMovimentoFilter = undefined;
+    this.tipoOperacaoFilter = undefined;
+    this.tipoEntregaFilter = undefined;
+
+    this.dataInicioFilter = undefined;
+    this.dataFimFilter = undefined;
+
+    this.parceiroCtrl.setValue(null);
+
+    this.applyFilter();
+  }
+
   applyFilter() {
-    this.dataSource.filterPredicate = (
-      data: FilaConferenciaDTO,
-      filter: string,
-    ) => {
-      const statusOk =
-        this.statusFilter === Status.TODOS || data.status === this.statusFilter;
+    this.dataSource.filterPredicate = (data: FilaConferenciaDTO) => {
+      const statusOk = !this.statusFilter || data.status === this.statusFilter;
       const tipoMovOk =
         !this.tipoMovimentoFilter ||
         data.tipoMovimento === this.tipoMovimentoFilter;
