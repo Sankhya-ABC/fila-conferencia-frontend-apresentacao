@@ -71,17 +71,17 @@ export class FilaConferenciaComponent implements OnInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   // filtros
-  statusFilter = Status.TODOS;
+  statusFilter?: Status;
   tipoMovimentoFilter?: TipoMovimento;
   tipoOperacaoFilter?: TipoOperacao;
   tipoEntregaFilter?: TipoEntrega;
-  numeroModialFilter = '';
-  numeroNotaFilter = '';
-  numeroUnicoFilter = '';
-  parceiroCtrl = new FormControl('');
-  parceiroSelecionado?: ParceiroDTO;
+  numeroModialFilter?: string;
+  numeroNotaFilter?: string;
+  numeroUnicoFilter?: string;
   dataInicioFilter?: Date;
   dataFimFilter?: Date;
+  parceiroCtrl = new FormControl('');
+  parceiroSelecionado?: ParceiroDTO;
 
   // selects
   statusOptions = Object.values(Status);

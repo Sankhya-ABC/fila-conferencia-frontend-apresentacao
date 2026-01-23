@@ -3,9 +3,36 @@
 @use "../../../../../styles/breakpoints" as *;
 
 .filtros-container {
+  display: grid;
+  gap: $space-15;
+  grid-template-columns: repeat(1, 1fr);
+  margin-bottom: $space-30;
+
   mat-form-field {
     width: 100%;
   }
+}
 
-  margin-bottom: $space-30;
+@media (min-width: $sm) {
+  .filtros-container {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: $md) {
+  .filtros-container {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (min-width: $lg) {
+  .filtros-container {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+@media (min-width: $xl) {
+  .filtros-container {
+    grid-template-columns: repeat(5, 1fr);
+  }
 }
