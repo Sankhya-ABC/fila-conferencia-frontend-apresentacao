@@ -104,6 +104,7 @@ mat-error {
 
   mat-table {
     min-width: 100%;
+    border-top: spacing.$space-4 solid var(--color-primary);
   }
 
   mat-header-cell,
@@ -116,6 +117,5 @@ mat-error {
 
   mat-header-cell {
     color: var(--color-primary);
-    font-weight: 600;
   }
 }
