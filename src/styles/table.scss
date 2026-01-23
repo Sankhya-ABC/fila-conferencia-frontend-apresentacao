@@ -6,12 +6,16 @@
   width: 100%;
   overflow-x: auto;
   display: block;
+  border-top: spacing.$space-4 solid var(--color-primary);
 
   mat-table {
-    min-width: 100%;
-    border-top: spacing.$space-4 solid var(--color-primary);
+    width: 100%;
     table-layout: auto;
     border-collapse: collapse;
+
+    &.all-on-same-line {
+      min-width: max-content;
+    }
   }
 
   mat-header-row,
