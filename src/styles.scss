@@ -159,6 +159,16 @@ mat-error {
   }
 }
 
+// tooltip
 .tooltip {
   font-size: typography.$font-xs;
+}
+
+// form-field
+mat-form-field {
+  margin-bottom: 0;
+
+  .mat-mdc-form-field-subscript-wrapper {
+    display: none;
+  }
 }
