@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
 import { HeaderComponent } from './core/layout/header/header.component';
+import { map, Observable } from 'rxjs';
+import { RouteStateService } from './core/services/route-state.service';
 
 @Component({
   selector: 'app-root',
@@ -11,5 +13,11 @@ import { HeaderComponent } from './core/layout/header/header.component';
   styleUrl: './app.component.scss',
 })
 export class AppComponent {
-  title = 'fila-conferencia-frontend';
+  showContainer$: Observable<boolean>;
+
+  constructor(private routeState: RouteStateService) {
+    this.showContainer$ = this.routeState.isLoginRoute$.pipe(
+      map((isLogin) => !isLogin),
+    );
+  }
 }

@@ -1,18 +1,19 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import { NavigationEnd, Router } from '@angular/router';
-import { filter } from 'rxjs/operators';
-
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatToolbarModule } from '@angular/material/toolbar';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { RouteStateService } from '../../services/route-state.service';
 
 @Component({
   selector: 'app-header',
   standalone: true,
   imports: [
     CommonModule,
+    MatToolbarModule,
     MatToolbarModule,
     MatMenuModule,
     MatIconModule,
@@ -22,28 +23,14 @@ import { MatToolbarModule } from '@angular/material/toolbar';
   styleUrls: ['./header.component.scss'],
 })
 export class HeaderComponent {
-  title = '';
-  showHeader = true;
+  showHeader$: Observable<boolean>;
+  title$: Observable<string>;
 
-  constructor(private router: Router) {
-    this.router.events
-      .pipe(
-        filter(
-          (event): event is NavigationEnd => event instanceof NavigationEnd,
-        ),
-      )
-      .subscribe((event) => {
-        this.showHeader = !event.urlAfterRedirects.startsWith('/login');
-        this.title = this.getRouteTitle();
-      });
-  }
-
-  private getRouteTitle(): string {
-    let route = this.router.routerState.snapshot.root;
-    while (route.firstChild) {
-      route = route.firstChild;
-    }
-    return route?.['title'] ?? '';
+  constructor(private routeState: RouteStateService) {
+    this.showHeader$ = this.routeState.isLoginRoute$.pipe(
+      map((isLogin) => !isLogin),
+    );
+    this.title$ = this.routeState.routeTitle$;
   }
 
   logout() {
