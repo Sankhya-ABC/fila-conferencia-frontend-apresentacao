@@ -51,7 +51,7 @@ export class FilaConferenciaService {
       idUsuarioAlteracao: 'U004',
     },
     {
-      status: Status.FINALIZADA,
+      status: Status.FINALIZADO,
       idEmpresa: '456',
       numeroModial: 'MOD003',
       numeroNota: 'NF003',

@@ -228,4 +228,16 @@ export class FilaConferenciaComponent implements OnInit {
   onImprimirEtiqueta(fila: FilaConferenciaDTO) {
     console.log('Imprimir etiqueta clicado', fila);
   }
+
+  tooltipSeparar(e: any): string {
+    return e.status === Status.AGUARDANDO_CONFERENCIA
+      ? `Separar`
+      : `Disponível quando status é ${Status.AGUARDANDO_CONFERENCIA}`;
+  }
+
+  tooltipImprimir(e: any): string {
+    return e.status === Status.FINALIZADO
+      ? `Imprimir etiqueta`
+      : `Disponível quando status é ${Status.FINALIZADO}`;
+  }
 }
