@@ -18,8 +18,8 @@ import {
   TipoEntrega,
   TipoMovimento,
   TipoOperacao,
-} from './fila-conferencia.model';
-import { FilaConferenciaService } from './fila-conferencia.service';
+} from '../../services/fila-conferencia/fila-conferencia.model';
+import { FilaConferenciaService } from '../../services/fila-conferencia/fila-conferencia.service';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatButtonModule } from '@angular/material/button';
 
