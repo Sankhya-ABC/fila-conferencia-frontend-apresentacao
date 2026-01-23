@@ -20,6 +20,7 @@ import {
   TipoOperacao,
 } from './fila-conferencia.model';
 import { FilaConferenciaService } from './fila-conferencia.service';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @Component({
   selector: 'app-fila-conferencia',
@@ -38,6 +39,7 @@ import { FilaConferenciaService } from './fila-conferencia.service';
     MatDatepickerModule,
     MatNativeDateModule,
     MatIconModule,
+    MatTooltipModule,
   ],
   templateUrl: './fila-conferencia.component.html',
   styleUrls: ['./fila-conferencia.component.scss'],

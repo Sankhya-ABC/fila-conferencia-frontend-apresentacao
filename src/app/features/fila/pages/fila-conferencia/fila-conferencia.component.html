@@ -109,6 +109,7 @@
           <button
             mat-icon-button
             matTooltip="Separação"
+            matTooltipClass="tooltip"
             (click)="onSeparacao(e)"
           >
             <mat-icon>call_split</mat-icon>
@@ -116,13 +117,17 @@
           <button
             mat-icon-button
             matTooltip="Empacotar"
+            matTooltipClass="tooltip"
             (click)="onEmpacotar(e)"
           >
-            <mat-icon>inventory_2</mat-icon>
+            <mat-icon fontSet="material-symbols-outlined">
+              deployed_code
+            </mat-icon>
           </button>
           <button
             mat-icon-button
             matTooltip="Imprimir Etiqueta"
+            matTooltipClass="tooltip"
             (click)="onImprimirEtiqueta(e)"
           >
             <mat-icon>print</mat-icon>

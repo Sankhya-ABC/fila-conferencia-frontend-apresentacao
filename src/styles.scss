@@ -140,6 +140,21 @@ mat-error {
     .acoes-container {
       display: flex;
       gap: spacing.$space-6;
+
+      button {
+        padding: 0;
+        width: typography.$font-3xl;
+        height: typography.$font-3xl;
+        display: flex;
+
+        .mat-icon {
+          font-size: typography.$font-2xl;
+        }
+      }
     }
   }
+}
+
+.tooltip {
+  font-size: typography.$font-xs;
 }
