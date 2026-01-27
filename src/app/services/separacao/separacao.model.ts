@@ -2,7 +2,7 @@ import { IdNome } from '../dto/dominio.model';
 
 export interface ItemPedidoDTO {
   produto: IdNome & {
-    imagem: string;
+    imagem?: string;
     codigoBarras: string;
     marca: IdNome;
   };
@@ -16,7 +16,6 @@ export interface ItemPedidoDTO {
 }
 
 export interface DadosGeraisPedidoDTO {
-  numeroNota: string;
   vendedor: IdNome;
   parceiro: IdNome;
 }

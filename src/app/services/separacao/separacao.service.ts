@@ -11,7 +11,8 @@ export class SeparacaoService {
       produto: {
         id: 'PROD001',
         nome: 'Arroz Integral',
-        imagem: 'https://exemplo.com/imagens/arroz.jpg',
+        imagem:
+          'https://destro.fbitsstatic.net/img/p/arroz-branco-tio-joao-tipo-1-5kg-70247/256783.jpg?w=500&h=500&v=202501231555&qs=ignore',
         codigoBarras: '7891234567890',
         marca: {
           id: 'MAR01',
@@ -33,7 +34,6 @@ export class SeparacaoService {
       produto: {
         id: 'PROD002',
         nome: 'Feijão Carioca',
-        imagem: 'https://exemplo.com/imagens/feijao.jpg',
         codigoBarras: '7899876543210',
         marca: {
           id: 'MAR02',
@@ -55,7 +55,6 @@ export class SeparacaoService {
       produto: {
         id: 'PROD003',
         nome: 'Óleo de Soja',
-        imagem: 'https://exemplo.com/imagens/oleo.jpg',
         codigoBarras: '7895551234567',
         marca: {
           id: 'MAR03',
@@ -79,47 +78,18 @@ export class SeparacaoService {
     return of(this.itensPedido);
   }
 
-  private dadosGeraisPedido: DadosGeraisPedidoDTO[] = [
-    {
-      numeroNota: 'NF001',
-      vendedor: {
-        id: 'VEN001',
-        nome: 'Carlos Almeida',
-      },
-      parceiro: {
-        id: 'PAR001',
-        nome: 'Maria da Silva',
-      },
+  private dadosGeraisPedido: DadosGeraisPedidoDTO = {
+    vendedor: {
+      id: 'VEN001',
+      nome: 'Carlos Almeida',
     },
-    {
-      numeroNota: 'NF002',
-      vendedor: {
-        id: 'VEN002',
-        nome: 'Elisângela Fonsi',
-      },
-      parceiro: {
-        id: 'PAR002',
-        nome: 'Breno Maia',
-      },
+    parceiro: {
+      id: 'PAR001',
+      nome: 'Maria da Silva',
     },
-    {
-      numeroNota: 'NF003',
-      vendedor: {
-        id: 'VEN003',
-        nome: 'Felipe Rodrigues',
-      },
-      parceiro: {
-        id: 'PAR003',
-        nome: 'Jean Marcos',
-      },
-    },
-  ];
+  };
 
-  getDadosgerais(numeroNota: string): Observable<DadosGeraisPedidoDTO> {
-    return of(
-      this.dadosGeraisPedido?.find(
-        (dadoGeralPedido) => dadoGeralPedido?.numeroNota === numeroNota,
-      ),
-    ) as any;
+  getDadosgerais(): Observable<DadosGeraisPedidoDTO> {
+    return of(this.dadosGeraisPedido);
   }
 }

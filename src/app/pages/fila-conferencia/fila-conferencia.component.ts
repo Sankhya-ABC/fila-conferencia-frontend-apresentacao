@@ -50,7 +50,7 @@ import { FilaConferenciaService } from '../../services/fila-conferencia/fila-con
 })
 export class FilaConferenciaComponent implements OnInit {
   constructor(
-    private service: FilaConferenciaService,
+    private filaConferenciaService: FilaConferenciaService,
     private router: Router,
   ) {}
 
@@ -103,12 +103,12 @@ export class FilaConferenciaComponent implements OnInit {
   filteredParceiros$!: Observable<ParceiroDTO[]>;
 
   ngOnInit(): void {
-    this.service.getFila().subscribe((dados) => {
+    this.filaConferenciaService.getFila().subscribe((dados) => {
       this.dataSource.data = dados;
       this.dataSource.paginator = this.paginator;
     });
 
-    this.service.getParceiros().subscribe((data: any) => {
+    this.filaConferenciaService.getParceiros().subscribe((data: any) => {
       this.parceiros = data;
       this.filteredParceiros$ = this.parceiroCtrl.valueChanges.pipe(
         startWith(''),
