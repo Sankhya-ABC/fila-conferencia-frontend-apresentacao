@@ -86,7 +86,7 @@ export class SeparacaoComponent implements OnInit {
   @ViewChild('modalItemNaoEncontrado')
   modalItemNaoEncontradoTpl!: TemplateRef<any>;
 
-  @ViewChild('modalIniciarCubagem')
+  @ViewChild('modalIniciarCubagemTpl')
   modalIniciarCubagemTpl!: TemplateRef<any>;
 
   ngOnInit(): void {
@@ -251,10 +251,7 @@ export class SeparacaoComponent implements OnInit {
   abrirModalItemNaoEncontrado() {
     this.dialog.open(ModalComponent, {
       data: {
-        content: this.modalItemNaoEncontradoTpl,
-        context: {
-          fechar: () => this.dialog.closeAll(),
-        },
+        template: this.modalItemNaoEncontradoTpl,
       },
     });
   }

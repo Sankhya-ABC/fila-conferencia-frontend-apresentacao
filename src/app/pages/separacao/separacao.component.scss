@@ -66,20 +66,24 @@ h3 {
 }
 
 // TEMPLATE DO MODAL: INICIAR CUBAGEM
-.modal-cubagem {
+.modal-iniciar-cubagem {
   text-align: center;
-  padding: 16px;
-}
 
-.modal-cubagem .icone {
-  font-size: 48px;
-  color: #2e7d32;
-  margin-bottom: 8px;
-}
+  h4 {
+    margin: $space-9 0;
+    font-size: $font-lg;
+  }
 
-.modal-cubagem .acoes {
-  display: flex;
-  justify-content: center;
-  gap: 16px;
-  margin-top: 24px;
+  h4,
+  mat-icon {
+    color: var(--color-primary);
+  }
+
+  p {
+    margin-bottom: $space-9;
+  }
+
+  .grid {
+    margin-top: $space-18;
+  }
 }

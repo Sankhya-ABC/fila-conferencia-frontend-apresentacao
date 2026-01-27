@@ -28,7 +28,7 @@
       matInput
       formControlName="codigoBarras"
       (keyup.enter)="onCodigoInserido()"
-      (blur)="onCodigoInserido()"
+      (blur)="abrirModalIniciarCubagem()"
     />
   </mat-form-field>
 
@@ -286,29 +286,32 @@
 
 <!-- TEMPLATE DO MODAL: INICIAR CUBAGEM -->
 <ng-template #modalIniciarCubagemTpl let-fechar="fechar">
-  <div class="modal-cubagem">
+  <div class="modal-iniciar-cubagem">
     <mat-icon fontSet="material-symbols-outlined" class="icone">
       inventory_2
     </mat-icon>
 
-    <h3>Conferência finalizada</h3>
+    <h4>Conferência finalizada</h4>
+    <p>Todos os itens do pedido foram conferidos com sucesso!</p>
+    <p>Deseja iniciar a cubagem agora?</p>
 
-    <p>
-      Todos os itens do pedido foram conferidos com sucesso. Deseja iniciar a
-      cubagem agora?
-    </p>
+    <div class="grid">
+      <button
+        mat-raised-button
+        color="warn"
+        (click)="fechar()"
+        class="xs-12 sm-6"
+      >
+        Fechar
+      </button>
 
-    <div class="acoes">
       <button
         mat-raised-button
         color="primary"
         (click)="iniciarCubagem(); fechar()"
+        class="xs-12 sm-6"
       >
         Iniciar cubagem
-      </button>
-
-      <button mat-raised-button color="warn" (click)="fechar()">
-        Cancelar
       </button>
     </div>
   </div>

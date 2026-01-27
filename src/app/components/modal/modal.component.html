@@ -1,5 +1,8 @@
-<div class="dialog-container">
-  <ng-container
-    *ngTemplateOutlet="data.content; context: data.context"
-  ></ng-container>
+<div class="backdrop">
+  <div class="dialog-container">
+    <ng-container
+      *ngTemplateOutlet="data?.template; context: { fechar: fechar }"
+    >
+    </ng-container>
+  </div>
 </div>
