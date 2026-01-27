@@ -1,4 +1,5 @@
 <!-- Tabela -->
+<h3>Itens do Pedido</h3>
 <div class="table-container">
   <mat-table [dataSource]="dataSource" class="mat-elevation-z8">
     <ng-container matColumnDef="acoes" sticky>
@@ -6,18 +7,16 @@
       <mat-cell *matCellDef="let e">
         <div class="acoes-container">
           <span
-            matTooltip="{{ tooltipSomething(e) }}"
+            matTooltip="{{ tooltipIniciarConferencia(e) }}"
             matTooltipClass="tooltip"
             matTooltipPosition="above"
           >
             <button
               mat-icon-button
-              (click)="onSomething(e)"
+              (click)="onIniciarConferencia(e)"
               [disabled]="e.status !== false"
             >
-              <mat-icon fontSet="material-symbols-outlined">
-                deployed_code
-              </mat-icon>
+              <mat-icon fontSet="material-symbols-outlined"> search </mat-icon>
             </button>
           </span>
         </div>
@@ -25,16 +24,21 @@
     </ng-container>
 
     <ng-container matColumnDef="imagem"
-      ><mat-header-cell *matHeaderCellDef>Imagem</mat-header-cell
+      ><mat-header-cell *matHeaderCellDef style="text-align: center"
+        >Imagem</mat-header-cell
       ><mat-cell *matCellDef="let e"
-        ><img
-          *ngIf="e.produto.imagem"
-          src="{e.produto.imagem}"
-          alt="Imagem do produto"
-        />
-        <mat-icon *ngIf="!e.produto.imagem" fontSet="material-symbols-outlined"
-          >hide_image</mat-icon
-        >
+        ><div class="image-container">
+          <img
+            *ngIf="e.produto.imagem"
+            [src]="e.produto.imagem"
+            alt="Imagem do produto"
+          />
+          <mat-icon
+            *ngIf="!e.produto.imagem"
+            fontSet="material-symbols-outlined"
+            >hide_image</mat-icon
+          >
+        </div>
       </mat-cell></ng-container
     >
 

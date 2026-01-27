@@ -86,11 +86,11 @@ export class SeparacaoComponent implements OnInit {
   }
 
   // ações
-  onSomething(fila: FilaConferenciaDTO) {
+  onIniciarConferencia(fila: FilaConferenciaDTO) {
     console.log('aaaa');
   }
 
-  tooltipSomething(e: any): string {
-    return `bbbb`;
+  tooltipIniciarConferencia(e: ItemPedidoDTO): string {
+    return `Iniciar conferência de ${e.produto.nome}`;
   }
 }
