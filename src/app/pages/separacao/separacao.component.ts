@@ -89,7 +89,7 @@ export class SeparacaoComponent implements OnInit {
 
     this.form = this.fb.group({
       codigoBarras: [''],
-      quantidade: [null, [Validators.required, Validators.min(1)]],
+      quantidade: [null],
       controle: [{ value: '', disabled: true }],
     });
 
@@ -131,23 +131,67 @@ export class SeparacaoComponent implements OnInit {
       codigoBarras: item.produto.codigoBarras,
       controle: item.controle ?? '',
     });
+
+    if (this.quantidadeCtrl?.value) {
+      this.onBlurQuantidade();
+    }
+  }
+
+  onBlurQuantidade() {
+    const ctrl = this.quantidadeCtrl;
+    if (!ctrl) return;
+
+    if (ctrl.value === null || ctrl.value === '') {
+      ctrl.setErrors(null);
+      return;
+    }
+
+    const valor = Number(ctrl.value);
+
+    if (valor <= 0) {
+      ctrl.setErrors({ menorQueZero: true });
+      return;
+    }
+
+    if (!this.itemSelecionado) {
+      ctrl.setErrors(null);
+      return;
+    }
+
+    const max = Number(this.itemSelecionado.medidas.quantidade);
+
+    if (valor > max) {
+      ctrl.setErrors({
+        maiorQueDisponivel: {
+          max,
+        },
+      });
+      return;
+    }
+
+    ctrl.setErrors(null);
   }
 
   onConferir() {
-    if (!this.itemSelecionado || this.form.invalid) return;
+    if (!this.itemSelecionado) return;
 
-    const qtdInformada = Number(this.form.get('quantidade')?.value);
+    const qtdCtrl = this.quantidadeCtrl;
+    if (!qtdCtrl || qtdCtrl.value === null || qtdCtrl.value <= 0) {
+      return;
+    }
+
+    if (qtdCtrl.invalid) return;
+
+    const qtdInformada = Number(qtdCtrl.value);
     const qtdPedido = Number(this.itemSelecionado.medidas.quantidade);
 
     if (qtdInformada > qtdPedido) {
-      return; // regra mantida, sem alert
+      return;
     }
 
-    // diminui do pedido
     const restante = qtdPedido - qtdInformada;
     this.itemSelecionado.medidas.quantidade = String(restante);
 
-    // adiciona / soma nos conferidos
     const existente = this.dataSourceConferidos.data.find(
       (i) =>
         i.produto.codigoBarras === this.itemSelecionado!.produto.codigoBarras,
@@ -167,7 +211,6 @@ export class SeparacaoComponent implements OnInit {
       });
     }
 
-    // remove do pedido se zerar
     if (restante === 0) {
       this.dataSourcePedidos.data = this.dataSourcePedidos.data.filter(
         (i) => i !== this.itemSelecionado,
@@ -182,10 +225,16 @@ export class SeparacaoComponent implements OnInit {
 
   limparFormulario() {
     this.itemSelecionado = null;
+
     this.form.reset();
+
+    Object.values(this.form.controls).forEach((ctrl) => {
+      ctrl.setErrors(null);
+      ctrl.markAsPristine();
+      ctrl.markAsUntouched();
+    });
   }
 
-  // helper para template
   get quantidadeCtrl() {
     return this.form.get('quantidade');
   }
