@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatButtonModule } from '@angular/material/button';
 import { MatNativeDateModule, MatOptionModule } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -10,6 +11,8 @@ import { MatInputModule } from '@angular/material/input';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatSelectModule } from '@angular/material/select';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { Router } from '@angular/router';
 import { Observable, map, startWith } from 'rxjs';
 import {
   FilaConferenciaDTO,
@@ -20,8 +23,6 @@ import {
   TipoOperacao,
 } from '../../services/fila-conferencia/fila-conferencia.model';
 import { FilaConferenciaService } from '../../services/fila-conferencia/fila-conferencia.service';
-import { MatTooltipModule } from '@angular/material/tooltip';
-import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'app-fila-conferencia',
@@ -48,7 +49,10 @@ import { MatButtonModule } from '@angular/material/button';
   styleUrls: ['./fila-conferencia.component.scss'],
 })
 export class FilaConferenciaComponent implements OnInit {
-  constructor(private service: FilaConferenciaService) {}
+  constructor(
+    private service: FilaConferenciaService,
+    private router: Router,
+  ) {}
 
   Status = Status;
 
@@ -222,7 +226,7 @@ export class FilaConferenciaComponent implements OnInit {
 
   // ações
   onSeparar(fila: FilaConferenciaDTO) {
-    console.log('Separação clicada', fila);
+    this.router.navigate([`/separacao/${fila?.numeroNota}`]);
   }
 
   onImprimirEtiqueta(fila: FilaConferenciaDTO) {
@@ -231,13 +235,19 @@ export class FilaConferenciaComponent implements OnInit {
 
   tooltipSeparar(e: any): string {
     return e.status === Status.AGUARDANDO_CONFERENCIA
-      ? `Separar`
+      ? `Separação`
       : `Disponível quando status é ${Status.AGUARDANDO_CONFERENCIA}`;
+  }
+
+  tooltipCubagem(e: any): string {
+    return e.status === Status.EM_ANDAMENTO
+      ? `Separação`
+      : `Disponível quando status é ${Status.EM_ANDAMENTO}`;
   }
 
   tooltipImprimir(e: any): string {
     return e.status === Status.FINALIZADO
-      ? `Imprimir etiqueta`
+      ? `Impressão de etiqueta`
       : `Disponível quando status é ${Status.FINALIZADO}`;
   }
 }
