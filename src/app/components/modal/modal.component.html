@@ -1,14 +1,5 @@
-<div class="dialog-container" [ngClass]="data.tipo || 'info'">
-  <mat-icon class="icon">
-    {{
-      data.tipo === "erro"
-        ? "error"
-        : data.tipo === "aviso"
-          ? "warning"
-          : "info"
-    }}
-  </mat-icon>
-
-  <h2>{{ data.titulo }}</h2>
-  <p>{{ data.mensagem }}</p>
+<div class="dialog-container">
+  <ng-container
+    *ngTemplateOutlet="data.content; context: data.context"
+  ></ng-container>
 </div>
