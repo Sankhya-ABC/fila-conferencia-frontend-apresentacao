@@ -1,19 +1,22 @@
+import { IdNome } from '../dto/dominio.model';
+
 export interface ItemPedidoDTO {
-  produto: {
+  produto: IdNome & {
     imagem: string;
     codigoBarras: string;
-    id: string;
-    nome: string;
-    marca: string;
+    marca: IdNome;
   };
   medidas: {
     quantidade: string;
     unidade: string;
   };
-  fornecedor: {
-    id: string;
-    nome: string;
-  };
+  fornecedor: IdNome;
   controle: string;
   complemento: string;
+}
+
+export interface DadosGeraisPedidoDTO {
+  numeroNota: string;
+  vendedor: IdNome;
+  parceiro: IdNome;
 }
