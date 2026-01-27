@@ -1,5 +1,5 @@
 <!-- Dados Gerais -->
-<div class="container-dados-gerais" *ngIf="dadosGerais">
+<section class="dados-gerais" *ngIf="dadosGerais">
   <div class="info-item">
     <mat-icon fontSet="material-symbols-outlined">receipt</mat-icon>
     <p><span>Nº Nota</span>: {{ numeroNota }}</p>
@@ -18,7 +18,7 @@
       {{ dadosGerais.parceiro.nome }}
     </p>
   </div>
-</div>
+</section>
 
 <!-- Tabela -->
 <h3>Itens do Pedido</h3>
@@ -64,9 +64,11 @@
       </mat-cell></ng-container
     >
 
-    <ng-container matColumnDef="produto.id"
-      ><mat-header-cell *matHeaderCellDef>ID</mat-header-cell
-      ><mat-cell *matCellDef="let e">{{ e.produto.id }}</mat-cell></ng-container
+    <ng-container matColumnDef="produto.codigoBarras"
+      ><mat-header-cell *matHeaderCellDef>Código de Barras</mat-header-cell
+      ><mat-cell *matCellDef="let e">{{
+        e.produto.codigoBarras
+      }}</mat-cell></ng-container
     >
     <ng-container matColumnDef="produto.nome"
       ><mat-header-cell *matHeaderCellDef>Nome</mat-header-cell

@@ -2,7 +2,7 @@
 @use "../../../styles/typography" as *;
 @use "../../../styles/breakpoints" as *;
 
-div.container-dados-gerais {
+.dados-gerais {
   background-color: var(--color-primary);
   color: var(--color-on-primary);
   padding: $space-9 $space-9;
@@ -26,7 +26,12 @@ div.container-dados-gerais {
   }
 }
 
-div.image-container {
+h3 {
+  font-size: $font-lg;
+  margin-bottom: $space-9;
+}
+
+.image-container {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -35,9 +40,4 @@ div.image-container {
   img {
     height: 65px;
   }
-}
-
-h3 {
-  font-size: $font-lg;
-  margin-bottom: $space-9;
 }

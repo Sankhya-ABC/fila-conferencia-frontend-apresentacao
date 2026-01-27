@@ -11,8 +11,8 @@ export interface ItemPedidoDTO {
     unidade: string;
   };
   fornecedor: IdNome;
-  controle: string;
-  complemento: string;
+  controle?: string;
+  complemento?: string;
 }
 
 export interface DadosGeraisPedidoDTO {

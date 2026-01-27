@@ -53,7 +53,7 @@ export class SeparacaoComponent implements OnInit {
   displayedColumns: string[] = [
     'acoes',
     'imagem',
-    'produto.id',
+    'produto.codigoBarras',
     'produto.nome',
     'medidas.quantidade',
     'medidas.unidade',
