@@ -1,6 +1,11 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -19,7 +24,7 @@ import { SeparacaoService } from '../../services/separacao/separacao.service';
   standalone: true,
   imports: [
     CommonModule,
-    FormsModule,
+    ReactiveFormsModule,
     MatTableModule,
     MatFormFieldModule,
     MatInputModule,
@@ -31,6 +36,13 @@ import { SeparacaoService } from '../../services/separacao/separacao.service';
   styleUrl: './separacao.component.scss',
 })
 export class SeparacaoComponent implements OnInit {
+  constructor(
+    private fb: FormBuilder,
+    private separacaoService: SeparacaoService,
+    private route: ActivatedRoute,
+  ) {}
+
+  // data
   displayedColumnsPedidos = [
     'acoes',
     'imagem',
@@ -63,24 +75,26 @@ export class SeparacaoComponent implements OnInit {
   dataSourcePedidos = new MatTableDataSource<ItemPedidoDTO>([]);
   dataSourceConferidos = new MatTableDataSource<ItemPedidoDTO>([]);
 
-  codigoBarras = '';
-  quantidade = 1;
-
-  itemSelecionado: ItemPedidoDTO | null = null;
-
   dadosGerais!: DadosGeraisPedidoDTO;
   numeroNota: string | null = null;
 
-  constructor(
-    private separacaoService: SeparacaoService,
-    private route: ActivatedRoute,
-  ) {}
+  // form
+  form!: FormGroup;
+
+  // control
+  itemSelecionado: ItemPedidoDTO | null = null;
 
   ngOnInit(): void {
     this.numeroNota = this.route.snapshot.paramMap.get('numeroNota');
 
+    this.form = this.fb.group({
+      codigoBarras: [''],
+      quantidade: [null, [Validators.required, Validators.min(1)]],
+      controle: [{ value: '', disabled: true }],
+    });
+
     this.separacaoService.getItensPedido().subscribe((dados) => {
-      this.dataSourcePedidos.data = [...dados];
+      this.dataSourcePedidos.data = dados;
     });
 
     this.separacaoService.getDadosgerais().subscribe((data) => {
@@ -88,20 +102,22 @@ export class SeparacaoComponent implements OnInit {
     });
   }
 
+  // acoes
   onIniciarConferencia(item: ItemPedidoDTO) {
     this.selecionarItem(item);
   }
 
   onCodigoInserido() {
-    if (!this.codigoBarras) return;
+    const codigo = this.form.get('codigoBarras')?.value;
+    if (!codigo) return;
 
     const item = this.dataSourcePedidos.data.find(
-      (i) => i.produto.codigoBarras === this.codigoBarras,
+      (i) => i.produto.codigoBarras === codigo,
     );
 
     if (!item) {
       alert('Item não encontrado no pedido');
-      this.codigoBarras = '';
+      this.limparFormulario();
       return;
     }
 
@@ -110,23 +126,26 @@ export class SeparacaoComponent implements OnInit {
 
   selecionarItem(item: ItemPedidoDTO) {
     this.itemSelecionado = item;
-    this.codigoBarras = item.produto.codigoBarras;
+
+    this.form.patchValue({
+      codigoBarras: item.produto.codigoBarras,
+      controle: item.controle ?? '',
+    });
   }
 
   onConferir() {
-    if (!this.itemSelecionado) return;
+    if (!this.itemSelecionado || this.form.invalid) return;
 
+    const qtdInformada = Number(this.form.get('quantidade')?.value);
     const qtdPedido = Number(this.itemSelecionado.medidas.quantidade);
 
-    if (this.quantidade > qtdPedido) {
-      alert('Quantidade maior que a disponível');
-      return;
+    if (qtdInformada > qtdPedido) {
+      return; // regra mantida, sem alert
     }
 
     // diminui do pedido
-    this.itemSelecionado.medidas.quantidade = String(
-      qtdPedido - this.quantidade,
-    );
+    const restante = qtdPedido - qtdInformada;
+    this.itemSelecionado.medidas.quantidade = String(restante);
 
     // adiciona / soma nos conferidos
     const existente = this.dataSourceConferidos.data.find(
@@ -136,20 +155,20 @@ export class SeparacaoComponent implements OnInit {
 
     if (existente) {
       existente.medidas.quantidade = String(
-        Number(existente.medidas.quantidade) + this.quantidade,
+        Number(existente.medidas.quantidade) + qtdInformada,
       );
     } else {
       this.dataSourceConferidos.data.push({
         ...this.itemSelecionado,
         medidas: {
           ...this.itemSelecionado.medidas,
-          quantidade: String(this.quantidade),
+          quantidade: String(qtdInformada),
         },
       });
     }
 
     // remove do pedido se zerar
-    if (Number(this.itemSelecionado.medidas.quantidade) === 0) {
+    if (restante === 0) {
       this.dataSourcePedidos.data = this.dataSourcePedidos.data.filter(
         (i) => i !== this.itemSelecionado,
       );
@@ -158,8 +177,16 @@ export class SeparacaoComponent implements OnInit {
     this.dataSourcePedidos._updateChangeSubscription();
     this.dataSourceConferidos._updateChangeSubscription();
 
-    this.codigoBarras = '';
-    this.quantidade = 1;
+    this.limparFormulario();
+  }
+
+  limparFormulario() {
     this.itemSelecionado = null;
+    this.form.reset();
+  }
+
+  // helper para template
+  get quantidadeCtrl() {
+    return this.form.get('quantidade');
   }
 }
