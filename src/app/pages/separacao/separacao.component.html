@@ -1,3 +1,25 @@
+<!-- Dados Gerais -->
+<div class="container-dados-gerais" *ngIf="dadosGerais">
+  <div class="info-item">
+    <mat-icon fontSet="material-symbols-outlined">receipt</mat-icon>
+    <p><span>Nº Nota</span>: {{ numeroNota }}</p>
+  </div>
+  <div class="info-item">
+    <mat-icon fontSet="material-symbols-outlined">person</mat-icon>
+    <p>
+      <span>Vendedor</span>: ({{ dadosGerais.vendedor.id }}) -
+      {{ dadosGerais.vendedor.nome }}
+    </p>
+  </div>
+  <div class="info-item">
+    <mat-icon fontSet="material-symbols-outlined">handshake</mat-icon>
+    <p>
+      <span>Parceiro</span>: ({{ dadosGerais.parceiro.id }}) -
+      {{ dadosGerais.parceiro.nome }}
+    </p>
+  </div>
+</div>
+
 <!-- Tabela -->
 <h3>Itens do Pedido</h3>
 <div class="table-container">

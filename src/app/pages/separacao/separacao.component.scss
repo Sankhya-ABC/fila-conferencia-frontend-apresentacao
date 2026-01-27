@@ -2,6 +2,30 @@
 @use "../../../styles/typography" as *;
 @use "../../../styles/breakpoints" as *;
 
+div.container-dados-gerais {
+  background-color: var(--color-primary);
+  color: var(--color-on-primary);
+  padding: $space-9 $space-9;
+  margin-bottom: $space-24;
+
+  & > div {
+    display: flex;
+    align-items: center;
+
+    mat-icon {
+      padding-right: $space-9;
+    }
+
+    p {
+      font-weight: 300;
+
+      span {
+        font-weight: normal;
+      }
+    }
+  }
+}
+
 div.image-container {
   display: flex;
   justify-content: center;
