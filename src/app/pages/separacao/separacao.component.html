@@ -270,3 +270,16 @@
     ></mat-row>
   </mat-table>
 </div>
+
+<!-- TEMPLATE DO MODAL: ITEM NÃO ENCONTRADO -->
+<ng-template #itemNaoEncontrado let-fechar="fechar">
+  <div class="modal-item-nao-encontrado">
+    <mat-icon fontSet="material-symbols-outlined">error</mat-icon>
+    <h4>Item não encontrado</h4>
+    <p>
+      O código de barras informado
+      <strong>{{ form.get("codigoBarras")?.value }}</strong>
+      não pertence a este pedido.
+    </p>
+  </div>
+</ng-template>

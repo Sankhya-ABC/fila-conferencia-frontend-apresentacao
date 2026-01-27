@@ -49,3 +49,18 @@ h3 {
 .itens-pedidos {
   margin-bottom: $space-24;
 }
+
+// TEMPLATE DO MODAL: ITEM NÃO ENCONTRADO
+.modal-item-nao-encontrado {
+  text-align: center;
+
+  h4 {
+    margin: $space-9 0;
+    font-size: $font-lg;
+  }
+
+  h4,
+  mat-icon {
+    color: var(--color-warn);
+  }
+}

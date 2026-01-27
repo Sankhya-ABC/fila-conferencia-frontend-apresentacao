@@ -1,18 +1,15 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
-import {
-  FormBuilder,
-  FormGroup,
-  ReactiveFormsModule,
-  Validators,
-} from '@angular/forms';
+import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
+import { MatDialog } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { ActivatedRoute } from '@angular/router';
+import { ModalComponent } from '../../components/modal/modal.component';
 import {
   DadosGeraisPedidoDTO,
   ItemPedidoDTO,
@@ -31,6 +28,7 @@ import { SeparacaoService } from '../../services/separacao/separacao.service';
     MatButtonModule,
     MatIconModule,
     MatCardModule,
+    ModalComponent,
   ],
   templateUrl: './separacao.component.html',
   styleUrl: './separacao.component.scss',
@@ -40,6 +38,7 @@ export class SeparacaoComponent implements OnInit {
     private fb: FormBuilder,
     private separacaoService: SeparacaoService,
     private route: ActivatedRoute,
+    private dialog: MatDialog,
   ) {}
 
   // data
@@ -84,6 +83,10 @@ export class SeparacaoComponent implements OnInit {
   // control
   itemSelecionado: ItemPedidoDTO | null = null;
 
+  // template
+  @ViewChild('itemNaoEncontrado')
+  itemNaoEncontradoTpl!: TemplateRef<any>;
+
   ngOnInit(): void {
     this.numeroNota = this.route.snapshot.paramMap.get('numeroNota');
 
@@ -116,7 +119,7 @@ export class SeparacaoComponent implements OnInit {
     );
 
     if (!item) {
-      alert('Item não encontrado no pedido');
+      this.abrirItemNaoEncontrado();
       this.limparFormulario();
       return;
     }
@@ -232,6 +235,17 @@ export class SeparacaoComponent implements OnInit {
       ctrl.setErrors(null);
       ctrl.markAsPristine();
       ctrl.markAsUntouched();
+    });
+  }
+
+  abrirItemNaoEncontrado() {
+    this.dialog.open(ModalComponent, {
+      data: {
+        content: this.itemNaoEncontradoTpl,
+        context: {
+          fechar: () => this.dialog.closeAll(),
+        },
+      },
     });
   }
 
