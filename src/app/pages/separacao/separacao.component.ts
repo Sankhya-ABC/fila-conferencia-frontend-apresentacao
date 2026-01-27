@@ -1,18 +1,12 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { Component, OnInit } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
-import { MatCard } from '@angular/material/card';
-import { MatNativeDateModule, MatOptionModule } from '@angular/material/core';
-import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
-import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
-import { MatSelectModule } from '@angular/material/select';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
-import { MatTooltipModule } from '@angular/material/tooltip';
 import { ActivatedRoute } from '@angular/router';
 import {
   DadosGeraisPedidoDTO,
@@ -26,32 +20,18 @@ import { SeparacaoService } from '../../services/separacao/separacao.service';
   imports: [
     CommonModule,
     FormsModule,
-    ReactiveFormsModule,
     MatTableModule,
-    MatPaginatorModule,
     MatFormFieldModule,
     MatInputModule,
-    MatSelectModule,
-    MatOptionModule,
-    MatAutocompleteModule,
-    MatDatepickerModule,
-    MatNativeDateModule,
-    MatIconModule,
-    MatTooltipModule,
-    CommonModule,
     MatButtonModule,
-    MatCard,
+    MatIconModule,
+    MatCardModule,
   ],
   templateUrl: './separacao.component.html',
   styleUrl: './separacao.component.scss',
 })
 export class SeparacaoComponent implements OnInit {
-  constructor(
-    private separacaoService: SeparacaoService,
-    private route: ActivatedRoute,
-  ) {}
-
-  displayedColumns: string[] = [
+  displayedColumnsPedidos = [
     'acoes',
     'imagem',
     'produto.codigoBarras',
@@ -65,53 +45,67 @@ export class SeparacaoComponent implements OnInit {
     'controle',
     'complemento',
   ];
-  dataSource = new MatTableDataSource<ItemPedidoDTO>([]);
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
 
-  dadosGerais!: DadosGeraisPedidoDTO;
-  numeroNota: string | null = null;
+  displayedColumnsConferidos = [
+    'imagem',
+    'produto.codigoBarras',
+    'produto.nome',
+    'medidas.quantidade',
+    'medidas.unidade',
+    'produto.marca.id',
+    'produto.marca.nome',
+    'fornecedor.id',
+    'fornecedor.nome',
+    'controle',
+    'complemento',
+  ];
+
+  dataSourcePedidos = new MatTableDataSource<ItemPedidoDTO>([]);
+  dataSourceConferidos = new MatTableDataSource<ItemPedidoDTO>([]);
 
   codigoBarras = '';
   quantidade = 1;
 
   itemSelecionado: ItemPedidoDTO | null = null;
 
-  itensConferidos: ItemPedidoDTO[] = [];
+  dadosGerais!: DadosGeraisPedidoDTO;
+  numeroNota: string | null = null;
+
+  constructor(
+    private separacaoService: SeparacaoService,
+    private route: ActivatedRoute,
+  ) {}
 
   ngOnInit(): void {
     this.numeroNota = this.route.snapshot.paramMap.get('numeroNota');
 
     this.separacaoService.getItensPedido().subscribe((dados) => {
-      this.dataSource.data = dados;
-      this.dataSource.paginator = this.paginator;
+      this.dataSourcePedidos.data = [...dados];
     });
 
     this.separacaoService.getDadosgerais().subscribe((data) => {
       this.dadosGerais = data;
     });
-
-    console.log(this.dataSource.filteredData?.[0]?.produto?.imagem);
   }
 
-  // ações
+  onIniciarConferencia(item: ItemPedidoDTO) {
+    this.selecionarItem(item);
+  }
+
   onCodigoInserido() {
-    const item = this.dataSource.data.find(
+    if (!this.codigoBarras) return;
+
+    const item = this.dataSourcePedidos.data.find(
       (i) => i.produto.codigoBarras === this.codigoBarras,
     );
 
     if (!item) {
-      this.abrirModalItemNaoEncontrado();
-      // TODO: limpar formulário
+      alert('Item não encontrado no pedido');
+      this.codigoBarras = '';
       return;
     }
 
     this.selecionarItem(item);
-  }
-
-  onBlurCodigo() {
-    if (this.codigoBarras) {
-      this.onCodigoInserido();
-    }
   }
 
   selecionarItem(item: ItemPedidoDTO) {
@@ -122,36 +116,50 @@ export class SeparacaoComponent implements OnInit {
   onConferir() {
     if (!this.itemSelecionado) return;
 
-    const quantidadePedido = Number(this.itemSelecionado.medidas.quantidade);
+    const qtdPedido = Number(this.itemSelecionado.medidas.quantidade);
 
-    if (this.quantidade > quantidadePedido) {
-      alert('Quantidade maior do que a disponível no pedido');
+    if (this.quantidade > qtdPedido) {
+      alert('Quantidade maior que a disponível');
       return;
     }
 
-    // remove do pedido
+    // diminui do pedido
     this.itemSelecionado.medidas.quantidade = String(
-      quantidadePedido - this.quantidade,
+      qtdPedido - this.quantidade,
     );
 
-    // adiciona aos conferidos
-    this.itensConferidos.push({
-      ...this.itemSelecionado,
-      medidas: {
-        ...this.itemSelecionado.medidas,
-        quantidade: String(this.quantidade),
-      },
-    });
+    // adiciona / soma nos conferidos
+    const existente = this.dataSourceConferidos.data.find(
+      (i) =>
+        i.produto.codigoBarras === this.itemSelecionado!.produto.codigoBarras,
+    );
 
-    // reset
+    if (existente) {
+      existente.medidas.quantidade = String(
+        Number(existente.medidas.quantidade) + this.quantidade,
+      );
+    } else {
+      this.dataSourceConferidos.data.push({
+        ...this.itemSelecionado,
+        medidas: {
+          ...this.itemSelecionado.medidas,
+          quantidade: String(this.quantidade),
+        },
+      });
+    }
+
+    // remove do pedido se zerar
+    if (Number(this.itemSelecionado.medidas.quantidade) === 0) {
+      this.dataSourcePedidos.data = this.dataSourcePedidos.data.filter(
+        (i) => i !== this.itemSelecionado,
+      );
+    }
+
+    this.dataSourcePedidos._updateChangeSubscription();
+    this.dataSourceConferidos._updateChangeSubscription();
+
     this.codigoBarras = '';
     this.quantidade = 1;
     this.itemSelecionado = null;
-
-    this.dataSource._updateChangeSubscription();
-  }
-
-  abrirModalItemNaoEncontrado() {
-    alert('Item não encontrado na lista do pedido');
   }
 }

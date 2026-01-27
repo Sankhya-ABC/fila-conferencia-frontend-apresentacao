@@ -20,32 +20,26 @@
   </div>
 </section>
 
-<!-- ALERTA -->
-<mat-card class="alert-conferencia">
-  Clique no item ou Beepe ou Insira o Código de Barra do Item que deseja
-  conferir
-</mat-card>
-
-<!-- FORM DE CONFERÊNCIA -->
-<div class="conferencia-form">
-  <mat-form-field appearance="outline">
+<!-- FORM -->
+<div class="form-conferencia grid">
+  <mat-form-field appearance="outline" class="xs-12 sm-6 md-3 lg-3 xl-2">
     <mat-label>Código de Barras</mat-label>
     <input
       matInput
       [(ngModel)]="codigoBarras"
-      (blur)="onBlurCodigo()"
       (keyup.enter)="onCodigoInserido()"
+      (blur)="onCodigoInserido()"
     />
   </mat-form-field>
 
-  <mat-form-field appearance="outline">
+  <mat-form-field appearance="outline" class="xs-12 sm-6 md-3 lg-3 xl-2">
     <mat-label>Quantidade</mat-label>
-    <input matInput type="number" [(ngModel)]="quantidade" min="1" />
+    <input matInput type="number" min="1" [(ngModel)]="quantidade" />
   </mat-form-field>
 
-  <mat-form-field appearance="outline">
+  <mat-form-field appearance="outline" class="xs-12 sm-6 md-3 lg-3 xl-2">
     <mat-label>Controle</mat-label>
-    <input matInput [value]="itemSelecionado?.controle" readonly />
+    <input matInput [value]="itemSelecionado?.controle || ''" readonly />
   </mat-form-field>
 
   <button
@@ -53,15 +47,16 @@
     color="primary"
     (click)="onConferir()"
     [disabled]="!itemSelecionado"
+    class="xs-12 sm-6 md-3 lg-3 xl-2"
   >
     Conferir
   </button>
 </div>
 
-<!-- Tabela -->
+<!-- TABELA PEDIDOS -->
 <h3>Itens do Pedido</h3>
-<div class="table-container">
-  <mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+<div class="table-container itens-pedidos">
+  <mat-table [dataSource]="dataSourcePedidos" class="mat-elevation-z8">
     <ng-container matColumnDef="acoes" sticky>
       <mat-header-cell *matHeaderCellDef>Ações</mat-header-cell>
       <mat-cell *matCellDef="let e">
@@ -71,8 +66,8 @@
             matTooltipClass="tooltip"
             matTooltipPosition="above"
           >
-            <button mat-icon-button (click)="selecionarItem(e)">
-              <mat-icon fontSet="material-symbols-outlined"> search </mat-icon>
+            <button mat-icon-button (click)="onIniciarConferencia(e)">
+              <mat-icon fontSet="material-symbols-outlined">search</mat-icon>
             </button>
           </span>
         </div>
@@ -159,15 +154,104 @@
       }}</mat-cell></ng-container
     >
 
-    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-header-row *matHeaderRowDef="displayedColumnsPedidos"></mat-header-row>
     <mat-row
-      *matRowDef="let row; columns: displayedColumns"
+      *matRowDef="let row; columns: displayedColumnsPedidos"
       [class.linha-selecionada]="row === itemSelecionado"
     ></mat-row>
   </mat-table>
 </div>
 
-<mat-paginator
-  [pageSizeOptions]="[5, 10, 20]"
-  showFirstLastButtons
-></mat-paginator>
+<!-- TABELA CONFERIDOS -->
+<h3>Itens Conferidos</h3>
+<div class="table-container itens-conferidos">
+  <mat-table [dataSource]="dataSourceConferidos" class="mat-elevation-z8">
+    <ng-container matColumnDef="imagem"
+      ><mat-header-cell *matHeaderCellDef style="text-align: center"
+        >Imagem</mat-header-cell
+      ><mat-cell *matCellDef="let e"
+        ><div class="image-container">
+          <img
+            *ngIf="e.produto.imagem"
+            [src]="e.produto.imagem"
+            alt="Imagem do produto"
+          />
+          <mat-icon
+            *ngIf="!e.produto.imagem"
+            fontSet="material-symbols-outlined"
+            >hide_image</mat-icon
+          >
+        </div>
+      </mat-cell></ng-container
+    >
+
+    <ng-container matColumnDef="produto.codigoBarras"
+      ><mat-header-cell *matHeaderCellDef>Código de Barras</mat-header-cell
+      ><mat-cell *matCellDef="let e">{{
+        e.produto.codigoBarras
+      }}</mat-cell></ng-container
+    >
+    <ng-container matColumnDef="produto.nome"
+      ><mat-header-cell *matHeaderCellDef>Nome</mat-header-cell
+      ><mat-cell *matCellDef="let e">{{
+        e.produto.nome
+      }}</mat-cell></ng-container
+    >
+
+    <ng-container matColumnDef="medidas.quantidade"
+      ><mat-header-cell *matHeaderCellDef>Quantidade</mat-header-cell
+      ><mat-cell *matCellDef="let e">{{
+        e.medidas.quantidade
+      }}</mat-cell></ng-container
+    >
+    <ng-container matColumnDef="medidas.unidade"
+      ><mat-header-cell *matHeaderCellDef>Unidade</mat-header-cell
+      ><mat-cell *matCellDef="let e">{{
+        e.medidas.unidade
+      }}</mat-cell></ng-container
+    >
+
+    <ng-container matColumnDef="produto.marca.id"
+      ><mat-header-cell *matHeaderCellDef>ID Marca</mat-header-cell
+      ><mat-cell *matCellDef="let e">{{
+        e.produto.marca.id
+      }}</mat-cell></ng-container
+    >
+    <ng-container matColumnDef="produto.marca.nome"
+      ><mat-header-cell *matHeaderCellDef>Marca</mat-header-cell
+      ><mat-cell *matCellDef="let e">{{
+        e.produto.marca.nome
+      }}</mat-cell></ng-container
+    >
+    <ng-container matColumnDef="fornecedor.id"
+      ><mat-header-cell *matHeaderCellDef>ID Fornecedor</mat-header-cell
+      ><mat-cell *matCellDef="let e">{{
+        e.fornecedor.id
+      }}</mat-cell></ng-container
+    >
+    <ng-container matColumnDef="fornecedor.nome"
+      ><mat-header-cell *matHeaderCellDef>Fornecedor</mat-header-cell
+      ><mat-cell *matCellDef="let e">{{
+        e.fornecedor.nome
+      }}</mat-cell></ng-container
+    >
+    <ng-container matColumnDef="controle"
+      ><mat-header-cell *matHeaderCellDef>Controle</mat-header-cell
+      ><mat-cell *matCellDef="let e">{{ e.controle }}</mat-cell></ng-container
+    >
+    <ng-container matColumnDef="complemento"
+      ><mat-header-cell *matHeaderCellDef>Complemento</mat-header-cell
+      ><mat-cell *matCellDef="let e">{{
+        e.complemento
+      }}</mat-cell></ng-container
+    >
+
+    <mat-header-row
+      *matHeaderRowDef="displayedColumnsConferidos"
+    ></mat-header-row>
+    <mat-row
+      *matRowDef="let row; columns: displayedColumnsConferidos"
+      [class.linha-selecionada]="row === itemSelecionado"
+    ></mat-row>
+  </mat-table>
+</div>
