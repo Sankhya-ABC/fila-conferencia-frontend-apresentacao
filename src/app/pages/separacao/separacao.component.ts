@@ -28,7 +28,6 @@ import { SeparacaoService } from '../../services/separacao/separacao.service';
     MatButtonModule,
     MatIconModule,
     MatCardModule,
-    ModalComponent,
   ],
   templateUrl: './separacao.component.html',
   styleUrl: './separacao.component.scss',
@@ -84,8 +83,11 @@ export class SeparacaoComponent implements OnInit {
   itemSelecionado: ItemPedidoDTO | null = null;
 
   // template
-  @ViewChild('itemNaoEncontrado')
-  itemNaoEncontradoTpl!: TemplateRef<any>;
+  @ViewChild('modalItemNaoEncontrado')
+  modalItemNaoEncontradoTpl!: TemplateRef<any>;
+
+  @ViewChild('modalIniciarCubagem')
+  modalIniciarCubagemTpl!: TemplateRef<any>;
 
   ngOnInit(): void {
     this.numeroNota = this.route.snapshot.paramMap.get('numeroNota');
@@ -119,7 +121,7 @@ export class SeparacaoComponent implements OnInit {
     );
 
     if (!item) {
-      this.abrirItemNaoEncontrado();
+      this.abrirModalItemNaoEncontrado();
       this.limparFormulario();
       return;
     }
@@ -224,6 +226,14 @@ export class SeparacaoComponent implements OnInit {
     this.dataSourceConferidos._updateChangeSubscription();
 
     this.limparFormulario();
+
+    this.verificarSeFinalizouConferencia();
+  }
+
+  verificarSeFinalizouConferencia() {
+    if (this.dataSourcePedidos.data.length === 0) {
+      this.abrirModalIniciarCubagem();
+    }
   }
 
   limparFormulario() {
@@ -238,15 +248,28 @@ export class SeparacaoComponent implements OnInit {
     });
   }
 
-  abrirItemNaoEncontrado() {
+  abrirModalItemNaoEncontrado() {
     this.dialog.open(ModalComponent, {
       data: {
-        content: this.itemNaoEncontradoTpl,
+        content: this.modalItemNaoEncontradoTpl,
         context: {
           fechar: () => this.dialog.closeAll(),
         },
       },
     });
+  }
+
+  abrirModalIniciarCubagem() {
+    this.dialog.open(ModalComponent, {
+      data: {
+        template: this.modalIniciarCubagemTpl,
+      },
+      disableClose: true,
+    });
+  }
+
+  iniciarCubagem() {
+    console.log('Iniciando cubagem...');
   }
 
   get quantidadeCtrl() {

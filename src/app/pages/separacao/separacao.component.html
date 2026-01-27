@@ -272,7 +272,7 @@
 </div>
 
 <!-- TEMPLATE DO MODAL: ITEM NÃO ENCONTRADO -->
-<ng-template #itemNaoEncontrado let-fechar="fechar">
+<ng-template #modalItemNaoEncontrado let-fechar="fechar">
   <div class="modal-item-nao-encontrado">
     <mat-icon fontSet="material-symbols-outlined">error</mat-icon>
     <h4>Item não encontrado</h4>
@@ -281,5 +281,35 @@
       <strong>{{ form.get("codigoBarras")?.value }}</strong>
       não pertence a este pedido.
     </p>
+  </div>
+</ng-template>
+
+<!-- TEMPLATE DO MODAL: INICIAR CUBAGEM -->
+<ng-template #modalIniciarCubagemTpl let-fechar="fechar">
+  <div class="modal-cubagem">
+    <mat-icon fontSet="material-symbols-outlined" class="icone">
+      inventory_2
+    </mat-icon>
+
+    <h3>Conferência finalizada</h3>
+
+    <p>
+      Todos os itens do pedido foram conferidos com sucesso. Deseja iniciar a
+      cubagem agora?
+    </p>
+
+    <div class="acoes">
+      <button
+        mat-raised-button
+        color="primary"
+        (click)="iniciarCubagem(); fechar()"
+      >
+        Iniciar cubagem
+      </button>
+
+      <button mat-raised-button color="warn" (click)="fechar()">
+        Cancelar
+      </button>
+    </div>
   </div>
 </ng-template>
