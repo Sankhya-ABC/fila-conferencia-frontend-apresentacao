@@ -8,6 +8,11 @@
   display: block;
   border-top: spacing.$space-4 solid var(--color-primary);
 
+  .linha-selecionada {
+    background-color: var(--color-primary);
+    color: var(--color-on-primary);
+  }
+
   mat-table {
     width: 100%;
     table-layout: auto;

@@ -3,6 +3,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatButtonModule } from '@angular/material/button';
+import { MatCard } from '@angular/material/card';
 import { MatNativeDateModule, MatOptionModule } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -13,7 +14,6 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { ActivatedRoute } from '@angular/router';
-import { FilaConferenciaDTO } from '../../services/fila-conferencia/fila-conferencia.model';
 import {
   DadosGeraisPedidoDTO,
   ItemPedidoDTO,
@@ -40,6 +40,7 @@ import { SeparacaoService } from '../../services/separacao/separacao.service';
     MatTooltipModule,
     CommonModule,
     MatButtonModule,
+    MatCard,
   ],
   templateUrl: './separacao.component.html',
   styleUrl: './separacao.component.scss',
@@ -70,6 +71,13 @@ export class SeparacaoComponent implements OnInit {
   dadosGerais!: DadosGeraisPedidoDTO;
   numeroNota: string | null = null;
 
+  codigoBarras = '';
+  quantidade = 1;
+
+  itemSelecionado: ItemPedidoDTO | null = null;
+
+  itensConferidos: ItemPedidoDTO[] = [];
+
   ngOnInit(): void {
     this.numeroNota = this.route.snapshot.paramMap.get('numeroNota');
 
@@ -86,11 +94,64 @@ export class SeparacaoComponent implements OnInit {
   }
 
   // ações
-  onIniciarConferencia(fila: FilaConferenciaDTO) {
-    console.log('aaaa');
+  onCodigoInserido() {
+    const item = this.dataSource.data.find(
+      (i) => i.produto.codigoBarras === this.codigoBarras,
+    );
+
+    if (!item) {
+      this.abrirModalItemNaoEncontrado();
+      // TODO: limpar formulário
+      return;
+    }
+
+    this.selecionarItem(item);
   }
 
-  tooltipIniciarConferencia(e: ItemPedidoDTO): string {
-    return `Iniciar conferência de ${e.produto.nome}`;
+  onBlurCodigo() {
+    if (this.codigoBarras) {
+      this.onCodigoInserido();
+    }
+  }
+
+  selecionarItem(item: ItemPedidoDTO) {
+    this.itemSelecionado = item;
+    this.codigoBarras = item.produto.codigoBarras;
+  }
+
+  onConferir() {
+    if (!this.itemSelecionado) return;
+
+    const quantidadePedido = Number(this.itemSelecionado.medidas.quantidade);
+
+    if (this.quantidade > quantidadePedido) {
+      alert('Quantidade maior do que a disponível no pedido');
+      return;
+    }
+
+    // remove do pedido
+    this.itemSelecionado.medidas.quantidade = String(
+      quantidadePedido - this.quantidade,
+    );
+
+    // adiciona aos conferidos
+    this.itensConferidos.push({
+      ...this.itemSelecionado,
+      medidas: {
+        ...this.itemSelecionado.medidas,
+        quantidade: String(this.quantidade),
+      },
+    });
+
+    // reset
+    this.codigoBarras = '';
+    this.quantidade = 1;
+    this.itemSelecionado = null;
+
+    this.dataSource._updateChangeSubscription();
+  }
+
+  abrirModalItemNaoEncontrado() {
+    alert('Item não encontrado na lista do pedido');
   }
 }

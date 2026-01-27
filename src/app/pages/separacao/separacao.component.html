@@ -20,6 +20,44 @@
   </div>
 </section>
 
+<!-- ALERTA -->
+<mat-card class="alert-conferencia">
+  Clique no item ou Beepe ou Insira o Código de Barra do Item que deseja
+  conferir
+</mat-card>
+
+<!-- FORM DE CONFERÊNCIA -->
+<div class="conferencia-form">
+  <mat-form-field appearance="outline">
+    <mat-label>Código de Barras</mat-label>
+    <input
+      matInput
+      [(ngModel)]="codigoBarras"
+      (blur)="onBlurCodigo()"
+      (keyup.enter)="onCodigoInserido()"
+    />
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <mat-label>Quantidade</mat-label>
+    <input matInput type="number" [(ngModel)]="quantidade" min="1" />
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <mat-label>Controle</mat-label>
+    <input matInput [value]="itemSelecionado?.controle" readonly />
+  </mat-form-field>
+
+  <button
+    mat-raised-button
+    color="primary"
+    (click)="onConferir()"
+    [disabled]="!itemSelecionado"
+  >
+    Conferir
+  </button>
+</div>
+
 <!-- Tabela -->
 <h3>Itens do Pedido</h3>
 <div class="table-container">
@@ -29,15 +67,11 @@
       <mat-cell *matCellDef="let e">
         <div class="acoes-container">
           <span
-            matTooltip="{{ tooltipIniciarConferencia(e) }}"
+            matTooltip="Conferir"
             matTooltipClass="tooltip"
             matTooltipPosition="above"
           >
-            <button
-              mat-icon-button
-              (click)="onIniciarConferencia(e)"
-              [disabled]="e.status !== false"
-            >
+            <button mat-icon-button (click)="selecionarItem(e)">
               <mat-icon fontSet="material-symbols-outlined"> search </mat-icon>
             </button>
           </span>
@@ -126,7 +160,10 @@
     >
 
     <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-    <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
+    <mat-row
+      *matRowDef="let row; columns: displayedColumns"
+      [class.linha-selecionada]="row === itemSelecionado"
+    ></mat-row>
   </mat-table>
 </div>
 
