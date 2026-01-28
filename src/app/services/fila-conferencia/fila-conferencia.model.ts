@@ -22,20 +22,37 @@ export enum TipoEntrega {
 }
 
 export interface FilaConferenciaDTO {
-  status: Status;
+  codigoStatus: string;
+  descricaoStatus: string;
+
   idEmpresa: string;
+  nomeEmpresa: string;
+
   numeroModial: string;
   numeroNota: string;
   numeroUnico: string;
+
   dataMovimento: Date;
-  tipoMovimento: TipoMovimento;
-  tipoOperacao: TipoOperacao;
-  tipoEntrega: TipoEntrega;
+
+  codigoTipoMovimento: string;
+  descricaoTipoMovimento: string;
+
+  codigoTipoOperacao: string;
+  descricaoTipoOperacao: string;
+
+  codigoTipoEntrega: string;
+  descricaoTipoEntrega: string;
+
+  idParceiro: string;
   nomeParceiro: string;
-  numeroParceiro: string;
-  numeroVendedor: string;
+
+  idVendedor: string;
+  nomeVendedor: string;
+
   valorNota: string;
+
   volume: string;
+
   idUsuarioInclusao: string;
   idUsuarioAlteracao: string;
 }
