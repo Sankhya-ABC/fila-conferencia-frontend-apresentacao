@@ -1,7 +1,8 @@
 import axios from 'axios';
+import { environment } from '../../environments/environment';
 
 export const api = axios.create({
-  baseURL: 'http://localhost:3000',
+  baseURL: `${environment.API_GATEWAY}/api`,
   timeout: 30000,
   headers: {
     'Content-Type': 'application/json',

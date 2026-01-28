@@ -11,22 +11,22 @@ import {
 })
 export class FilaConferenciaService {
   getFilaConferencias(params?: FilaConferenciaFilter) {
-    return api.get<FilaConferenciaDTO[]>('/fila-conferencia', { params });
+    return api.get<FilaConferenciaDTO[]>('/filas-conferencia', { params });
   }
 
   getStatus() {
-    return api.get<CodigoDescricao[]>('/fila-conferencia/status');
+    return api.get<CodigoDescricao[]>('/filas-conferencia/status');
   }
 
   getTipoMovimento() {
-    return api.get<CodigoDescricao[]>('/fila-conferencia/tipo-movimento');
+    return api.get<CodigoDescricao[]>('/filas-conferencia/tipo-movimento');
   }
 
   getTipoOperacao() {
-    return api.get<CodigoDescricao[]>('/fila-conferencia/tipo-operacao');
+    return api.get<CodigoDescricao[]>('/filas-conferencia/tipo-operacao');
   }
 
   getTipoEntrega() {
-    return api.get<CodigoDescricao[]>('/fila-conferencia/tipo-entrega');
+    return api.get<CodigoDescricao[]>('/filas-conferencia/tipo-entrega');
   }
 }
