@@ -35,8 +35,15 @@ export interface FilaConferenciaDTO {
   nomeUsuarioAlteracao: string;
 }
 
-export interface ParceiroDTO {
-  id: string;
-  nome: string;
-  cpfCnpj: string;
+export class FilaConferenciaFilter {
+  codigoStatus?: string;
+  numeroModial?: string;
+  numeroNota?: string;
+  numeroUnico?: string;
+  dataInicio?: string;
+  dataFim?: string;
+  idParceiro?: string;
+  codigoTipoMovimento?: string;
+  codigoTipoOperacao?: string;
+  codigoTipoEntrega?: string;
 }
