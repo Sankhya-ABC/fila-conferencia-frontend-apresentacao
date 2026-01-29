@@ -26,26 +26,26 @@ export class FilaConferenciaService {
       });
     }
 
-    return this.http.get<FilaConferenciaDTO[]>('/filas-conferencia', {
+    return this.http.get<FilaConferenciaDTO[]>('/fila-conferencias', {
       params: httpParams,
     });
   }
 
   getStatus(): Observable<CodigoDescricao[]> {
-    return this.http.get<CodigoDescricao[]>('/filas-conferencia/status');
+    return this.http.get<CodigoDescricao[]>('/fila-conferencias/status');
   }
 
   getTipoMovimento(): Observable<CodigoDescricao[]> {
     return this.http.get<CodigoDescricao[]>(
-      '/filas-conferencia/tipo-movimento',
+      '/fila-conferencias/tipo-movimento',
     );
   }
 
   getTipoOperacao(): Observable<CodigoDescricao[]> {
-    return this.http.get<CodigoDescricao[]>('/filas-conferencia/tipo-operacao');
+    return this.http.get<CodigoDescricao[]>('/fila-conferencias/tipo-operacao');
   }
 
   getTipoEntrega(): Observable<CodigoDescricao[]> {
-    return this.http.get<CodigoDescricao[]>('/filas-conferencia/tipo-entrega');
+    return this.http.get<CodigoDescricao[]>('/fila-conferencias/tipo-entrega');
   }
 }

@@ -188,8 +188,16 @@ export class FilaConferenciaComponent implements OnInit {
   }
 
   // formats
-  displayParceiro = (parceiro?: ParceiroDTO): string =>
-    parceiro ? `${parceiro.nome} - ${parceiro.cpfCnpj}` : '';
+  displayParceiro(parceiro?: ParceiroDTO): string {
+    return parceiro ? `${parceiro.nome} - ${parceiro.cpfCnpj}` : '';
+  }
+
+  displayDate(date: string) {
+    const day = date?.substring(0, 2);
+    const month = date?.substring(2, 4);
+    const year = date?.substring(4, 8);
+    return `${day}/${month}/${year}`;
+  }
 
   // tooltips
   tooltipSeparar(data: FilaConferenciaDTO): string {

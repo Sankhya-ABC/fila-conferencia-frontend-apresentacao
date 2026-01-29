@@ -190,7 +190,9 @@
 
     <ng-container matColumnDef="dataMovimento">
       <mat-header-cell *matHeaderCellDef>Data Movimento</mat-header-cell>
-      <mat-cell *matCellDef="let data">{{ data.dataMovimento }}</mat-cell>
+      <mat-cell *matCellDef="let data">{{
+        displayDate(data.dataMovimento)
+      }}</mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="codigoStatus">
