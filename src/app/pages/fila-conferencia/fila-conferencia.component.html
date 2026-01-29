@@ -57,13 +57,10 @@
 
   <mat-form-field appearance="outline" class="xs-12 sm-12 md-8 lg-6 xl-4">
     <mat-label>Parceiro</mat-label>
-    <input matInput [formControl]="parceiroCtrl" [matAutocomplete]="auto" />
-    <mat-autocomplete
-      #auto="matAutocomplete"
-      (optionSelected)="onParceiroSelected($event.option.value)"
-    >
+    <input matInput formControlName="idParceiro" [matAutocomplete]="auto" />
+    <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayParceiro">
       <mat-option *ngFor="let parceiro of listParceiro" [value]="parceiro">
-        {{ parceiro.nome }} - {{ parceiro.cpfCnpj }}
+        {{ displayParceiro(parceiro) }}
       </mat-option>
     </mat-autocomplete>
   </mat-form-field>
@@ -298,8 +295,3 @@
     <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
   </mat-table>
 </div>
-
-<mat-paginator
-  [pageSizeOptions]="[5, 10, 20]"
-  showFirstLastButtons
-></mat-paginator>

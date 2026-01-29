@@ -1,8 +1,7 @@
-import { CommonModule } from '@angular/common';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { CommonModule, formatDate } from '@angular/common';
+import { Component, OnInit } from '@angular/core';
 import {
   FormBuilder,
-  FormControl,
   FormGroup,
   FormsModule,
   ReactiveFormsModule,
@@ -14,7 +13,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
-import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
+import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSelectModule } from '@angular/material/select';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
@@ -88,26 +87,20 @@ export class FilaConferenciaComponent implements OnInit {
     'nomeUsuarioAlteracao',
   ];
   dataSource = new MatTableDataSource<FilaConferenciaDTO>([]);
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
-
-  // FORM DE FILTROS
-  filters!: FormGroup;
-
-  // parceiro autocomplete
-  parceiroCtrl = new FormControl('');
-  parceiroSelecionado?: ParceiroDTO;
-  listParceiro: ParceiroDTO[] = [];
 
   // selects
   listStatus: CodigoDescricao[] = [];
   listTipoMovimento: CodigoDescricao[] = [];
   listTipoOperacao: CodigoDescricao[] = [];
   listTipoEntrega: CodigoDescricao[] = [];
+  listParceiro: ParceiroDTO[] = [];
+
+  // filters
+  filters!: FormGroup;
 
   ngOnInit(): void {
     this.criarForm();
 
-    // selects
     this.filaConferenciaService
       .getStatus()
       .subscribe((data) => (this.listStatus = data));
@@ -124,15 +117,17 @@ export class FilaConferenciaComponent implements OnInit {
       .getTipoEntrega()
       .subscribe((data) => (this.listTipoEntrega = data));
 
-    this.parceiroCtrl.valueChanges.subscribe((value) => {
-      if (!value || value.length < 2) {
-        this.listParceiro = [];
-        return;
-      }
+    this.filters.get('idParceiro')!.valueChanges.subscribe((value) => {
+      if (typeof value === 'string') {
+        if (!value) {
+          this.listParceiro = [];
+          return;
+        }
 
-      this.parceiroService
-        .getParceiros({ search: value })
-        .subscribe((resp) => (this.listParceiro = resp));
+        this.parceiroService
+          .getParceiros({ search: value })
+          .subscribe((resp) => (this.listParceiro = resp));
+      }
     });
 
     this.applyFilter();
@@ -141,29 +136,28 @@ export class FilaConferenciaComponent implements OnInit {
   private criarForm(): void {
     this.filters = this.fb.group({
       codigoStatus: [],
-      codigoTipoMovimento: [],
-      codigoTipoOperacao: [],
-      codigoTipoEntrega: [],
       numeroModial: [],
       numeroNota: [],
       numeroUnico: [],
       dataInicio: [],
       dataFim: [],
+      idParceiro: [],
+      codigoTipoMovimento: [],
+      codigoTipoOperacao: [],
+      codigoTipoEntrega: [],
     });
   }
 
-  onParceiroSelected(parceiro: ParceiroDTO): void {
-    this.parceiroSelecionado = parceiro;
-    this.applyFilter();
-  }
-
   applyFilter(): void {
-    const formValue = this.filters.value;
+    this.dataSource.data = [];
+    const params: FilaConferenciaFilter = this.filters.value;
 
-    const params: FilaConferenciaFilter = {
-      ...formValue,
-      idParceiro: this.parceiroSelecionado?.id,
-    };
+    params.dataInicio = params.dataInicio
+      ? formatDate(params.dataInicio, 'yyyy-MM-dd', 'en-US')
+      : undefined;
+    params.dataFim = params.dataFim
+      ? formatDate(params.dataFim, 'yyyy-MM-dd', 'en-US')
+      : undefined;
 
     Object.keys(params).forEach(
       (k) =>
@@ -175,15 +169,12 @@ export class FilaConferenciaComponent implements OnInit {
       .getFilaConferencias(params)
       .subscribe((resp) => {
         this.dataSource.data = resp;
-        this.dataSource.paginator = this.paginator;
       });
   }
 
   // filters
   onLimparCampos(): void {
     this.filters.reset();
-    this.parceiroSelecionado = undefined;
-    this.parceiroCtrl.setValue('');
     this.applyFilter();
   }
 
@@ -195,6 +186,10 @@ export class FilaConferenciaComponent implements OnInit {
   onImprimirEtiqueta(fila: FilaConferenciaDTO): void {
     console.log('Imprimir etiqueta clicado', fila);
   }
+
+  // formats
+  displayParceiro = (parceiro?: ParceiroDTO): string =>
+    parceiro ? `${parceiro.nome} - ${parceiro.cpfCnpj}` : '';
 
   // tooltips
   tooltipSeparar(data: FilaConferenciaDTO): string {
