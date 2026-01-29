@@ -1,13 +1,12 @@
 <!-- Filtros -->
-<div class="filtros-container grid">
+<div class="filtros-container grid" [formGroup]="filters">
   <mat-form-field appearance="outline" class="xs-12 sm-6 md-4 lg-3 xl-2">
     <mat-label>Status</mat-label>
     <mat-select
-      [(ngModel)]="statusFilter"
-      [ngModelOptions]="{ standalone: true }"
-      (selectionChange)="onFilterChange('statusFilter', $event.value)"
+      formControlName="codigoStatus"
+      (selectionChange)="applyFilter()"
     >
-      <mat-option [value]="undefined">Todos</mat-option>
+      <mat-option [value]="null">Todos</mat-option>
       <mat-option *ngFor="let status of listStatus" [value]="status.codigo">
         {{ status.descricao }}
       </mat-option>
@@ -16,32 +15,17 @@
 
   <mat-form-field appearance="outline" class="xs-12 sm-6 md-4 lg-3 xl-2">
     <mat-label>Número Modial</mat-label>
-    <input
-      matInput
-      [(ngModel)]="numeroModialFilter"
-      [ngModelOptions]="{ standalone: true }"
-      (input)="applyFilter()"
-    />
+    <input matInput formControlName="numeroModial" (input)="applyFilter()" />
   </mat-form-field>
 
   <mat-form-field appearance="outline" class="xs-12 sm-6 md-4 lg-3 xl-2">
     <mat-label>Número Nota</mat-label>
-    <input
-      matInput
-      [(ngModel)]="numeroNotaFilter"
-      [ngModelOptions]="{ standalone: true }"
-      (input)="applyFilter()"
-    />
+    <input matInput formControlName="numeroNota" (input)="applyFilter()" />
   </mat-form-field>
 
   <mat-form-field appearance="outline" class="xs-12 sm-6 md-4 lg-3 xl-2">
     <mat-label>Número Único</mat-label>
-    <input
-      matInput
-      [(ngModel)]="numeroUnicoFilter"
-      [ngModelOptions]="{ standalone: true }"
-      (input)="applyFilter()"
-    />
+    <input matInput formControlName="numeroUnico" (input)="applyFilter()" />
   </mat-form-field>
 
   <mat-form-field appearance="outline" class="xs-12 sm-6 md-4 lg-3 xl-2">
@@ -49,8 +33,7 @@
     <input
       matInput
       [matDatepicker]="pickerInicio"
-      [(ngModel)]="dataInicioFilter"
-      [ngModelOptions]="{ standalone: true }"
+      formControlName="dataInicio"
       (dateChange)="applyFilter()"
     />
     <mat-datepicker-toggle
@@ -65,8 +48,7 @@
     <input
       matInput
       [matDatepicker]="pickerFim"
-      [(ngModel)]="dataFimFilter"
-      [ngModelOptions]="{ standalone: true }"
+      formControlName="dataFim"
       (dateChange)="applyFilter()"
     />
     <mat-datepicker-toggle matSuffix [for]="pickerFim"></mat-datepicker-toggle>
@@ -89,11 +71,10 @@
   <mat-form-field appearance="outline" class="xs-12 sm-6 md-4 lg-3 xl-2">
     <mat-label>Tipo Movimento</mat-label>
     <mat-select
-      [(ngModel)]="tipoMovimentoFilter"
-      [ngModelOptions]="{ standalone: true }"
-      (selectionChange)="onFilterChange('tipoMovimentoFilter', $event.value)"
+      formControlName="codigoTipoMovimento"
+      (selectionChange)="applyFilter()"
     >
-      <mat-option [value]="undefined">Todos</mat-option>
+      <mat-option [value]="null">Todos</mat-option>
       <mat-option
         *ngFor="let tipoMovimento of listTipoMovimento"
         [value]="tipoMovimento.codigo"
@@ -106,11 +87,10 @@
   <mat-form-field appearance="outline" class="xs-12 sm-6 md-4 lg-3 xl-2">
     <mat-label>Tipo Operação</mat-label>
     <mat-select
-      [(ngModel)]="tipoOperacaoFilter"
-      [ngModelOptions]="{ standalone: true }"
-      (selectionChange)="onFilterChange('tipoOperacaoFilter', $event.value)"
+      formControlName="codigoTipoOperacao"
+      (selectionChange)="applyFilter()"
     >
-      <mat-option [value]="undefined">Todos</mat-option>
+      <mat-option [value]="null">Todos</mat-option>
       <mat-option
         *ngFor="let tipoOperacao of listTipoOperacao"
         [value]="tipoOperacao.codigo"
@@ -123,11 +103,10 @@
   <mat-form-field appearance="outline" class="xs-12 sm-6 md-4 lg-3 xl-2">
     <mat-label>Tipo Entrega</mat-label>
     <mat-select
-      [(ngModel)]="tipoEntregaFilter"
-      [ngModelOptions]="{ standalone: true }"
-      (selectionChange)="onFilterChange('tipoEntregaFilter', $event.value)"
+      formControlName="codigoTipoEntrega"
+      (selectionChange)="applyFilter()"
     >
-      <mat-option [value]="undefined">Todos</mat-option>
+      <mat-option [value]="null">Todos</mat-option>
       <mat-option
         *ngFor="let tipoEntrega of listTipoEntrega"
         [value]="tipoEntrega.codigo"

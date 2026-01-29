@@ -1,6 +1,12 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import {
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  FormsModule,
+  ReactiveFormsModule,
+} from '@angular/forms';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatButtonModule } from '@angular/material/button';
 import { MatNativeDateModule, MatOptionModule } from '@angular/material/core';
@@ -47,6 +53,7 @@ import { ParceiroService } from '../../services/parceiro/parceiro.service';
 })
 export class FilaConferenciaComponent implements OnInit {
   constructor(
+    private fb: FormBuilder,
     private filaConferenciaService: FilaConferenciaService,
     private parceiroService: ParceiroService,
     private router: Router,
@@ -83,19 +90,13 @@ export class FilaConferenciaComponent implements OnInit {
   dataSource = new MatTableDataSource<FilaConferenciaDTO>([]);
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
-  // filtros
-  statusFilter?: string;
-  tipoMovimentoFilter?: string;
-  tipoOperacaoFilter?: string;
-  tipoEntregaFilter?: string;
-  numeroModialFilter?: string;
-  numeroNotaFilter?: string;
-  numeroUnicoFilter?: string;
-  dataInicioFilter?: Date;
-  dataFimFilter?: Date;
+  // FORM DE FILTROS
+  filters!: FormGroup;
 
+  // parceiro autocomplete
   parceiroCtrl = new FormControl('');
   parceiroSelecionado?: ParceiroDTO;
+  listParceiro: ParceiroDTO[] = [];
 
   // selects
   listStatus: CodigoDescricao[] = [];
@@ -103,10 +104,9 @@ export class FilaConferenciaComponent implements OnInit {
   listTipoOperacao: CodigoDescricao[] = [];
   listTipoEntrega: CodigoDescricao[] = [];
 
-  // autocomplete
-  listParceiro: ParceiroDTO[] = [];
-
   ngOnInit(): void {
+    this.criarForm();
+
     // selects
     this.filaConferenciaService
       .getStatus()
@@ -124,39 +124,45 @@ export class FilaConferenciaComponent implements OnInit {
       .getTipoEntrega()
       .subscribe((data) => (this.listTipoEntrega = data));
 
-    // autocomplete parceiro (digitando)
     this.parceiroCtrl.valueChanges.subscribe((value) => {
       if (!value || value.length < 2) {
         this.listParceiro = [];
         return;
       }
 
-      this.parceiroService.getParceiros({ search: value }).subscribe((resp) => {
-        this.listParceiro = resp;
-      });
+      this.parceiroService
+        .getParceiros({ search: value })
+        .subscribe((resp) => (this.listParceiro = resp));
     });
 
-    // carga inicial da tabela
     this.applyFilter();
   }
 
-  onParceiroSelected(parceiro: ParceiroDTO) {
+  private criarForm(): void {
+    this.filters = this.fb.group({
+      codigoStatus: [],
+      codigoTipoMovimento: [],
+      codigoTipoOperacao: [],
+      codigoTipoEntrega: [],
+      numeroModial: [],
+      numeroNota: [],
+      numeroUnico: [],
+      dataInicio: [],
+      dataFim: [],
+    });
+  }
+
+  onParceiroSelected(parceiro: ParceiroDTO): void {
     this.parceiroSelecionado = parceiro;
     this.applyFilter();
   }
 
-  applyFilter() {
+  applyFilter(): void {
+    const formValue = this.filters.value;
+
     const params: FilaConferenciaFilter = {
-      codigoStatus: this.statusFilter,
-      numeroModial: this.numeroModialFilter,
-      numeroNota: this.numeroNotaFilter,
-      numeroUnico: this.numeroUnicoFilter,
-      dataInicio: this.dataInicioFilter,
-      dataFim: this.dataFimFilter,
+      ...formValue,
       idParceiro: this.parceiroSelecionado?.id,
-      codigoTipoMovimento: this.tipoMovimentoFilter,
-      codigoTipoOperacao: this.tipoOperacaoFilter,
-      codigoTipoEntrega: this.tipoEntregaFilter,
     };
 
     Object.keys(params).forEach(
@@ -175,50 +181,26 @@ export class FilaConferenciaComponent implements OnInit {
 
   // filters
   onLimparCampos(): void {
-    this.statusFilter = undefined;
-    this.numeroModialFilter = undefined;
-    this.numeroNotaFilter = undefined;
-    this.numeroUnicoFilter = undefined;
-
-    this.tipoMovimentoFilter = undefined;
-    this.tipoOperacaoFilter = undefined;
-    this.tipoEntregaFilter = undefined;
-
-    this.dataInicioFilter = undefined;
-    this.dataFimFilter = undefined;
-
+    this.filters.reset();
     this.parceiroSelecionado = undefined;
     this.parceiroCtrl.setValue('');
-
-    this.applyFilter();
-  }
-
-  onFilterChange(
-    key:
-      | 'statusFilter'
-      | 'tipoMovimentoFilter'
-      | 'tipoOperacaoFilter'
-      | 'tipoEntregaFilter',
-    value: string,
-  ) {
-    this[key] = value;
     this.applyFilter();
   }
 
   // actions
-  onSeparar(fila: FilaConferenciaDTO) {
+  onSeparar(fila: FilaConferenciaDTO): void {
     this.router.navigate([`/separacao/${fila?.numeroNota}`]);
   }
 
-  onImprimirEtiqueta(fila: FilaConferenciaDTO) {
+  onImprimirEtiqueta(fila: FilaConferenciaDTO): void {
     console.log('Imprimir etiqueta clicado', fila);
   }
 
-  // tooltip
+  // tooltips
   tooltipSeparar(data: FilaConferenciaDTO): string {
     return data.codigoStatus === 'AC'
       ? `Separação`
-      : `Disponível quando status é AGUARDANDO_CONFERENCIA}`;
+      : `Disponível quando status é AGUARDANDO_CONFERENCIA`;
   }
 
   tooltipCubagem(data: FilaConferenciaDTO): string {
