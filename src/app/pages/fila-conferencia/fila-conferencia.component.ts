@@ -13,16 +13,12 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { Router } from '@angular/router';
-import { Observable, map, startWith } from 'rxjs';
-import {
-  FilaConferenciaDTO,
-  ParceiroDTO,
-  Status,
-  TipoEntrega,
-  TipoMovimento,
-  TipoOperacao,
-} from '../../services/fila-conferencia/fila-conferencia.model';
+import { Observable } from 'rxjs';
+import { FilaConferenciaDTO } from '../../services/fila-conferencia/fila-conferencia.model';
 import { FilaConferenciaService } from '../../services/fila-conferencia/fila-conferencia.service';
+import { ParceiroService } from '../../services/parceiro/parceiro.service';
+import { ParceiroDTO } from '../../services/parceiro/parceiro.model';
+import { CodigoDescricao } from '../../services/dto/dominio.model';
 
 @Component({
   selector: 'app-fila-conferencia',
@@ -51,39 +47,46 @@ import { FilaConferenciaService } from '../../services/fila-conferencia/fila-con
 export class FilaConferenciaComponent implements OnInit {
   constructor(
     private filaConferenciaService: FilaConferenciaService,
+    private parceiroService: ParceiroService,
     private router: Router,
   ) {}
-
-  Status = Status;
 
   // tabela
   displayedColumns: string[] = [
     'acoes',
-    'status',
-    'idEmpresa',
-    'numeroModial',
-    'numeroNota',
     'numeroUnico',
-    'dataMovimento',
-    'tipoMovimento',
-    'tipoOperacao',
-    'tipoEntrega',
-    'nomeParceiro',
-    'numeroParceiro',
-    'numeroVendedor',
+    'numeroNota',
+    'numeroModial',
     'valorNota',
     'volume',
+    'dataMovimento',
+    'codigoStatus',
+    'descricaoStatus',
+    'codigoTipoMovimento',
+    'descricaoTipoMovimento',
+    'codigoTipoOperacao',
+    'descricaoTipoOperacao',
+    'codigoTipoEntrega',
+    'descricaoTipoEntrega',
+    'idEmpresa',
+    'nomeEmpresa',
+    'idParceiro',
+    'nomeParceiro',
+    'idVendedor',
+    'nomeVendedor',
     'idUsuarioInclusao',
+    'nomeUsuarioInclusao',
     'idUsuarioAlteracao',
+    'nomeUsuarioAlteracao',
   ];
   dataSource = new MatTableDataSource<FilaConferenciaDTO>([]);
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   // filtros
-  statusFilter?: Status;
-  tipoMovimentoFilter?: TipoMovimento;
-  tipoOperacaoFilter?: TipoOperacao;
-  tipoEntregaFilter?: TipoEntrega;
+  statusFilter?: string;
+  tipoMovimentoFilter?: string;
+  tipoOperacaoFilter?: string;
+  tipoEntregaFilter?: string;
   numeroModialFilter?: string;
   numeroNotaFilter?: string;
   numeroUnicoFilter?: string;
@@ -93,42 +96,35 @@ export class FilaConferenciaComponent implements OnInit {
   parceiroSelecionado?: ParceiroDTO;
 
   // selects
-  statusOptions = Object.values(Status);
-  tipoMovimentoOptions = Object.values(TipoMovimento);
-  tipoOperacaoOptions = Object.values(TipoOperacao);
-  tipoEntregaOptions = Object.values(TipoEntrega);
+  listStatus: CodigoDescricao[] = [];
+  listTipoMovimento: CodigoDescricao[] = [];
+  listTipoOperacao: CodigoDescricao[] = [];
+  listTipoEntrega: CodigoDescricao[] = [];
 
   // autocomplete
-  parceiros: ParceiroDTO[] = [];
+  listParceiro: ParceiroDTO[] = [];
   filteredParceiros$!: Observable<ParceiroDTO[]>;
 
   ngOnInit(): void {
-    this.filaConferenciaService.getFila().subscribe((dados) => {
-      this.dataSource.data = dados;
-      this.dataSource.paginator = this.paginator;
-    });
+    this.filaConferenciaService
+      .getStatus()
+      .then((resp) => (this.listStatus = resp.data));
 
-    this.filaConferenciaService.getParceiros().subscribe((data: any) => {
-      this.parceiros = data;
-      this.filteredParceiros$ = this.parceiroCtrl.valueChanges.pipe(
-        startWith(''),
-        map((value) => this._filterParceiros(value ?? '')),
-      );
-    });
-  }
+    this.filaConferenciaService
+      .getTipoMovimento()
+      .then((resp) => (this.listTipoMovimento = resp.data));
 
-  private _filterParceiros(value: string | ParceiroDTO): ParceiroDTO[] {
-    const filterValue =
-      typeof value === 'string'
-        ? value.toLowerCase()
-        : value.nome.toLowerCase();
-    return this.parceiros.filter((p) =>
-      p.nome.toLowerCase().includes(filterValue),
-    );
-  }
+    this.filaConferenciaService
+      .getTipoOperacao()
+      .then((resp) => (this.listTipoOperacao = resp.data));
 
-  displayParceiro(parceiro: ParceiroDTO): string {
-    return parceiro ? parceiro.nome : '';
+    this.filaConferenciaService
+      .getTipoEntrega()
+      .then((resp) => (this.listTipoEntrega = resp.data));
+
+    this.parceiroService
+      .getParceiros({ search: this.parceiroCtrl.value || '' })
+      .then((resp) => (this.listParceiro = resp.data));
   }
 
   onParceiroSelected(parceiro: ParceiroDTO) {
@@ -156,52 +152,7 @@ export class FilaConferenciaComponent implements OnInit {
   }
 
   applyFilter() {
-    this.dataSource.filterPredicate = (data: FilaConferenciaDTO) => {
-      const statusOk = !this.statusFilter || data.status === this.statusFilter;
-      const tipoMovOk =
-        !this.tipoMovimentoFilter ||
-        data.tipoMovimento === this.tipoMovimentoFilter;
-      const tipoOpOk =
-        !this.tipoOperacaoFilter ||
-        data.tipoOperacao === this.tipoOperacaoFilter;
-      const tipoEntOk =
-        !this.tipoEntregaFilter || data.tipoEntrega === this.tipoEntregaFilter;
-
-      const modialOk =
-        !this.numeroModialFilter ||
-        data.numeroModial.includes(this.numeroModialFilter);
-      const notaOk =
-        !this.numeroNotaFilter ||
-        data.numeroNota.includes(this.numeroNotaFilter);
-      const unicoOk =
-        !this.numeroUnicoFilter ||
-        data.numeroUnico.includes(this.numeroUnicoFilter);
-      const parceiroOk =
-        !this.parceiroSelecionado ||
-        data.nomeParceiro === this.parceiroSelecionado.nome;
-
-      const dataInicioOk =
-        !this.dataInicioFilter ||
-        new Date(data.dataMovimento) >= this.dataInicioFilter;
-      const dataFimOk =
-        !this.dataFimFilter ||
-        new Date(data.dataMovimento) <= this.dataFimFilter;
-
-      return (
-        statusOk &&
-        tipoMovOk &&
-        tipoOpOk &&
-        tipoEntOk &&
-        modialOk &&
-        notaOk &&
-        unicoOk &&
-        parceiroOk &&
-        dataInicioOk &&
-        dataFimOk
-      );
-    };
-
-    this.dataSource.filter = '' + Math.random();
+    //
   }
 
   onStatusChange(value: any) {
@@ -233,21 +184,21 @@ export class FilaConferenciaComponent implements OnInit {
     console.log('Imprimir etiqueta clicado', fila);
   }
 
-  tooltipSeparar(e: any): string {
-    return e.status === Status.AGUARDANDO_CONFERENCIA
+  tooltipSeparar(e: FilaConferenciaDTO): string {
+    return e.codigoStatus === 'AC'
       ? `Separação`
-      : `Disponível quando status é ${Status.AGUARDANDO_CONFERENCIA}`;
+      : `Disponível quando status é AGUARDANDO_CONFERENCIA}`;
   }
 
-  tooltipCubagem(e: any): string {
-    return e.status === Status.EM_ANDAMENTO
+  tooltipCubagem(e: FilaConferenciaDTO): string {
+    return e.codigoStatus === 'A'
       ? `Separação`
-      : `Disponível quando status é ${Status.EM_ANDAMENTO}`;
+      : `Disponível quando status é EM_ANDAMENTO`;
   }
 
-  tooltipImprimir(e: any): string {
-    return e.status === Status.FINALIZADO
+  tooltipImprimir(e: FilaConferenciaDTO): string {
+    return e.codigoStatus === 'F'
       ? `Impressão de etiqueta`
-      : `Disponível quando status é ${Status.FINALIZADO}`;
+      : `Disponível quando status é FINALIZADO_OK`;
   }
 }

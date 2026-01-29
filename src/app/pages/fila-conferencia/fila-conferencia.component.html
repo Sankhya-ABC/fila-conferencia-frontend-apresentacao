@@ -3,12 +3,12 @@
   <mat-form-field appearance="outline" class="xs-12 sm-6 md-4 lg-3 xl-2">
     <mat-label>Status</mat-label>
     <mat-select
-      [value]="statusFilter"
+      [(ngModel)]="statusFilter"
       (selectionChange)="onStatusChange($event.value)"
     >
       <mat-option [value]="undefined">Todos</mat-option>
-      <mat-option *ngFor="let s of statusOptions" [value]="s">{{
-        s
+      <mat-option *ngFor="let status of listStatus" [value]="status.codigo">{{
+        status.descricao
       }}</mat-option>
     </mat-select>
   </mat-form-field>
@@ -60,48 +60,59 @@
     <input matInput [formControl]="parceiroCtrl" [matAutocomplete]="auto" />
     <mat-autocomplete
       #auto="matAutocomplete"
-      [displayWith]="displayParceiro.bind(this)"
       (optionSelected)="onParceiroSelected($event.option.value)"
     >
-      <mat-option *ngFor="let p of filteredParceiros$ | async" [value]="p">
-        {{ p.nome }} - {{ p.cpfCnpj }}
+      <mat-option
+        *ngFor="let parceiro of filteredParceiros$ | async"
+        [value]="parceiro"
+      >
+        {{ parceiro.nome }} - {{ parceiro.cpfCnpj }}
       </mat-option>
     </mat-autocomplete>
   </mat-form-field>
 
   <mat-form-field appearance="outline" class="xs-12 sm-6 md-4 lg-3 xl-2">
     <mat-label>Tipo Movimento</mat-label>
-    <mat-select (selectionChange)="onTipoMovimentoChange($event.value)">
+    <mat-select
+      [(ngModel)]="tipoMovimentoFilter"
+      (selectionChange)="onTipoMovimentoChange($event.value)"
+    >
       <mat-option [value]="undefined">Todos</mat-option>
-      <mat-option *ngFor="let t of tipoMovimentoOptions" [value]="t">{{
-        t
-      }}</mat-option>
+      <mat-option
+        *ngFor="let tipoMovimento of listTipoMovimento"
+        [value]="tipoMovimento.codigo"
+        >{{ tipoMovimento.descricao }}</mat-option
+      >
     </mat-select>
   </mat-form-field>
 
   <mat-form-field appearance="outline" class="xs-12 sm-6 md-4 lg-3 xl-2">
     <mat-label>Tipo Operação</mat-label>
     <mat-select
-      [value]="tipoOperacaoFilter"
+      [(ngModel)]="tipoOperacaoFilter"
       (selectionChange)="onTipoOperacaoChange($event.value)"
     >
       <mat-option [value]="undefined">Todos</mat-option>
-      <mat-option *ngFor="let t of tipoOperacaoOptions" [value]="t">{{
-        t
-      }}</mat-option>
+      <mat-option
+        *ngFor="let tipoOperacao of listTipoOperacao"
+        [value]="tipoOperacao.codigo"
+        >{{ tipoOperacao.descricao }}</mat-option
+      >
     </mat-select>
   </mat-form-field>
 
   <mat-form-field appearance="outline" class="xs-12 sm-6 md-4 lg-3 xl-2">
     <mat-label>Tipo Entrega</mat-label>
     <mat-select
-      [value]="tipoEntregaFilter"
+      [(ngModel)]="tipoEntregaFilter"
       (selectionChange)="onTipoEntregaChange($event.value)"
     >
       <mat-option [value]="undefined">Todos</mat-option>
-      <mat-option *ngFor="let t of tipoEntregaOptions" [value]="t">{{
-        t
-      }}</mat-option>
+      <mat-option
+        *ngFor="let tipoEntrega of listTipoEntrega"
+        [value]="tipoEntrega.codigo"
+        >{{ tipoEntrega.descricao }}</mat-option
+      >
     </mat-select>
   </mat-form-field>
 
@@ -130,7 +141,7 @@
             <button
               mat-icon-button
               (click)="onSeparar(e)"
-              [disabled]="e.status !== Status.AGUARDANDO_CONFERENCIA"
+              [disabled]="e.codigoStatus !== 'AC'"
             >
               <mat-icon fontSet="material-symbols-outlined">
                 deployed_code
@@ -146,7 +157,7 @@
             <button
               mat-icon-button
               (click)="onImprimirEtiqueta(e)"
-              [disabled]="e.status !== Status.FINALIZADO"
+              [disabled]="e.codigoStatus !== 'F'"
             >
               <mat-icon>print</mat-icon>
             </button>
