@@ -4,28 +4,44 @@
     <mat-label>Status</mat-label>
     <mat-select
       [(ngModel)]="statusFilter"
+      [ngModelOptions]="{ standalone: true }"
       (selectionChange)="onStatusChange($event.value)"
     >
       <mat-option [value]="undefined">Todos</mat-option>
-      <mat-option *ngFor="let status of listStatus" [value]="status.codigo">{{
-        status.descricao
-      }}</mat-option>
+      <mat-option *ngFor="let status of listStatus" [value]="status.codigo">
+        {{ status.descricao }}
+      </mat-option>
     </mat-select>
   </mat-form-field>
 
   <mat-form-field appearance="outline" class="xs-12 sm-6 md-4 lg-3 xl-2">
     <mat-label>Número Modial</mat-label>
-    <input matInput [(ngModel)]="numeroModialFilter" (input)="applyFilter()" />
+    <input
+      matInput
+      [(ngModel)]="numeroModialFilter"
+      [ngModelOptions]="{ standalone: true }"
+      (input)="applyFilter()"
+    />
   </mat-form-field>
 
   <mat-form-field appearance="outline" class="xs-12 sm-6 md-4 lg-3 xl-2">
     <mat-label>Número Nota</mat-label>
-    <input matInput [(ngModel)]="numeroNotaFilter" (input)="applyFilter()" />
+    <input
+      matInput
+      [(ngModel)]="numeroNotaFilter"
+      [ngModelOptions]="{ standalone: true }"
+      (input)="applyFilter()"
+    />
   </mat-form-field>
 
   <mat-form-field appearance="outline" class="xs-12 sm-6 md-4 lg-3 xl-2">
     <mat-label>Número Único</mat-label>
-    <input matInput [(ngModel)]="numeroUnicoFilter" (input)="applyFilter()" />
+    <input
+      matInput
+      [(ngModel)]="numeroUnicoFilter"
+      [ngModelOptions]="{ standalone: true }"
+      (input)="applyFilter()"
+    />
   </mat-form-field>
 
   <mat-form-field appearance="outline" class="xs-12 sm-6 md-4 lg-3 xl-2">
@@ -34,6 +50,7 @@
       matInput
       [matDatepicker]="pickerInicio"
       [(ngModel)]="dataInicioFilter"
+      [ngModelOptions]="{ standalone: true }"
       (dateChange)="applyFilter()"
     />
     <mat-datepicker-toggle
@@ -49,6 +66,7 @@
       matInput
       [matDatepicker]="pickerFim"
       [(ngModel)]="dataFimFilter"
+      [ngModelOptions]="{ standalone: true }"
       (dateChange)="applyFilter()"
     />
     <mat-datepicker-toggle matSuffix [for]="pickerFim"></mat-datepicker-toggle>
@@ -62,10 +80,7 @@
       #auto="matAutocomplete"
       (optionSelected)="onParceiroSelected($event.option.value)"
     >
-      <mat-option
-        *ngFor="let parceiro of filteredParceiros$ | async"
-        [value]="parceiro"
-      >
+      <mat-option *ngFor="let parceiro of listParceiro" [value]="parceiro">
         {{ parceiro.nome }} - {{ parceiro.cpfCnpj }}
       </mat-option>
     </mat-autocomplete>
@@ -75,14 +90,16 @@
     <mat-label>Tipo Movimento</mat-label>
     <mat-select
       [(ngModel)]="tipoMovimentoFilter"
+      [ngModelOptions]="{ standalone: true }"
       (selectionChange)="onTipoMovimentoChange($event.value)"
     >
       <mat-option [value]="undefined">Todos</mat-option>
       <mat-option
         *ngFor="let tipoMovimento of listTipoMovimento"
         [value]="tipoMovimento.codigo"
-        >{{ tipoMovimento.descricao }}</mat-option
       >
+        {{ tipoMovimento.descricao }}
+      </mat-option>
     </mat-select>
   </mat-form-field>
 
@@ -90,14 +107,16 @@
     <mat-label>Tipo Operação</mat-label>
     <mat-select
       [(ngModel)]="tipoOperacaoFilter"
+      [ngModelOptions]="{ standalone: true }"
       (selectionChange)="onTipoOperacaoChange($event.value)"
     >
       <mat-option [value]="undefined">Todos</mat-option>
       <mat-option
         *ngFor="let tipoOperacao of listTipoOperacao"
         [value]="tipoOperacao.codigo"
-        >{{ tipoOperacao.descricao }}</mat-option
       >
+        {{ tipoOperacao.descricao }}
+      </mat-option>
     </mat-select>
   </mat-form-field>
 
@@ -105,14 +124,16 @@
     <mat-label>Tipo Entrega</mat-label>
     <mat-select
       [(ngModel)]="tipoEntregaFilter"
+      [ngModelOptions]="{ standalone: true }"
       (selectionChange)="onTipoEntregaChange($event.value)"
     >
       <mat-option [value]="undefined">Todos</mat-option>
       <mat-option
         *ngFor="let tipoEntrega of listTipoEntrega"
         [value]="tipoEntrega.codigo"
-        >{{ tipoEntrega.descricao }}</mat-option
       >
+        {{ tipoEntrega.descricao }}
+      </mat-option>
     </mat-select>
   </mat-form-field>
 

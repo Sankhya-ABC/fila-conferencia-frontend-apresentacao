@@ -103,25 +103,24 @@ export class FilaConferenciaComponent implements OnInit {
 
   // autocomplete
   listParceiro: ParceiroDTO[] = [];
-  filteredParceiros$!: Observable<ParceiroDTO[]>;
 
   ngOnInit(): void {
     // selects
     this.filaConferenciaService
       .getStatus()
-      .then((resp) => (this.listStatus = resp.data));
+      .subscribe((data) => (this.listStatus = data));
 
     this.filaConferenciaService
       .getTipoMovimento()
-      .then((resp) => (this.listTipoMovimento = resp.data));
+      .subscribe((data) => (this.listTipoMovimento = data));
 
     this.filaConferenciaService
       .getTipoOperacao()
-      .then((resp) => (this.listTipoOperacao = resp.data));
+      .subscribe((data) => (this.listTipoOperacao = data));
 
     this.filaConferenciaService
       .getTipoEntrega()
-      .then((resp) => (this.listTipoEntrega = resp.data));
+      .subscribe((data) => (this.listTipoEntrega = data));
 
     // autocomplete parceiro (digitando)
     this.parceiroCtrl.valueChanges.subscribe((value) => {
@@ -130,9 +129,9 @@ export class FilaConferenciaComponent implements OnInit {
         return;
       }
 
-      this.parceiroService
-        .getParceiros({ search: value })
-        .then((resp) => (this.listParceiro = resp.data));
+      this.parceiroService.getParceiros({ search: value }).subscribe((resp) => {
+        this.listParceiro = resp;
+      });
     });
 
     // carga inicial da tabela
@@ -180,10 +179,12 @@ export class FilaConferenciaComponent implements OnInit {
 
     Object.keys(params).forEach((k) => params[k] == null && delete params[k]);
 
-    this.filaConferenciaService.getFilaConferencias(params).then((resp) => {
-      this.dataSource.data = resp.data;
-      this.dataSource.paginator = this.paginator;
-    });
+    this.filaConferenciaService
+      .getFilaConferencias(params)
+      .subscribe((resp) => {
+        this.dataSource.data = resp;
+        this.dataSource.paginator = this.paginator;
+      });
   }
 
   onStatusChange(value: any) {

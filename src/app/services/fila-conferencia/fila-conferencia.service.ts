@@ -1,5 +1,6 @@
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { api } from '../api';
+import { Observable } from 'rxjs';
 import { CodigoDescricao } from '../dto/dominio.model';
 import {
   FilaConferenciaDTO,
@@ -10,23 +11,41 @@ import {
   providedIn: 'root',
 })
 export class FilaConferenciaService {
-  getFilaConferencias(params?: FilaConferenciaFilter) {
-    return api.get<FilaConferenciaDTO[]>('/filas-conferencia', { params });
+  constructor(private http: HttpClient) {}
+
+  getFilaConferencias(
+    params?: FilaConferenciaFilter,
+  ): Observable<FilaConferenciaDTO[]> {
+    let httpParams = new HttpParams();
+
+    if (params) {
+      Object.entries(params).forEach(([key, value]) => {
+        if (value !== undefined && value !== null && value !== '') {
+          httpParams = httpParams.set(key, value as any);
+        }
+      });
+    }
+
+    return this.http.get<FilaConferenciaDTO[]>('/filas-conferencia', {
+      params: httpParams,
+    });
   }
 
-  getStatus() {
-    return api.get<CodigoDescricao[]>('/filas-conferencia/status');
+  getStatus(): Observable<CodigoDescricao[]> {
+    return this.http.get<CodigoDescricao[]>('/filas-conferencia/status');
   }
 
-  getTipoMovimento() {
-    return api.get<CodigoDescricao[]>('/filas-conferencia/tipo-movimento');
+  getTipoMovimento(): Observable<CodigoDescricao[]> {
+    return this.http.get<CodigoDescricao[]>(
+      '/filas-conferencia/tipo-movimento',
+    );
   }
 
-  getTipoOperacao() {
-    return api.get<CodigoDescricao[]>('/filas-conferencia/tipo-operacao');
+  getTipoOperacao(): Observable<CodigoDescricao[]> {
+    return this.http.get<CodigoDescricao[]>('/filas-conferencia/tipo-operacao');
   }
 
-  getTipoEntrega() {
-    return api.get<CodigoDescricao[]>('/filas-conferencia/tipo-entrega');
+  getTipoEntrega(): Observable<CodigoDescricao[]> {
+    return this.http.get<CodigoDescricao[]>('/filas-conferencia/tipo-entrega');
   }
 }
