@@ -40,8 +40,8 @@ export interface FilaConferenciaFilter {
   numeroModial?: string;
   numeroNota?: string;
   numeroUnico?: string;
-  dataInicio?: string;
-  dataFim?: string;
+  dataInicio?: Date | string;
+  dataFim?: Date | string;
   idParceiro?: string;
   codigoTipoMovimento?: string;
   codigoTipoOperacao?: string;

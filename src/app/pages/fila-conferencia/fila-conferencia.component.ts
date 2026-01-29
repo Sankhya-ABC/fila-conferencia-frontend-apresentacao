@@ -13,9 +13,11 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { Router } from '@angular/router';
-import { Observable } from 'rxjs';
 import { CodigoDescricao } from '../../services/dto/dominio.model';
-import { FilaConferenciaDTO } from '../../services/fila-conferencia/fila-conferencia.model';
+import {
+  FilaConferenciaDTO,
+  FilaConferenciaFilter,
+} from '../../services/fila-conferencia/fila-conferencia.model';
 import { FilaConferenciaService } from '../../services/fila-conferencia/fila-conferencia.service';
 import { ParceiroDTO } from '../../services/parceiro/parceiro.model';
 import { ParceiroService } from '../../services/parceiro/parceiro.service';
@@ -143,7 +145,35 @@ export class FilaConferenciaComponent implements OnInit {
     this.applyFilter();
   }
 
-  // limpar filtros
+  applyFilter() {
+    const params: FilaConferenciaFilter = {
+      codigoStatus: this.statusFilter,
+      numeroModial: this.numeroModialFilter,
+      numeroNota: this.numeroNotaFilter,
+      numeroUnico: this.numeroUnicoFilter,
+      dataInicio: this.dataInicioFilter,
+      dataFim: this.dataFimFilter,
+      idParceiro: this.parceiroSelecionado?.id,
+      codigoTipoMovimento: this.tipoMovimentoFilter,
+      codigoTipoOperacao: this.tipoOperacaoFilter,
+      codigoTipoEntrega: this.tipoEntregaFilter,
+    };
+
+    Object.keys(params).forEach(
+      (k) =>
+        params[k as keyof FilaConferenciaFilter] == null &&
+        delete params[k as keyof FilaConferenciaFilter],
+    );
+
+    this.filaConferenciaService
+      .getFilaConferencias(params)
+      .subscribe((resp) => {
+        this.dataSource.data = resp;
+        this.dataSource.paginator = this.paginator;
+      });
+  }
+
+  // filters
   onLimparCampos(): void {
     this.statusFilter = undefined;
     this.numeroModialFilter = undefined;
@@ -163,51 +193,19 @@ export class FilaConferenciaComponent implements OnInit {
     this.applyFilter();
   }
 
-  applyFilter() {
-    const params: any = {
-      status: this.statusFilter,
-      tipoMovimento: this.tipoMovimentoFilter,
-      tipoOperacao: this.tipoOperacaoFilter,
-      tipoEntrega: this.tipoEntregaFilter,
-      numeroNota: this.numeroNotaFilter,
-      numeroModial: this.numeroModialFilter,
-      numeroUnico: this.numeroUnicoFilter,
-      dataInicio: this.dataInicioFilter,
-      dataFim: this.dataFimFilter,
-      idParceiro: this.parceiroSelecionado?.id,
-    };
-
-    Object.keys(params).forEach((k) => params[k] == null && delete params[k]);
-
-    this.filaConferenciaService
-      .getFilaConferencias(params)
-      .subscribe((resp) => {
-        this.dataSource.data = resp;
-        this.dataSource.paginator = this.paginator;
-      });
-  }
-
-  onStatusChange(value: any) {
-    this.statusFilter = value;
+  onFilterChange(
+    key:
+      | 'statusFilter'
+      | 'tipoMovimentoFilter'
+      | 'tipoOperacaoFilter'
+      | 'tipoEntregaFilter',
+    value: string,
+  ) {
+    this[key] = value;
     this.applyFilter();
   }
 
-  onTipoMovimentoChange(value: any) {
-    this.tipoMovimentoFilter = value;
-    this.applyFilter();
-  }
-
-  onTipoOperacaoChange(value: any) {
-    this.tipoOperacaoFilter = value;
-    this.applyFilter();
-  }
-
-  onTipoEntregaChange(value: any) {
-    this.tipoEntregaFilter = value;
-    this.applyFilter();
-  }
-
-  // ações
+  // actions
   onSeparar(fila: FilaConferenciaDTO) {
     this.router.navigate([`/separacao/${fila?.numeroNota}`]);
   }
@@ -216,20 +214,21 @@ export class FilaConferenciaComponent implements OnInit {
     console.log('Imprimir etiqueta clicado', fila);
   }
 
-  tooltipSeparar(e: FilaConferenciaDTO): string {
-    return e.codigoStatus === 'AC'
+  // tooltip
+  tooltipSeparar(data: FilaConferenciaDTO): string {
+    return data.codigoStatus === 'AC'
       ? `Separação`
       : `Disponível quando status é AGUARDANDO_CONFERENCIA}`;
   }
 
-  tooltipCubagem(e: FilaConferenciaDTO): string {
-    return e.codigoStatus === 'A'
+  tooltipCubagem(data: FilaConferenciaDTO): string {
+    return data.codigoStatus === 'A'
       ? `Separação`
       : `Disponível quando status é EM_ANDAMENTO`;
   }
 
-  tooltipImprimir(e: FilaConferenciaDTO): string {
-    return e.codigoStatus === 'F'
+  tooltipImprimir(data: FilaConferenciaDTO): string {
+    return data.codigoStatus === 'F'
       ? `Impressão de etiqueta`
       : `Disponível quando status é FINALIZADO_OK`;
   }

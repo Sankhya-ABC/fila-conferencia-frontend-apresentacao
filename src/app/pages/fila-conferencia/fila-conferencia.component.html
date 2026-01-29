@@ -5,7 +5,7 @@
     <mat-select
       [(ngModel)]="statusFilter"
       [ngModelOptions]="{ standalone: true }"
-      (selectionChange)="onStatusChange($event.value)"
+      (selectionChange)="onFilterChange('statusFilter', $event.value)"
     >
       <mat-option [value]="undefined">Todos</mat-option>
       <mat-option *ngFor="let status of listStatus" [value]="status.codigo">
@@ -91,7 +91,7 @@
     <mat-select
       [(ngModel)]="tipoMovimentoFilter"
       [ngModelOptions]="{ standalone: true }"
-      (selectionChange)="onTipoMovimentoChange($event.value)"
+      (selectionChange)="onFilterChange('tipoMovimentoFilter', $event.value)"
     >
       <mat-option [value]="undefined">Todos</mat-option>
       <mat-option
@@ -108,7 +108,7 @@
     <mat-select
       [(ngModel)]="tipoOperacaoFilter"
       [ngModelOptions]="{ standalone: true }"
-      (selectionChange)="onTipoOperacaoChange($event.value)"
+      (selectionChange)="onFilterChange('tipoOperacaoFilter', $event.value)"
     >
       <mat-option [value]="undefined">Todos</mat-option>
       <mat-option
@@ -125,7 +125,7 @@
     <mat-select
       [(ngModel)]="tipoEntregaFilter"
       [ngModelOptions]="{ standalone: true }"
-      (selectionChange)="onTipoEntregaChange($event.value)"
+      (selectionChange)="onFilterChange('tipoEntregaFilter', $event.value)"
     >
       <mat-option [value]="undefined">Todos</mat-option>
       <mat-option
