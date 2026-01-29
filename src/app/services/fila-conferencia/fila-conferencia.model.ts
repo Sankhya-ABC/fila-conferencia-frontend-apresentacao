@@ -35,7 +35,7 @@ export interface FilaConferenciaDTO {
   nomeUsuarioAlteracao: string;
 }
 
-export class FilaConferenciaFilter {
+export interface FilaConferenciaFilter {
   codigoStatus?: string;
   numeroModial?: string;
   numeroNota?: string;
