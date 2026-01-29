@@ -14,11 +14,11 @@ import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
+import { CodigoDescricao } from '../../services/dto/dominio.model';
 import { FilaConferenciaDTO } from '../../services/fila-conferencia/fila-conferencia.model';
 import { FilaConferenciaService } from '../../services/fila-conferencia/fila-conferencia.service';
-import { ParceiroService } from '../../services/parceiro/parceiro.service';
 import { ParceiroDTO } from '../../services/parceiro/parceiro.model';
-import { CodigoDescricao } from '../../services/dto/dominio.model';
+import { ParceiroService } from '../../services/parceiro/parceiro.service';
 
 @Component({
   selector: 'app-fila-conferencia',
@@ -38,7 +38,6 @@ import { CodigoDescricao } from '../../services/dto/dominio.model';
     MatNativeDateModule,
     MatIconModule,
     MatTooltipModule,
-    CommonModule,
     MatButtonModule,
   ],
   templateUrl: './fila-conferencia.component.html',
@@ -92,6 +91,7 @@ export class FilaConferenciaComponent implements OnInit {
   numeroUnicoFilter?: string;
   dataInicioFilter?: Date;
   dataFimFilter?: Date;
+
   parceiroCtrl = new FormControl('');
   parceiroSelecionado?: ParceiroDTO;
 
@@ -106,6 +106,7 @@ export class FilaConferenciaComponent implements OnInit {
   filteredParceiros$!: Observable<ParceiroDTO[]>;
 
   ngOnInit(): void {
+    // selects
     this.filaConferenciaService
       .getStatus()
       .then((resp) => (this.listStatus = resp.data));
@@ -122,9 +123,20 @@ export class FilaConferenciaComponent implements OnInit {
       .getTipoEntrega()
       .then((resp) => (this.listTipoEntrega = resp.data));
 
-    this.parceiroService
-      .getParceiros({ search: this.parceiroCtrl.value || '' })
-      .then((resp) => (this.listParceiro = resp.data));
+    // autocomplete parceiro (digitando)
+    this.parceiroCtrl.valueChanges.subscribe((value) => {
+      if (!value || value.length < 2) {
+        this.listParceiro = [];
+        return;
+      }
+
+      this.parceiroService
+        .getParceiros({ search: value })
+        .then((resp) => (this.listParceiro = resp.data));
+    });
+
+    // carga inicial da tabela
+    this.applyFilter();
   }
 
   onParceiroSelected(parceiro: ParceiroDTO) {
@@ -132,7 +144,7 @@ export class FilaConferenciaComponent implements OnInit {
     this.applyFilter();
   }
 
-  // filtros
+  // limpar filtros
   onLimparCampos(): void {
     this.statusFilter = undefined;
     this.numeroModialFilter = undefined;
@@ -146,13 +158,32 @@ export class FilaConferenciaComponent implements OnInit {
     this.dataInicioFilter = undefined;
     this.dataFimFilter = undefined;
 
-    this.parceiroCtrl.setValue(null);
+    this.parceiroSelecionado = undefined;
+    this.parceiroCtrl.setValue('');
 
     this.applyFilter();
   }
 
   applyFilter() {
-    //
+    const params: any = {
+      status: this.statusFilter,
+      tipoMovimento: this.tipoMovimentoFilter,
+      tipoOperacao: this.tipoOperacaoFilter,
+      tipoEntrega: this.tipoEntregaFilter,
+      numeroNota: this.numeroNotaFilter,
+      numeroModial: this.numeroModialFilter,
+      numeroUnico: this.numeroUnicoFilter,
+      dataInicio: this.dataInicioFilter,
+      dataFim: this.dataFimFilter,
+      idParceiro: this.parceiroSelecionado?.id,
+    };
+
+    Object.keys(params).forEach((k) => params[k] == null && delete params[k]);
+
+    this.filaConferenciaService.getFilaConferencias(params).then((resp) => {
+      this.dataSource.data = resp.data;
+      this.dataSource.paginator = this.paginator;
+    });
   }
 
   onStatusChange(value: any) {
