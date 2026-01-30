@@ -180,7 +180,9 @@
 
     <ng-container matColumnDef="valorNota">
       <mat-header-cell *matHeaderCellDef>Valor Nota</mat-header-cell>
-      <mat-cell *matCellDef="let data">{{ data.valorNota }}</mat-cell>
+      <mat-cell *matCellDef="let data"
+        >{{ data.valorNota | currency: "BRL" : "symbol" : "1.2-2" : "pt-BR" }}
+      </mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="volume">
