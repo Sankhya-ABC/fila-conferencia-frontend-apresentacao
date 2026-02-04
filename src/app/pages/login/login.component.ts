@@ -43,7 +43,7 @@ export class LoginComponent {
     this.loading = true;
 
     this.authService.login(this.form.getRawValue()).subscribe({
-      next: (resp) => {
+      next: () => {
         this.loading = false;
         this.router.navigate(['/fila-conferencia']);
       },
