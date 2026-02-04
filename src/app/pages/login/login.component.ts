@@ -6,6 +6,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatError, MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { Router } from '@angular/router';
+import { AuthService } from '../../services/auth/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -26,30 +27,30 @@ export class LoginComponent {
   constructor(
     private fb: FormBuilder,
     private router: Router,
+    private authService: AuthService,
   ) {}
 
   loading = false;
 
   form = this.fb.nonNullable.group({
-    username: ['', Validators.required],
-    password: ['', Validators.required],
+    usuario: ['', Validators.required],
+    senha: ['', Validators.required],
   });
 
-  onSubmit(): void {
+  login(): void {
     if (this.form.invalid) return;
 
     this.loading = true;
 
-    const { username, password } = this.form.getRawValue();
-
-    setTimeout(() => {
-      if (username === 'sup' && password === '123456') {
-        localStorage.setItem('auth', 'true');
-        this.router.navigate(['/fila-conferencia']);
-      } else {
-        alert('Usuário ou senha inválidos');
+    this.authService.login(this.form.getRawValue()).subscribe({
+      next: (resp) => {
         this.loading = false;
-      }
-    }, 1000);
+        this.router.navigate(['/fila-conferencia']);
+      },
+      error: (err) => {
+        this.loading = false;
+        console.error(err);
+      },
+    });
   }
 }

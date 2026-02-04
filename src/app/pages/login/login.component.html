@@ -1,4 +1,4 @@
-<form class="login-page" [formGroup]="form" (ngSubmit)="onSubmit()">
+<form class="login-page" [formGroup]="form" (ngSubmit)="login()">
   <div class="login-form">
     <div class="form-wrapper">
       <h1>Login</h1>
@@ -6,16 +6,16 @@
 
       <mat-form-field appearance="outline">
         <mat-label>Usuário</mat-label>
-        <input matInput formControlName="username" />
-        <mat-error *ngIf="form.controls.username.invalid">
+        <input matInput formControlName="usuario" />
+        <mat-error *ngIf="form.controls.usuario.invalid">
           Usuário obrigatório
         </mat-error>
       </mat-form-field>
 
       <mat-form-field appearance="outline">
         <mat-label>Senha</mat-label>
-        <input matInput type="password" formControlName="password" />
-        <mat-error *ngIf="form.controls.password.invalid">
+        <input matInput type="senha" formControlName="senha" />
+        <mat-error *ngIf="form.controls.senha.invalid">
           Senha obrigatória
         </mat-error>
       </mat-form-field>

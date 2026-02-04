@@ -9,9 +9,7 @@ export function apiInterceptor(
 ): Observable<HttpEvent<any>> {
   const apiReq = req.clone({
     url: `${environment.API_GATEWAY}/api${req.url}`,
-    setHeaders: {
-      'Content-Type': 'application/json',
-    },
+    setHeaders: { 'Content-Type': 'application/json' },
   });
 
   return next(apiReq).pipe(
