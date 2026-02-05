@@ -12,7 +12,7 @@ export class SeparacaoService {
         'https://m.media-amazon.com/images/I/61pN8KO-z6L._AC_UF894,1000_QL80_.jpg',
       idProduto: 'PROD001',
       nomeProduto: 'Urna Funerária',
-      codigoBarras: '1234567890123',
+      codigoBarras: ['1234567890123', '1234567890999'],
       quantidade: '1',
       unidade: 'unidade',
       idMarca: 'MAR001',
@@ -25,7 +25,7 @@ export class SeparacaoService {
     {
       idProduto: 'PROD002',
       nomeProduto: 'Coroa de Flores Natural',
-      codigoBarras: '9876543210987',
+      codigoBarras: ['9876543210987'],
       quantidade: '12',
       unidade: 'unidades',
       idMarca: 'MAR002',
@@ -40,7 +40,7 @@ export class SeparacaoService {
         'https://pt.ajcasketfactory.com/uploads/202238241/small/executive-cherry-wood-casket06364141050.jpg?size=380x0',
       idProduto: 'PROD003',
       nomeProduto: 'Caixão de Madeira Nobre',
-      codigoBarras: '1928374650912',
+      codigoBarras: ['1928374650912', '1928374650000'],
       quantidade: '2',
       unidade: 'unidades',
       idMarca: 'MAR003',
@@ -68,7 +68,7 @@ export class SeparacaoService {
     },
   };
 
-  getDadosgerais(): Observable<DadosGeraisPedidoDTO> {
+  getDadosGerais(): Observable<DadosGeraisPedidoDTO> {
     return of(this.dadosGeraisPedido);
   }
 }

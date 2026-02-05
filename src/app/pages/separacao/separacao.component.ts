@@ -95,7 +95,7 @@ export class SeparacaoComponent implements OnInit {
     this.numeroNota = this.route.snapshot.paramMap.get('numeroNota');
 
     this.form = this.fb.group({
-      codigoBarras: [''],
+      identificador: [''],
       quantidade: [null],
       controle: [{ value: '', disabled: true }],
     });
@@ -104,7 +104,7 @@ export class SeparacaoComponent implements OnInit {
       this.dataSourcePedidos.data = dados;
     });
 
-    this.separacaoService.getDadosgerais().subscribe((data) => {
+    this.separacaoService.getDadosGerais().subscribe((data) => {
       this.dadosGerais = data;
     });
   }
@@ -114,12 +114,14 @@ export class SeparacaoComponent implements OnInit {
     this.selecionarItem(item);
   }
 
-  onCodigoInserido() {
-    const codigo = this.form.get('codigoBarras')?.value;
-    if (!codigo) return;
+  onIdentificadorInserido() {
+    const identificador = this.form.get('identificador')?.value;
+    if (!identificador) return;
 
     const item = this.dataSourcePedidos.data.find(
-      (i) => i.codigoBarras === codigo,
+      (i) =>
+        i.idProduto === identificador ||
+        i.codigoBarras?.some((cb) => cb === identificador),
     );
 
     if (!item) {
@@ -135,7 +137,7 @@ export class SeparacaoComponent implements OnInit {
     this.itemSelecionado = item;
 
     this.form.patchValue({
-      codigoBarras: item.codigoBarras,
+      identificador: item.idProduto,
       controle: item.controle ?? '',
     });
 
@@ -200,7 +202,7 @@ export class SeparacaoComponent implements OnInit {
     this.itemSelecionado.quantidade = String(restante);
 
     const existente = this.dataSourceConferidos.data.find(
-      (i) => i.codigoBarras === this.itemSelecionado!.codigoBarras,
+      (i) => i.idProduto === this.itemSelecionado!.idProduto,
     );
 
     if (existente) {

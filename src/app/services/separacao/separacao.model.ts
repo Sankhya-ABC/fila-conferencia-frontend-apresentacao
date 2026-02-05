@@ -6,7 +6,7 @@ export interface ItemPedidoDTO {
   idProduto: string;
   nomeProduto: string;
 
-  codigoBarras: string;
+  codigoBarras?: string[];
 
   quantidade: string;
   unidade: string;

@@ -23,12 +23,12 @@
 <!-- FORM -->
 <form [formGroup]="form" class="form-conferencia grid">
   <mat-form-field appearance="outline" class="xs-12 sm-6 md-3 lg-3 xl-2">
-    <mat-label>Código de Barras</mat-label>
+    <mat-label>Código de Barras/ID do produto</mat-label>
     <input
       matInput
-      formControlName="codigoBarras"
-      (keyup.enter)="onCodigoInserido()"
-      (blur)="onCodigoInserido()"
+      formControlName="identificador"
+      (keyup.enter)="onIdentificadorInserido()"
+      (blur)="onIdentificadorInserido()"
     />
   </mat-form-field>
 
@@ -111,7 +111,7 @@
     <ng-container matColumnDef="codigoBarras"
       ><mat-header-cell *matHeaderCellDef>Código de Barras</mat-header-cell
       ><mat-cell *matCellDef="let e">{{
-        e.codigoBarras
+        e.codigoBarras?.join(", ")
       }}</mat-cell></ng-container
     >
 
@@ -195,7 +195,7 @@
     <ng-container matColumnDef="codigoBarras"
       ><mat-header-cell *matHeaderCellDef>Código de Barras</mat-header-cell
       ><mat-cell *matCellDef="let e">{{
-        e.codigoBarras
+        e.codigoBarras?.join(", ")
       }}</mat-cell></ng-container
     >
 
