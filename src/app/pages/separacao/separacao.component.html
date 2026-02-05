@@ -2,20 +2,20 @@
 <section class="dados-gerais" *ngIf="dadosGerais">
   <div class="info-item">
     <mat-icon fontSet="material-symbols-outlined">receipt</mat-icon>
-    <p><span>Nº Nota</span>: {{ numeroNota }}</p>
+    <p><span>Nº Nota</span>: {{ dadosGerais.numeroNota }}</p>
   </div>
   <div class="info-item">
     <mat-icon fontSet="material-symbols-outlined">person</mat-icon>
     <p>
-      <span>Vendedor</span>: ({{ dadosGerais.vendedor.id }}) -
-      {{ dadosGerais.vendedor.nome }}
+      <span>Vendedor</span>: {{ dadosGerais.idVendedor }} -
+      {{ dadosGerais.nomeVendedor }}
     </p>
   </div>
   <div class="info-item">
     <mat-icon fontSet="material-symbols-outlined">handshake</mat-icon>
     <p>
-      <span>Parceiro</span>: ({{ dadosGerais.parceiro.id }}) -
-      {{ dadosGerais.parceiro.nome }}
+      <span>Parceiro</span>: {{ dadosGerais.idParceiro }} -
+      {{ dadosGerais.nomeParceiro }}
     </p>
   </div>
 </section>
@@ -95,7 +95,11 @@
         >Imagem</mat-header-cell
       ><mat-cell *matCellDef="let e"
         ><div class="image-container">
-          <img *ngIf="e.imagem" [src]="e.imagem" alt="Imagem do produto" />
+          <img
+            *ngIf="e.imagem"
+            [src]="hexToImageBlob(e.imagem)"
+            alt="Imagem do produto"
+          />
           <mat-icon *ngIf="!e.imagem" fontSet="material-symbols-outlined"
             >hide_image</mat-icon
           >
@@ -179,7 +183,11 @@
         >Imagem</mat-header-cell
       ><mat-cell *matCellDef="let e"
         ><div class="image-container">
-          <img *ngIf="e.imagem" [src]="e.imagem" alt="Imagem do produto" />
+          <img
+            *ngIf="e.imagem"
+            [src]="hexToImageBlob(e.imagem)"
+            alt="Imagem do produto"
+          />
           <mat-icon *ngIf="!e.imagem" fontSet="material-symbols-outlined"
             >hide_image</mat-icon
           >

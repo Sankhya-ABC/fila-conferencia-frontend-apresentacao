@@ -1,5 +1,3 @@
-import { IdNome } from '../dto/dominio.model';
-
 export interface ItemPedidoDTO {
   imagem?: string;
 
@@ -21,7 +19,11 @@ export interface ItemPedidoDTO {
   complemento: string;
 }
 
-export interface DadosGeraisPedidoDTO {
-  vendedor: IdNome;
-  parceiro: IdNome;
+export interface DadosBasicosPedidoDTO {
+  numeroNota: string;
+  numeroConferencia: string;
+  idParceiro: string;
+  nomeParceiro: string;
+  idVendedor: string;
+  nomeVendedor: string;
 }

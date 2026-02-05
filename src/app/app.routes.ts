@@ -20,7 +20,7 @@ export const routes: Routes = [
   },
   {
     canActivate: [authGuard],
-    path: 'separacao/:numeroNota',
+    path: 'separacao/:numeroUnico',
     title: 'Separação',
     component: SeparacaoComponent,
   },

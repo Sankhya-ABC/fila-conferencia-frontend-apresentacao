@@ -11,10 +11,11 @@ import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { ActivatedRoute } from '@angular/router';
 import { ModalComponent } from '../../components/modal/modal.component';
 import {
-  DadosGeraisPedidoDTO,
+  DadosBasicosPedidoDTO,
   ItemPedidoDTO,
 } from '../../services/separacao/separacao.model';
 import { SeparacaoService } from '../../services/separacao/separacao.service';
+import { hexToImageBlob } from '../../shared/utils/hexToImageBlob';
 
 @Component({
   selector: 'app-separacao',
@@ -75,8 +76,8 @@ export class SeparacaoComponent implements OnInit {
   dataSourcePedidos = new MatTableDataSource<ItemPedidoDTO>([]);
   dataSourceConferidos = new MatTableDataSource<ItemPedidoDTO>([]);
 
-  dadosGerais!: DadosGeraisPedidoDTO;
-  numeroNota: string | null = null;
+  dadosGerais!: DadosBasicosPedidoDTO;
+  numeroUnico: string | null = null;
 
   // form
   form!: FormGroup;
@@ -92,7 +93,7 @@ export class SeparacaoComponent implements OnInit {
   modalIniciarCubagemTpl!: TemplateRef<any>;
 
   ngOnInit(): void {
-    this.numeroNota = this.route.snapshot.paramMap.get('numeroNota');
+    this.numeroUnico = this.route.snapshot.paramMap.get('numeroUnico');
 
     this.form = this.fb.group({
       identificador: [''],
@@ -100,14 +101,27 @@ export class SeparacaoComponent implements OnInit {
       controle: [{ value: '', disabled: true }],
     });
 
-    this.separacaoService.getItensPedido().subscribe((dados) => {
-      this.dataSourcePedidos.data = dados;
+    this.separacaoService.getDadosBasicos(this.numeroUnico!).subscribe({
+      next: (resp) => {
+        this.dadosGerais = resp;
+      },
+      error: (err) => {
+        console.error(err);
+      },
     });
 
-    this.separacaoService.getDadosGerais().subscribe((data) => {
-      this.dadosGerais = data;
+    this.separacaoService.getItensPedido(this.numeroUnico!).subscribe({
+      next: (resp) => {
+        this.dataSourcePedidos.data = resp;
+      },
+      error: (err) => {
+        console.error(err);
+      },
     });
   }
+
+  // convert
+  hexToImageBlob = hexToImageBlob;
 
   // acoes
   onIniciarConferencia(item: ItemPedidoDTO) {

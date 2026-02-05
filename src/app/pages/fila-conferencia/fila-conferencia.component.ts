@@ -181,7 +181,7 @@ export class FilaConferenciaComponent implements OnInit {
 
   // actions
   onSeparar(fila: FilaConferenciaDTO): void {
-    this.router.navigate([`/separacao/${fila?.numeroNota}`]);
+    this.router.navigate([`/separacao/${fila?.numeroUnico}`]);
   }
 
   onImprimirEtiqueta(fila: FilaConferenciaDTO): void {
