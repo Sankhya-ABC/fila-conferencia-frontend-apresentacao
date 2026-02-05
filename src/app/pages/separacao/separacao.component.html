@@ -95,68 +95,60 @@
         >Imagem</mat-header-cell
       ><mat-cell *matCellDef="let e"
         ><div class="image-container">
-          <img
-            *ngIf="e.produto.imagem"
-            [src]="e.produto.imagem"
-            alt="Imagem do produto"
-          />
-          <mat-icon
-            *ngIf="!e.produto.imagem"
-            fontSet="material-symbols-outlined"
+          <img *ngIf="e.imagem" [src]="e.imagem" alt="Imagem do produto" />
+          <mat-icon *ngIf="!e.imagem" fontSet="material-symbols-outlined"
             >hide_image</mat-icon
           >
         </div>
       </mat-cell></ng-container
     >
 
-    <ng-container matColumnDef="produto.codigoBarras"
+    <ng-container matColumnDef="idProduto"
+      ><mat-header-cell *matHeaderCellDef>ID Produto</mat-header-cell
+      ><mat-cell *matCellDef="let e">{{ e.idProduto }}</mat-cell></ng-container
+    >
+
+    <ng-container matColumnDef="codigoBarras"
       ><mat-header-cell *matHeaderCellDef>Código de Barras</mat-header-cell
       ><mat-cell *matCellDef="let e">{{
-        e.produto.codigoBarras
-      }}</mat-cell></ng-container
-    >
-    <ng-container matColumnDef="produto.nome"
-      ><mat-header-cell *matHeaderCellDef>Nome</mat-header-cell
-      ><mat-cell *matCellDef="let e">{{
-        e.produto.nome
+        e.codigoBarras
       }}</mat-cell></ng-container
     >
 
-    <ng-container matColumnDef="medidas.quantidade"
+    <ng-container matColumnDef="nomeProduto"
+      ><mat-header-cell *matHeaderCellDef>Produto</mat-header-cell
+      ><mat-cell *matCellDef="let e">{{
+        e.nomeProduto
+      }}</mat-cell></ng-container
+    >
+
+    <ng-container matColumnDef="quantidade"
       ><mat-header-cell *matHeaderCellDef>Quantidade</mat-header-cell
-      ><mat-cell *matCellDef="let e">{{
-        e.medidas.quantidade
-      }}</mat-cell></ng-container
+      ><mat-cell *matCellDef="let e">{{ e.quantidade }}</mat-cell></ng-container
     >
-    <ng-container matColumnDef="medidas.unidade"
+    <ng-container matColumnDef="unidade"
       ><mat-header-cell *matHeaderCellDef>Unidade</mat-header-cell
-      ><mat-cell *matCellDef="let e">{{
-        e.medidas.unidade
-      }}</mat-cell></ng-container
+      ><mat-cell *matCellDef="let e">{{ e.unidade }}</mat-cell></ng-container
     >
 
-    <ng-container matColumnDef="produto.marca.id"
+    <ng-container matColumnDef="idMarca"
       ><mat-header-cell *matHeaderCellDef>ID Marca</mat-header-cell
-      ><mat-cell *matCellDef="let e">{{
-        e.produto.marca.id
-      }}</mat-cell></ng-container
+      ><mat-cell *matCellDef="let e">{{ e.idMarca }}</mat-cell></ng-container
     >
-    <ng-container matColumnDef="produto.marca.nome"
+    <ng-container matColumnDef="nomeMarca"
       ><mat-header-cell *matHeaderCellDef>Marca</mat-header-cell
-      ><mat-cell *matCellDef="let e">{{
-        e.produto.marca.nome
-      }}</mat-cell></ng-container
+      ><mat-cell *matCellDef="let e">{{ e.nomeMarca }}</mat-cell></ng-container
     >
-    <ng-container matColumnDef="fornecedor.id"
+    <ng-container matColumnDef="idFornecedor"
       ><mat-header-cell *matHeaderCellDef>ID Fornecedor</mat-header-cell
       ><mat-cell *matCellDef="let e">{{
-        e.fornecedor.id
+        e.idFornecedor
       }}</mat-cell></ng-container
     >
-    <ng-container matColumnDef="fornecedor.nome"
+    <ng-container matColumnDef="nomeFornecedor"
       ><mat-header-cell *matHeaderCellDef>Fornecedor</mat-header-cell
       ><mat-cell *matCellDef="let e">{{
-        e.fornecedor.nome
+        e.nomeFornecedor
       }}</mat-cell></ng-container
     >
     <ng-container matColumnDef="controle"
@@ -187,68 +179,60 @@
         >Imagem</mat-header-cell
       ><mat-cell *matCellDef="let e"
         ><div class="image-container">
-          <img
-            *ngIf="e.produto.imagem"
-            [src]="e.produto.imagem"
-            alt="Imagem do produto"
-          />
-          <mat-icon
-            *ngIf="!e.produto.imagem"
-            fontSet="material-symbols-outlined"
+          <img *ngIf="e.imagem" [src]="e.imagem" alt="Imagem do produto" />
+          <mat-icon *ngIf="!e.imagem" fontSet="material-symbols-outlined"
             >hide_image</mat-icon
           >
         </div>
       </mat-cell></ng-container
     >
 
-    <ng-container matColumnDef="produto.codigoBarras"
+    <ng-container matColumnDef="idProduto"
+      ><mat-header-cell *matHeaderCellDef>ID Produto</mat-header-cell
+      ><mat-cell *matCellDef="let e">{{ e.idProduto }}</mat-cell></ng-container
+    >
+
+    <ng-container matColumnDef="codigoBarras"
       ><mat-header-cell *matHeaderCellDef>Código de Barras</mat-header-cell
       ><mat-cell *matCellDef="let e">{{
-        e.produto.codigoBarras
-      }}</mat-cell></ng-container
-    >
-    <ng-container matColumnDef="produto.nome"
-      ><mat-header-cell *matHeaderCellDef>Nome</mat-header-cell
-      ><mat-cell *matCellDef="let e">{{
-        e.produto.nome
+        e.codigoBarras
       }}</mat-cell></ng-container
     >
 
-    <ng-container matColumnDef="medidas.quantidade"
+    <ng-container matColumnDef="nomeProduto"
+      ><mat-header-cell *matHeaderCellDef>Produto</mat-header-cell
+      ><mat-cell *matCellDef="let e">{{
+        e.nomeProduto
+      }}</mat-cell></ng-container
+    >
+
+    <ng-container matColumnDef="quantidade"
       ><mat-header-cell *matHeaderCellDef>Quantidade</mat-header-cell
-      ><mat-cell *matCellDef="let e">{{
-        e.medidas.quantidade
-      }}</mat-cell></ng-container
+      ><mat-cell *matCellDef="let e">{{ e.quantidade }}</mat-cell></ng-container
     >
-    <ng-container matColumnDef="medidas.unidade"
+    <ng-container matColumnDef="unidade"
       ><mat-header-cell *matHeaderCellDef>Unidade</mat-header-cell
-      ><mat-cell *matCellDef="let e">{{
-        e.medidas.unidade
-      }}</mat-cell></ng-container
+      ><mat-cell *matCellDef="let e">{{ e.unidade }}</mat-cell></ng-container
     >
 
-    <ng-container matColumnDef="produto.marca.id"
+    <ng-container matColumnDef="idMarca"
       ><mat-header-cell *matHeaderCellDef>ID Marca</mat-header-cell
-      ><mat-cell *matCellDef="let e">{{
-        e.produto.marca.id
-      }}</mat-cell></ng-container
+      ><mat-cell *matCellDef="let e">{{ e.idMarca }}</mat-cell></ng-container
     >
-    <ng-container matColumnDef="produto.marca.nome"
+    <ng-container matColumnDef="nomeMarca"
       ><mat-header-cell *matHeaderCellDef>Marca</mat-header-cell
-      ><mat-cell *matCellDef="let e">{{
-        e.produto.marca.nome
-      }}</mat-cell></ng-container
+      ><mat-cell *matCellDef="let e">{{ e.nomeMarca }}</mat-cell></ng-container
     >
-    <ng-container matColumnDef="fornecedor.id"
+    <ng-container matColumnDef="idFornecedor"
       ><mat-header-cell *matHeaderCellDef>ID Fornecedor</mat-header-cell
       ><mat-cell *matCellDef="let e">{{
-        e.fornecedor.id
+        e.idFornecedor
       }}</mat-cell></ng-container
     >
-    <ng-container matColumnDef="fornecedor.nome"
+    <ng-container matColumnDef="nomeFornecedor"
       ><mat-header-cell *matHeaderCellDef>Fornecedor</mat-header-cell
       ><mat-cell *matCellDef="let e">{{
-        e.fornecedor.nome
+        e.nomeFornecedor
       }}</mat-cell></ng-container
     >
     <ng-container matColumnDef="controle"

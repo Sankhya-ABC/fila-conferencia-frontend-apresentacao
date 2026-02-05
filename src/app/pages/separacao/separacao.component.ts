@@ -44,28 +44,30 @@ export class SeparacaoComponent implements OnInit {
   displayedColumnsPedidos = [
     'acoes',
     'imagem',
-    'produto.codigoBarras',
-    'produto.nome',
-    'medidas.quantidade',
-    'medidas.unidade',
-    'produto.marca.id',
-    'produto.marca.nome',
-    'fornecedor.id',
-    'fornecedor.nome',
+    'idProduto',
+    'nomeProduto',
+    'codigoBarras',
+    'quantidade',
+    'unidade',
+    'idMarca',
+    'nomeMarca',
+    'idFornecedor',
+    'nomeFornecedor',
     'controle',
     'complemento',
   ];
 
   displayedColumnsConferidos = [
     'imagem',
-    'produto.codigoBarras',
-    'produto.nome',
-    'medidas.quantidade',
-    'medidas.unidade',
-    'produto.marca.id',
-    'produto.marca.nome',
-    'fornecedor.id',
-    'fornecedor.nome',
+    'idProduto',
+    'nomeProduto',
+    'codigoBarras',
+    'quantidade',
+    'unidade',
+    'idMarca',
+    'nomeMarca',
+    'idFornecedor',
+    'nomeFornecedor',
     'controle',
     'complemento',
   ];
@@ -117,7 +119,7 @@ export class SeparacaoComponent implements OnInit {
     if (!codigo) return;
 
     const item = this.dataSourcePedidos.data.find(
-      (i) => i.produto.codigoBarras === codigo,
+      (i) => i.codigoBarras === codigo,
     );
 
     if (!item) {
@@ -133,7 +135,7 @@ export class SeparacaoComponent implements OnInit {
     this.itemSelecionado = item;
 
     this.form.patchValue({
-      codigoBarras: item.produto.codigoBarras,
+      codigoBarras: item.codigoBarras,
       controle: item.controle ?? '',
     });
 
@@ -163,7 +165,7 @@ export class SeparacaoComponent implements OnInit {
       return;
     }
 
-    const max = Number(this.itemSelecionado.medidas.quantidade);
+    const max = Number(this.itemSelecionado.quantidade);
 
     if (valor > max) {
       ctrl.setErrors({
@@ -188,31 +190,27 @@ export class SeparacaoComponent implements OnInit {
     if (qtdCtrl.invalid) return;
 
     const qtdInformada = Number(qtdCtrl.value);
-    const qtdPedido = Number(this.itemSelecionado.medidas.quantidade);
+    const qtdPedido = Number(this.itemSelecionado.quantidade);
 
     if (qtdInformada > qtdPedido) {
       return;
     }
 
     const restante = qtdPedido - qtdInformada;
-    this.itemSelecionado.medidas.quantidade = String(restante);
+    this.itemSelecionado.quantidade = String(restante);
 
     const existente = this.dataSourceConferidos.data.find(
-      (i) =>
-        i.produto.codigoBarras === this.itemSelecionado!.produto.codigoBarras,
+      (i) => i.codigoBarras === this.itemSelecionado!.codigoBarras,
     );
 
     if (existente) {
-      existente.medidas.quantidade = String(
-        Number(existente.medidas.quantidade) + qtdInformada,
+      existente.quantidade = String(
+        Number(existente.quantidade) + qtdInformada,
       );
     } else {
       this.dataSourceConferidos.data.push({
         ...this.itemSelecionado,
-        medidas: {
-          ...this.itemSelecionado.medidas,
-          quantidade: String(qtdInformada),
-        },
+        quantidade: String(qtdInformada),
       });
     }
 
