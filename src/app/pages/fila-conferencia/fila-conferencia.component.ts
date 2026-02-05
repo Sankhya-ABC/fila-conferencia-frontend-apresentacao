@@ -64,6 +64,7 @@ export class FilaConferenciaComponent implements OnInit {
     'numeroUnico',
     'numeroNota',
     'numeroModial',
+    'numeroConferencia',
     'valorNota',
     'volume',
     'dataMovimento',

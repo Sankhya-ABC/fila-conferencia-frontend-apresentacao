@@ -2,6 +2,7 @@ export interface FilaConferenciaDTO {
   numeroUnico: string;
   numeroNota: string;
   numeroModial: string;
+  numeroConferencia: string;
 
   valorNota: string;
   volume: string;

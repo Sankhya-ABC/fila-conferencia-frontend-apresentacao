@@ -178,6 +178,11 @@
       <mat-cell *matCellDef="let data">{{ data.numeroModial }}</mat-cell>
     </ng-container>
 
+    <ng-container matColumnDef="numeroConferencia">
+      <mat-header-cell *matHeaderCellDef>Nº Conferência</mat-header-cell>
+      <mat-cell *matCellDef="let data">{{ data.numeroConferencia }}</mat-cell>
+    </ng-container>
+
     <ng-container matColumnDef="valorNota">
       <mat-header-cell *matHeaderCellDef>Valor Nota</mat-header-cell>
       <mat-cell *matCellDef="let data"
