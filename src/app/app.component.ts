@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
-import { HeaderComponent } from './components/header/header.component';
+import { HeaderComponent } from './shared/components/header/header.component';
 import { map, Observable } from 'rxjs';
 import { RouteStateService } from './services/route-state/route-state.service';
 

@@ -1,0 +1,8 @@
+@use "../../../../styles/spacing" as *;
+@use "../../../../styles/typography" as *;
+@use "../../../../styles/breakpoints" as *;
+
+.dialog-container {
+  padding: $space-15;
+  max-width: 420px;
+}

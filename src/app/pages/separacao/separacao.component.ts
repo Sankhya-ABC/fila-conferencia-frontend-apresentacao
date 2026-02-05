@@ -9,7 +9,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { ActivatedRoute } from '@angular/router';
-import { ModalComponent } from '../../components/modal/modal.component';
+import { ModalComponent } from '../../shared/components/modal/modal.component';
 import {
   DadosBasicosPedidoDTO,
   ItemPedidoDTO,
