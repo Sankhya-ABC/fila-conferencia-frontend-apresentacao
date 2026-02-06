@@ -1,3 +1,4 @@
 export const environment = {
-  API_GATEWAY: 'http://localhost:3000',
+  production: true,
+  API_GATEWAY: 'http://163.176.239.42',
 };
