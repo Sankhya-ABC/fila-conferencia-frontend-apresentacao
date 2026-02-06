@@ -138,7 +138,7 @@
             <button
               mat-icon-button
               (click)="onSeparar(e)"
-              [disabled]="e.codigoStatus !== 'AC'"
+              [disabled]="e.codigoStatus !== 'AC' && e.codigoStatus !== 'A'"
             >
               <mat-icon fontSet="material-symbols-outlined">
                 deployed_code
