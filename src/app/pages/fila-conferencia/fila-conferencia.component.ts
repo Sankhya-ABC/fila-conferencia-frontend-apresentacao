@@ -18,6 +18,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { Router } from '@angular/router';
+import { finalize } from 'rxjs';
 import { CodigoDescricao } from '../../services/dto/dominio.model';
 import {
   FilaConferenciaDTO,
@@ -99,6 +100,9 @@ export class FilaConferenciaComponent implements OnInit {
   // filters
   filters!: FormGroup;
 
+  // requests
+  loading = false;
+
   ngOnInit(): void {
     this.criarForm();
 
@@ -150,9 +154,10 @@ export class FilaConferenciaComponent implements OnInit {
   }
 
   applyFilter(): void {
+    this.loading = true;
     this.dataSource.data = [];
-    const params: FilaConferenciaFilter = this.filters.value;
 
+    const params: FilaConferenciaFilter = this.filters.value;
     params.dataInicio = params.dataInicio
       ? formatDate(params.dataInicio, 'yyyy-MM-dd', 'en-US')
       : undefined;
@@ -168,8 +173,14 @@ export class FilaConferenciaComponent implements OnInit {
 
     this.filaConferenciaService
       .getFilaConferencias(params)
-      .subscribe((resp) => {
-        this.dataSource.data = resp;
+      .pipe(finalize(() => (this.loading = false)))
+      .subscribe({
+        next: (resp) => {
+          this.dataSource.data = resp;
+        },
+        error: () => {
+          this.dataSource.data = [];
+        },
       });
   }
 
