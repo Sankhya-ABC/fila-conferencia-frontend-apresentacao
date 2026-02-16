@@ -20,10 +20,16 @@ export interface ItemPedidoDTO {
 }
 
 export interface DadosBasicosPedidoDTO {
+  numeroUnico: string;
   numeroNota: string;
+  numeroModial: string;
   numeroConferencia: string;
+
+  codigoStatus: string;
+
   idParceiro: string;
   nomeParceiro: string;
+
   idVendedor: string;
   nomeVendedor: string;
 }
