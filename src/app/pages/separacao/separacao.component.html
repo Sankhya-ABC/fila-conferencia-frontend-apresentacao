@@ -97,7 +97,7 @@
         ><div class="image-container">
           <img
             *ngIf="e.imagem"
-            [src]="hexToImageBlob(e.imagem)"
+            [src]="'data:image/png;base64,' + e.imagem"
             alt="Imagem do produto"
           />
           <mat-icon *ngIf="!e.imagem" fontSet="material-symbols-outlined"
@@ -185,7 +185,7 @@
         ><div class="image-container">
           <img
             *ngIf="e.imagem"
-            [src]="hexToImageBlob(e.imagem)"
+            [src]="'data:image/png;base64,' + e.imagem"
             alt="Imagem do produto"
           />
           <mat-icon *ngIf="!e.imagem" fontSet="material-symbols-outlined"

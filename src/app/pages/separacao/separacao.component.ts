@@ -15,7 +15,6 @@ import {
   ItemPedidoDTO,
 } from '../../services/separacao/separacao.model';
 import { SeparacaoService } from '../../services/separacao/separacao.service';
-import { hexToImageBlob } from '../../shared/utils/hexToImageBlob';
 
 @Component({
   selector: 'app-separacao',
@@ -119,9 +118,6 @@ export class SeparacaoComponent implements OnInit {
       },
     });
   }
-
-  // convert
-  hexToImageBlob = hexToImageBlob;
 
   // acoes
   onIniciarConferencia(item: ItemPedidoDTO) {
