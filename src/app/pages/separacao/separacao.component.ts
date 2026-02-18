@@ -78,7 +78,7 @@ export class SeparacaoComponent implements OnInit {
   dataSourceConferidos = new MatTableDataSource<ItemPedidoDTO>([]);
 
   dadosGerais!: DadosBasicosPedidoDTO;
-  numeroUnico: string | null = null;
+  numeroUnico: number | null = null;
   idUsuario = this.authService.getUser().idUsuario;
 
   // form
@@ -95,7 +95,7 @@ export class SeparacaoComponent implements OnInit {
   modalIniciarCubagemTpl!: TemplateRef<any>;
 
   ngOnInit(): void {
-    this.numeroUnico = this.route.snapshot.paramMap.get('numeroUnico');
+    this.numeroUnico = Number(this.route.snapshot.paramMap.get('numeroUnico'));
 
     this.form = this.fb.group({
       identificador: [''],
@@ -103,16 +103,18 @@ export class SeparacaoComponent implements OnInit {
       controle: [{ value: '', disabled: true }],
     });
 
-    this.separacaoService.getDadosBasicos(this.numeroUnico!).subscribe({
-      next: (resp) => {
-        this.dadosGerais = resp;
+    // obter dados básicos
+    this.separacaoService.getDadosBasicos(this.numeroUnico).subscribe({
+      next: (respDadosGerais) => {
+        this.dadosGerais = respDadosGerais;
 
-        if (resp.codigoStatus === 'AC') {
+        // iniciar conferência
+        if (respDadosGerais.codigoStatus === 'AC') {
           this.separacaoService
             .postIniciarConferencia({
               idUsuario: this.idUsuario,
-              numeroNota: resp.numeroNota,
-              numeroUnico: resp.numeroUnico,
+              numeroNota: respDadosGerais.numeroNota,
+              numeroUnico: respDadosGerais.numeroUnico,
             })
             .subscribe({
               error: (err) => {
@@ -120,15 +122,48 @@ export class SeparacaoComponent implements OnInit {
               },
             });
         }
-      },
-      error: (err) => {
-        console.error(err);
-      },
-    });
+        // obter itens pedidos
+        if (respDadosGerais.numeroUnico) {
+          this.separacaoService
+            .getItensPedido(respDadosGerais.numeroUnico!)
+            .subscribe({
+              next: (respItensPedido) => {
+                // obter itens conferidos
+                if (respDadosGerais.numeroConferencia) {
+                  this.separacaoService
+                    .getItensConferidos(respDadosGerais.numeroConferencia)
+                    .subscribe({
+                      // separar itens já conferidos dos itens do pedido
+                      next: (respItensConferidos) => {
+                        const setItensConferidos = new Set(
+                          respItensConferidos.map(String),
+                        );
 
-    this.separacaoService.getItensPedido(this.numeroUnico!).subscribe({
-      next: (resp) => {
-        this.dataSourcePedidos.data = resp;
+                        const pedidos: ItemPedidoDTO[] = [];
+                        const conferidos: ItemPedidoDTO[] = [];
+
+                        respItensPedido?.forEach((item) => {
+                          if (setItensConferidos.has(String(item.idProduto))) {
+                            conferidos.push({ ...item });
+                          } else {
+                            pedidos.push({ ...item });
+                          }
+                        });
+
+                        this.dataSourcePedidos.data = pedidos;
+                        this.dataSourceConferidos.data = conferidos;
+                      },
+                      error: (err) => {
+                        console.error(err);
+                      },
+                    });
+                }
+              },
+              error: (err) => {
+                console.error(err);
+              },
+            });
+        }
       },
       error: (err) => {
         console.error(err);

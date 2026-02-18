@@ -1,18 +1,18 @@
 export interface ItemPedidoDTO {
   imagem?: string;
 
-  idProduto: string;
+  idProduto: number;
   nomeProduto: string;
 
   codigoBarras?: string[];
 
-  quantidade: string;
+  quantidade: number;
   unidade: string;
 
-  idMarca: string;
+  idMarca: number;
   nomeMarca: string;
 
-  idFornecedor: string;
+  idFornecedor: number;
   nomeFornecedor: string;
 
   controle: string;
@@ -33,6 +33,11 @@ export interface DadosBasicosPedidoDTO {
 
   idVendedor: number;
   nomeVendedor: string;
+}
+
+export interface ItensConferidosResponse {
+  idProduto: number;
+  quantidade: number;
 }
 
 export interface PostIniciarConferenciaParams {
