@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import {
   DadosBasicosPedidoDTO,
   ItemPedidoDTO,
+  ItensConferidosResponse,
   PostIniciarConferenciaParams,
   PostIniciarConferenciaResponse,
 } from './separacao.model';
@@ -14,22 +15,27 @@ import {
 export class SeparacaoService {
   constructor(private http: HttpClient) {}
 
-  getDadosBasicos(numeroUnico: string): Observable<DadosBasicosPedidoDTO> {
+  getDadosBasicos(numeroUnico: number): Observable<DadosBasicosPedidoDTO> {
     return this.http.get<DadosBasicosPedidoDTO>('/separacoes/dados-basicos', {
       params: { numeroUnico },
     });
   }
 
-  getItensPedido(numeroUnico: string): Observable<ItemPedidoDTO[]> {
+  getItensPedido(numeroUnico: number): Observable<ItemPedidoDTO[]> {
     return this.http.get<ItemPedidoDTO[]>('/separacoes/itens-pedidos', {
       params: { numeroUnico },
     });
   }
 
-  getItensConferidos(numeroConferencia: number): Observable<number[]> {
-    return this.http.get<number[]>('/separacoes/itens-conferidos', {
-      params: { numeroConferencia },
-    });
+  getItensConferidos(
+    numeroConferencia: number,
+  ): Observable<ItensConferidosResponse[]> {
+    return this.http.get<ItensConferidosResponse[]>(
+      '/separacoes/itens-conferidos',
+      {
+        params: { numeroConferencia },
+      },
+    );
   }
 
   postIniciarConferencia(

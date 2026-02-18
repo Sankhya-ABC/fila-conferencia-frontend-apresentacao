@@ -9,13 +9,13 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { ActivatedRoute } from '@angular/router';
-import { ModalComponent } from '../../shared/components/modal/modal.component';
+import { AuthService } from '../../services/auth/auth.service';
 import {
   DadosBasicosPedidoDTO,
   ItemPedidoDTO,
 } from '../../services/separacao/separacao.model';
 import { SeparacaoService } from '../../services/separacao/separacao.service';
-import { AuthService } from '../../services/auth/auth.service';
+import { ModalComponent } from '../../shared/components/modal/modal.component';
 
 @Component({
   selector: 'app-separacao',
@@ -135,18 +135,37 @@ export class SeparacaoComponent implements OnInit {
                     .subscribe({
                       // separar itens já conferidos dos itens do pedido
                       next: (respItensConferidos) => {
-                        const setItensConferidos = new Set(
-                          respItensConferidos.map(String),
+                        const mapConferidos = new Map(
+                          respItensConferidos.map((i) => [
+                            i.idProduto,
+                            i.quantidade,
+                          ]),
                         );
 
                         const pedidos: ItemPedidoDTO[] = [];
                         const conferidos: ItemPedidoDTO[] = [];
 
-                        respItensPedido?.forEach((item) => {
-                          if (setItensConferidos.has(String(item.idProduto))) {
-                            conferidos.push({ ...item });
+                        respItensPedido.forEach((item) => {
+                          const qtdConferida = mapConferidos.get(
+                            item.idProduto,
+                          );
+
+                          if (qtdConferida) {
+                            conferidos.push({
+                              ...item,
+                              quantidade: qtdConferida,
+                            });
+
+                            const restante = item.quantidade - qtdConferida;
+
+                            if (restante > 0) {
+                              pedidos.push({
+                                ...item,
+                                quantidade: restante,
+                              });
+                            }
                           } else {
-                            pedidos.push({ ...item });
+                            pedidos.push(item);
                           }
                         });
 
@@ -261,20 +280,18 @@ export class SeparacaoComponent implements OnInit {
     }
 
     const restante = qtdPedido - qtdInformada;
-    this.itemSelecionado.quantidade = String(restante);
+    this.itemSelecionado.quantidade = restante;
 
     const existente = this.dataSourceConferidos.data.find(
       (i) => i.idProduto === this.itemSelecionado!.idProduto,
     );
 
     if (existente) {
-      existente.quantidade = String(
-        Number(existente.quantidade) + qtdInformada,
-      );
+      existente.quantidade = existente.quantidade + qtdInformada;
     } else {
       this.dataSourceConferidos.data.push({
         ...this.itemSelecionado,
-        quantidade: String(qtdInformada),
+        quantidade: qtdInformada,
       });
     }
 
