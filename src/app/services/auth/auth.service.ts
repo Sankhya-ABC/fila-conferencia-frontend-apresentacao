@@ -12,20 +12,20 @@ export class AuthService {
   login(body: LoginRequest): Observable<LoginResponse> {
     return this.http.post<LoginResponse>('/auths/login', body).pipe(
       tap((resp) => {
-        localStorage.setItem(SESSION_KEYS.TOKEN_KEY, resp.token);
+        localStorage.setItem(SESSION_KEYS.AUTH_USER, JSON.stringify(resp));
       }),
     );
   }
 
   logout(): void {
-    localStorage.removeItem(SESSION_KEYS.TOKEN_KEY);
+    localStorage.removeItem(SESSION_KEYS.AUTH_USER);
   }
 
-  getToken(): string | null {
-    return localStorage.getItem(SESSION_KEYS.TOKEN_KEY);
+  getUser(): LoginResponse {
+    return JSON.parse(localStorage.getItem(SESSION_KEYS.AUTH_USER) || '{}');
   }
 
   isAuthenticated(): boolean {
-    return !!this.getToken();
+    return !!this.getUser().token;
   }
 }

@@ -20,16 +20,26 @@ export interface ItemPedidoDTO {
 }
 
 export interface DadosBasicosPedidoDTO {
-  numeroUnico: string;
-  numeroNota: string;
-  numeroModial: string;
-  numeroConferencia: string;
+  numeroUnico: number;
+  numeroNota: number;
+  numeroModial: number;
+  numeroConferencia: number;
 
   codigoStatus: string;
 
-  idParceiro: string;
+  idParceiro: number;
   nomeParceiro: string;
 
-  idVendedor: string;
+  idVendedor: number;
   nomeVendedor: string;
+}
+
+export interface PostIniciarConferenciaParams {
+  idUsuario: number;
+  numeroNota: number;
+  numeroUnico: number;
+}
+
+export interface PostIniciarConferenciaResponse {
+  numeroConferencia: number;
 }

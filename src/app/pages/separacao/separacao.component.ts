@@ -15,6 +15,7 @@ import {
   ItemPedidoDTO,
 } from '../../services/separacao/separacao.model';
 import { SeparacaoService } from '../../services/separacao/separacao.service';
+import { AuthService } from '../../services/auth/auth.service';
 
 @Component({
   selector: 'app-separacao',
@@ -38,6 +39,7 @@ export class SeparacaoComponent implements OnInit {
     private separacaoService: SeparacaoService,
     private route: ActivatedRoute,
     private dialog: MatDialog,
+    private authService: AuthService,
   ) {}
 
   // data
@@ -77,6 +79,7 @@ export class SeparacaoComponent implements OnInit {
 
   dadosGerais!: DadosBasicosPedidoDTO;
   numeroUnico: string | null = null;
+  idUsuario = this.authService.getUser().idUsuario;
 
   // form
   form!: FormGroup;
@@ -103,6 +106,20 @@ export class SeparacaoComponent implements OnInit {
     this.separacaoService.getDadosBasicos(this.numeroUnico!).subscribe({
       next: (resp) => {
         this.dadosGerais = resp;
+
+        if (resp.codigoStatus === 'AC') {
+          this.separacaoService
+            .postIniciarConferencia({
+              idUsuario: this.idUsuario,
+              numeroNota: resp.numeroNota,
+              numeroUnico: resp.numeroUnico,
+            })
+            .subscribe({
+              error: (err) => {
+                console.error(err);
+              },
+            });
+        }
       },
       error: (err) => {
         console.error(err);

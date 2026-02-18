@@ -1,7 +1,12 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { DadosBasicosPedidoDTO, ItemPedidoDTO } from './separacao.model';
+import {
+  DadosBasicosPedidoDTO,
+  ItemPedidoDTO,
+  PostIniciarConferenciaParams,
+  PostIniciarConferenciaResponse,
+} from './separacao.model';
 
 @Injectable({
   providedIn: 'root',
@@ -19,5 +24,14 @@ export class SeparacaoService {
     return this.http.get<ItemPedidoDTO[]>('/separacoes/itens-pedidos', {
       params: { numeroUnico },
     });
+  }
+
+  postIniciarConferencia(
+    body: PostIniciarConferenciaParams,
+  ): Observable<PostIniciarConferenciaResponse> {
+    return this.http.post<PostIniciarConferenciaResponse>(
+      '/separacoes/iniciar-conferencia',
+      body,
+    );
   }
 }

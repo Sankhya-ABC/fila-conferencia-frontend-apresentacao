@@ -1,3 +1,3 @@
 export const SESSION_KEYS = {
-  TOKEN_KEY: 'auth_token',
+  AUTH_USER: 'auth_user',
 };
