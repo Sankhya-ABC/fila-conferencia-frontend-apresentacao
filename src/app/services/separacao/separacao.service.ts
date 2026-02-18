@@ -26,6 +26,12 @@ export class SeparacaoService {
     });
   }
 
+  getItensConferidos(numeroConferencia: number): Observable<number[]> {
+    return this.http.get<number[]>('/separacoes/itens-conferidos', {
+      params: { numeroConferencia },
+    });
+  }
+
   postIniciarConferencia(
     body: PostIniciarConferenciaParams,
   ): Observable<PostIniciarConferenciaResponse> {
