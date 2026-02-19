@@ -557,8 +557,20 @@ export class SeparacaoComponent implements OnInit {
 
   verificarSeFinalizouConferencia() {
     if (this.dataSourcePedidos.data.length === 0) {
+      this.reordenarVolumesFinalizacao();
       this.abrirModalIniciarCubagem();
     }
+  }
+
+  reordenarVolumesFinalizacao() {
+    if (!this.volumes.length) return;
+
+    this.volumes.forEach((v) => (v.ativo = false));
+    this.volumeAtivo = undefined as any;
+
+    this.volumes = [...this.volumes].sort(
+      (a, b) => b.numeroVolume - a.numeroVolume,
+    );
   }
 
   limparFormulario() {
