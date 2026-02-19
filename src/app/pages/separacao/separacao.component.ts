@@ -247,6 +247,10 @@ export class SeparacaoComponent implements OnInit {
     return this.chaveItem(a) === this.chaveItem(b);
   }
 
+  normalizarControle(controle?: string | null): string {
+    return controle?.trim() || '';
+  }
+
   // acoes
   onIniciarConferencia(item: ItemPedidoDTO) {
     const itensDoProduto = this.dataSourcePedidos.data.filter(
@@ -297,15 +301,17 @@ export class SeparacaoComponent implements OnInit {
 
     this.form.patchValue({
       identificador: item.idProduto,
-      controle: item.controle ?? '',
+      controle: this.normalizarControle(item.controle),
     });
+
+    this.produtoIdentificado = true;
 
     if (this.quantidadeCtrl?.value) {
       this.onBlurQuantidade();
     }
   }
 
-  prepararSelecaoItem(
+  private prepararSelecaoItem(
     itensDoProduto: ItemPedidoDTO[],
     controlePreferido?: string,
   ) {
@@ -313,18 +319,29 @@ export class SeparacaoComponent implements OnInit {
       new Set(itensDoProduto.map((i) => i.controle?.trim() || 'SEM_CONTROLE')),
     );
 
-    const controleSelecionado =
-      controlePreferido ??
-      (this.controlesDisponiveis[0] === 'SEM_CONTROLE'
-        ? ''
-        : this.controlesDisponiveis[0]);
+    let controleSelecionado: string;
+
+    if (
+      this.controlesDisponiveis.length === 1 &&
+      this.controlesDisponiveis[0] === 'SEM_CONTROLE'
+    ) {
+      controleSelecionado = '';
+    } else {
+      controleSelecionado =
+        controlePreferido ??
+        (this.controlesDisponiveis[0] === 'SEM_CONTROLE'
+          ? ''
+          : this.controlesDisponiveis[0]);
+    }
 
     this.form.patchValue({
       controle: controleSelecionado,
     });
 
     const item = itensDoProduto.find(
-      (i) => (i.controle ?? '') === controleSelecionado,
+      (i) =>
+        this.normalizarControle(i.controle) ===
+        this.normalizarControle(controleSelecionado),
     );
 
     if (!item) return;
