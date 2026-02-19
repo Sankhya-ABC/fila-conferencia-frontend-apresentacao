@@ -306,12 +306,10 @@
       [class.ativo]="volume.ativo"
       (click)="selecionarVolume(volume)"
     >
-      <div
-        class="volume-header"
-        *ngIf="volume.ativo && aindaHaItensParaConferir"
-      >
+      <div class="volume-header" [class.inativo]="!volume.ativo">
         <button
           mat-icon-button
+          *ngIf="volume.ativo && aindaHaItensParaConferir"
           (click)="removerVolume(volume); $event.stopPropagation()"
           matTooltip="Remover volume"
         >
@@ -322,6 +320,7 @@
 
         <button
           mat-icon-button
+          *ngIf="volume.ativo && aindaHaItensParaConferir"
           (click)="encerrarVolume(volume); $event.stopPropagation()"
           matTooltip="Encerrar volume"
         >
