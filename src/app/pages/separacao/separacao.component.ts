@@ -225,13 +225,16 @@ export class SeparacaoComponent implements OnInit {
   }
 
   onIdentificadorInserido() {
-    const identificador = this.form.get('identificador')?.value;
-    if (!identificador) return;
+    const identificadorRaw = this.form.get('identificador')?.value;
+    if (!identificadorRaw) return;
+
+    const identificador = identificadorRaw.toString().trim();
+    const identificadorNumero = Number(identificador);
 
     const item = this.dataSourcePedidos.data.find(
       (i) =>
-        i.idProduto === identificador ||
-        i.codigoBarras?.some((cb) => cb === identificador),
+        i.idProduto === identificadorNumero ||
+        i.codigoBarras?.some((cb) => cb.toString() === identificador),
     );
 
     if (!item) {
