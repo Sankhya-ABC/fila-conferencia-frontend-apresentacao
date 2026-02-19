@@ -303,13 +303,13 @@
     <div
       class="volume-card xs-12 sm-6 md-4 lg-3 xl-2"
       *ngFor="let volume of volumes"
-      [class.ativo]="volume.ativo"
+      [class.ativo]="volume.ativo && !conferenciaFinalizada"
       (click)="selecionarVolume(volume)"
     >
       <div class="volume-header" [class.inativo]="!volume.ativo">
         <button
           mat-icon-button
-          *ngIf="volume.ativo && aindaHaItensParaConferir"
+          *ngIf="volume.itens.length > 0"
           (click)="removerVolume(volume); $event.stopPropagation()"
           matTooltip="Remover volume"
         >

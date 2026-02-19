@@ -271,6 +271,10 @@ export class SeparacaoComponent implements OnInit {
     return this.form.get('quantidade');
   }
 
+  get conferenciaFinalizada(): boolean {
+    return this.dataSourcePedidos.data.length === 0;
+  }
+
   // acoes
   onIniciarConferencia(item: ItemPedidoDTO) {
     const itensDoProduto = this.dataSourcePedidos.data.filter(
@@ -483,12 +487,12 @@ export class SeparacaoComponent implements OnInit {
   }
 
   encerrarVolume(volume: VolumeFrontDTO) {
-    if (!volume.itens.length) return;
+    if (!volume.itens.length || this.conferenciaFinalizada) return;
 
     volume.ativo = false;
     this.volumeAtivo = undefined as any;
 
-    if (this.dataSourcePedidos.data.length > 0) {
+    if (this.aindaHaItensParaConferir && !this.existeVolumeVazio()) {
       this.criarNovoVolume();
     }
 
@@ -500,6 +504,8 @@ export class SeparacaoComponent implements OnInit {
   }
 
   selecionarVolume(volume: VolumeFrontDTO) {
+    if (this.conferenciaFinalizada) return;
+
     this.volumes.forEach((v) => (v.ativo = false));
 
     volume.ativo = true;
@@ -563,22 +569,26 @@ export class SeparacaoComponent implements OnInit {
 
     this.volumes = this.volumes.filter((v) => v !== volume);
 
-    if (this.dataSourcePedidos.data.length && this.volumes.length) {
-      this.volumes.forEach((v) => (v.ativo = false));
+    this.volumeAtivo = undefined as any;
 
-      const ultimo = [...this.volumes].sort(
-        (a, b) => b.numeroVolume - a.numeroVolume,
-      )[0];
+    if (this.aindaHaItensParaConferir) {
+      if (!this.volumes.length) {
+        this.criarNovoVolume();
+      } else {
+        this.volumes.forEach((v) => (v.ativo = false));
 
-      ultimo.ativo = true;
-      this.volumeAtivo = ultimo;
+        const ultimo = [...this.volumes].sort(
+          (a, b) => b.numeroVolume - a.numeroVolume,
+        )[0];
 
-      this.volumes = this.volumes
-        .filter((v) => v !== ultimo)
-        .concat(ultimo)
-        .reverse();
-    } else {
-      this.volumeAtivo = undefined as any;
+        ultimo.ativo = true;
+        this.volumeAtivo = ultimo;
+
+        this.volumes = this.volumes
+          .filter((v) => v !== ultimo)
+          .concat(ultimo)
+          .reverse();
+      }
     }
   }
 
