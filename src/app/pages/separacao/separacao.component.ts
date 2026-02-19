@@ -146,9 +146,14 @@ export class SeparacaoComponent implements OnInit {
                     .subscribe({
                       // separar itens já conferidos dos itens do pedido
                       next: (respItensConferidos) => {
+                        const chave = (i: {
+                          idProduto: number;
+                          controle?: string;
+                        }) => `${i.idProduto}#${i.controle ?? ''}`;
+
                         const mapConferidos = new Map(
                           respItensConferidos.map((i) => [
-                            i.idProduto,
+                            chave(i),
                             i.quantidade,
                           ]),
                         );
@@ -157,9 +162,7 @@ export class SeparacaoComponent implements OnInit {
                         const conferidos: ItemPedidoDTO[] = [];
 
                         respItensPedido.forEach((item) => {
-                          const qtdConferida = mapConferidos.get(
-                            item.idProduto,
-                          );
+                          const qtdConferida = mapConferidos.get(chave(item));
 
                           if (qtdConferida) {
                             conferidos.push({
@@ -233,18 +236,24 @@ export class SeparacaoComponent implements OnInit {
   }
 
   // helper
+  chaveItem(i: { idProduto: number; controle?: string }) {
+    return `${i.idProduto}#${i.controle ?? ''}`;
+  }
+
   mesmaChaveItem(
     a: { idProduto: number; controle?: string },
     b: { idProduto: number; controle?: string },
   ) {
-    return (
-      a.idProduto === b.idProduto && (a.controle ?? '') === (b.controle ?? '')
-    );
+    return this.chaveItem(a) === this.chaveItem(b);
   }
 
   // acoes
   onIniciarConferencia(item: ItemPedidoDTO) {
-    this.selecionarItem(item);
+    const itensDoProduto = this.dataSourcePedidos.data.filter(
+      (i) => i.idProduto === item.idProduto,
+    );
+
+    this.prepararSelecaoItem(itensDoProduto, item.controle ?? '');
   }
 
   onIdentificadorInserido() {
@@ -254,7 +263,7 @@ export class SeparacaoComponent implements OnInit {
     const identificador = identificadorRaw.toString().trim();
     const identificadorNumero = Number(identificador);
 
-    const itensDoProduto = [...this.dataSourcePedidos.data].filter(
+    const itensDoProduto = this.dataSourcePedidos.data.filter(
       (i) =>
         i.idProduto === identificadorNumero ||
         i.codigoBarras?.some((cb) => cb.toString() === identificador),
@@ -266,23 +275,7 @@ export class SeparacaoComponent implements OnInit {
       return;
     }
 
-    this.controlesDisponiveis = Array.from(
-      new Set(itensDoProduto.map((i) => i.controle ?? '')),
-    );
-
-    const controleInicial = this.controlesDisponiveis[0];
-
-    this.form.patchValue({
-      controle: controleInicial,
-    });
-
-    const item = itensDoProduto.find(
-      (i) => (i.controle ?? '') === controleInicial,
-    )!;
-
-    this.selecionarItem(item);
-
-    this.produtoIdentificado = true;
+    this.prepararSelecaoItem(itensDoProduto);
   }
 
   onControleChange(controle: string) {
@@ -310,6 +303,34 @@ export class SeparacaoComponent implements OnInit {
     if (this.quantidadeCtrl?.value) {
       this.onBlurQuantidade();
     }
+  }
+
+  prepararSelecaoItem(
+    itensDoProduto: ItemPedidoDTO[],
+    controlePreferido?: string,
+  ) {
+    this.controlesDisponiveis = Array.from(
+      new Set(itensDoProduto.map((i) => i.controle?.trim() || 'SEM_CONTROLE')),
+    );
+
+    const controleSelecionado =
+      controlePreferido ??
+      (this.controlesDisponiveis[0] === 'SEM_CONTROLE'
+        ? ''
+        : this.controlesDisponiveis[0]);
+
+    this.form.patchValue({
+      controle: controleSelecionado,
+    });
+
+    const item = itensDoProduto.find(
+      (i) => (i.controle ?? '') === controleSelecionado,
+    );
+
+    if (!item) return;
+
+    this.selecionarItem(item);
+    this.produtoIdentificado = true;
   }
 
   onDevolverItemConferido(item: ItemPedidoDTO) {

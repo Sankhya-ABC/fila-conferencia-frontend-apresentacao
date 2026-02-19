@@ -61,13 +61,13 @@
     <mat-select
       formControlName="controle"
       (selectionChange)="onControleChange($event.value)"
-      [disabled]="controlesDisponiveis.length <= 1"
+      [disabled]="controlesDisponiveis.length === 0"
     >
       <mat-option
         *ngFor="let controle of controlesDisponiveis"
-        [value]="controle"
+        [value]="controle === 'SEM_CONTROLE' ? '' : controle"
       >
-        {{ controle || "Sem controle" }}
+        {{ controle === "SEM_CONTROLE" ? "Sem controle" : controle }}
       </mat-option>
     </mat-select>
   </mat-form-field>
