@@ -42,7 +42,6 @@ export interface ItensConferidosResponse {
 
 export interface PostIniciarConferenciaParams {
   idUsuario: number;
-  numeroNota: number;
   numeroUnico: number;
 }
 

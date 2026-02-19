@@ -113,7 +113,6 @@ export class SeparacaoComponent implements OnInit {
           this.separacaoService
             .postIniciarConferencia({
               idUsuario: this.idUsuario,
-              numeroNota: respDadosGerais.numeroNota,
               numeroUnico: respDadosGerais.numeroUnico,
             })
             .subscribe({
