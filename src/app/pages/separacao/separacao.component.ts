@@ -251,6 +251,18 @@ export class SeparacaoComponent implements OnInit {
     return controle?.trim() || '';
   }
 
+  existeVolumeVazio(): boolean {
+    return this.volumes.some((v) => v.itens.length === 0);
+  }
+
+  proximoNumeroVolume(): number {
+    if (!this.volumes.length) {
+      return 1;
+    }
+
+    return Math.max(...this.volumes.map((v) => v.numeroVolume)) + 1;
+  }
+
   get aindaHaItensParaConferir(): boolean {
     return this.dataSourcePedidos.data.length > 0;
   }
@@ -675,21 +687,21 @@ export class SeparacaoComponent implements OnInit {
   }
 
   criarNovoVolume() {
-    const numeroVolume =
-      this.volumes.length > 0
-        ? Math.max(...this.volumes.map((v) => v.numeroVolume)) + 1
-        : 1;
+    if (this.existeVolumeVazio()) {
+      return;
+    }
 
-    this.volumes.forEach((v) => (v.ativo = false));
+    if (this.volumeAtivo) {
+      this.volumeAtivo.ativo = false;
+    }
 
     const novoVolume: VolumeFrontDTO = {
-      numeroVolume,
-      itens: [],
+      numeroVolume: this.proximoNumeroVolume(),
       ativo: true,
+      itens: [],
     };
 
-    this.volumes.unshift(novoVolume);
-    this.volumes = [...this.volumes];
+    this.volumes.push(novoVolume);
     this.volumeAtivo = novoVolume;
   }
 }

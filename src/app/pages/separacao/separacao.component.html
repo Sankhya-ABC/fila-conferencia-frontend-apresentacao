@@ -322,6 +322,7 @@
           mat-icon-button
           *ngIf="volume.ativo && aindaHaItensParaConferir"
           (click)="encerrarVolume(volume); $event.stopPropagation()"
+          [disabled]="existeVolumeVazio()"
           matTooltip="Encerrar volume"
         >
           <mat-icon fontSet="material-symbols-outlined">add</mat-icon>
