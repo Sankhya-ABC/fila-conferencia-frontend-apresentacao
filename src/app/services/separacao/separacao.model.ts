@@ -19,15 +19,22 @@ export interface ItemPedidoDTO {
   complemento: string;
 }
 
+export interface VolumeItemDTO {
+  idProduto: number;
+  descricaoProduto: string;
+  imagem: string | null;
+  quantidade: number;
+  unidade: string;
+  controle?: string;
+}
+
 export interface VolumeDTO {
   numeroVolume: number;
-  itens: {
-    idProduto: number;
-    descricaoProduto: string;
-    imagem: string | null;
-    quantidade: number;
-    unidade: string;
-  }[];
+  itens: VolumeItemDTO[];
+}
+
+export interface VolumeFrontDTO extends VolumeDTO {
+  ativo?: boolean;
 }
 
 export interface DadosBasicosPedidoDTO {

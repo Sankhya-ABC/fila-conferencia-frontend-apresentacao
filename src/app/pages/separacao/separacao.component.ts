@@ -3,22 +3,22 @@ import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
+import { MatOption } from '@angular/material/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
+import { MatSelect } from '@angular/material/select';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { ActivatedRoute } from '@angular/router';
 import { AuthService } from '../../services/auth/auth.service';
 import {
   DadosBasicosPedidoDTO,
   ItemPedidoDTO,
-  VolumeDTO,
+  VolumeFrontDTO,
 } from '../../services/separacao/separacao.model';
 import { SeparacaoService } from '../../services/separacao/separacao.service';
 import { ModalComponent } from '../../shared/components/modal/modal.component';
-import { MatOption } from '@angular/material/core';
-import { MatSelect } from '@angular/material/select';
 
 @Component({
   selector: 'app-separacao',
@@ -85,7 +85,10 @@ export class SeparacaoComponent implements OnInit {
   dadosGerais!: DadosBasicosPedidoDTO;
   numeroUnico: number | null = null;
   idUsuario = this.authService.getUser().idUsuario;
-  volumes: VolumeDTO[] = [];
+
+  // volume
+  volumes: VolumeFrontDTO[] = [];
+  volumeAtivo!: VolumeFrontDTO;
 
   // form
   form!: FormGroup;
@@ -203,9 +206,24 @@ export class SeparacaoComponent implements OnInit {
           this.separacaoService
             .getVolumes(respDadosGerais.numeroConferencia)
             .subscribe({
-              next: (resp) => (this.volumes = resp),
+              next: (resp) => {
+                this.volumes = resp.map((v) => ({
+                  ...v,
+                  ativo: false,
+                }));
+
+                this.garantirVolumeAtivo();
+              },
               error: (err) => console.error(err),
             });
+        }
+
+        // criar volume
+        if (
+          respDadosGerais.codigoTipoMovimento === 'P' &&
+          this.volumes.length === 0
+        ) {
+          this.criarNovoVolume();
         }
       },
       error: (err) => {
@@ -236,7 +254,7 @@ export class SeparacaoComponent implements OnInit {
     const identificador = identificadorRaw.toString().trim();
     const identificadorNumero = Number(identificador);
 
-    const itensDoProduto = this.dataSourcePedidos.data.filter(
+    const itensDoProduto = [...this.dataSourcePedidos.data].filter(
       (i) =>
         i.idProduto === identificadorNumero ||
         i.codigoBarras?.some((cb) => cb.toString() === identificador),
@@ -315,10 +333,6 @@ export class SeparacaoComponent implements OnInit {
     this.removerItemDosVolumes(item);
   }
 
-  removerItemDosVolumes(item: ItemPedidoDTO) {
-    //
-  }
-
   onBlurQuantidade() {
     const ctrl = this.quantidadeCtrl;
     if (!ctrl) return;
@@ -352,6 +366,65 @@ export class SeparacaoComponent implements OnInit {
     }
 
     ctrl.setErrors(null);
+  }
+
+  garantirVolumeAtivo() {
+    if (!this.volumes.length) {
+      this.criarNovoVolume();
+      return;
+    }
+
+    const ativo = this.volumes.find((v) => v.ativo);
+    if (!ativo) {
+      this.volumes[0].ativo = true;
+      this.volumeAtivo = this.volumes[0];
+    } else {
+      this.volumeAtivo = ativo;
+    }
+  }
+
+  adicionarItemAoVolume(item: ItemPedidoDTO, quantidade: number) {
+    this.garantirVolumeAtivo();
+
+    const existente = this.volumeAtivo.itens.find((i) =>
+      this.mesmaChaveItem(i, item),
+    );
+
+    if (existente) {
+      existente.quantidade += quantidade;
+    } else {
+      this.volumeAtivo.itens.push({
+        idProduto: item.idProduto,
+        descricaoProduto: item.nomeProduto,
+        imagem: item.imagem || null,
+        quantidade,
+        unidade: item.unidade,
+        controle: item.controle ?? '',
+      });
+    }
+  }
+
+  encerrarVolume(volume: VolumeFrontDTO) {
+    if (!volume.itens.length) return;
+
+    volume.ativo = false;
+    this.volumeAtivo = undefined as any;
+
+    if (this.dataSourcePedidos.data.length > 0) {
+      this.criarNovoVolume();
+    }
+  }
+
+  selecionarVolume(volume: VolumeFrontDTO) {
+    this.volumes.forEach((v) => (v.ativo = false));
+    volume.ativo = true;
+    this.volumeAtivo = volume;
+  }
+
+  removerItemDosVolumes(item: ItemPedidoDTO) {
+    for (const volume of this.volumes) {
+      volume.itens = volume.itens.filter((i) => !this.mesmaChaveItem(i, item));
+    }
   }
 
   onConferir() {
@@ -393,8 +466,12 @@ export class SeparacaoComponent implements OnInit {
       );
     }
 
+    const itemConferido = { ...this.itemSelecionado };
+
     this.dataSourcePedidos._updateChangeSubscription();
     this.dataSourceConferidos._updateChangeSubscription();
+
+    this.adicionarItemAoVolume(itemConferido, qtdInformada);
 
     this.limparFormulario();
 
@@ -439,7 +516,26 @@ export class SeparacaoComponent implements OnInit {
   }
 
   iniciarCubagem() {
-    console.log('Iniciando cubagem...');
+    this.criarNovoVolume();
+  }
+
+  criarNovoVolume() {
+    const numeroVolume =
+      this.volumes.length > 0
+        ? Math.max(...this.volumes.map((v) => v.numeroVolume)) + 1
+        : 1;
+
+    this.volumes.forEach((v) => (v.ativo = false));
+
+    const novoVolume: VolumeFrontDTO = {
+      numeroVolume,
+      itens: [],
+      ativo: true,
+    };
+
+    this.volumes.unshift(novoVolume);
+    this.volumes = [...this.volumes];
+    this.volumeAtivo = novoVolume;
   }
 
   get quantidadeCtrl() {

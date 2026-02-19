@@ -303,8 +303,21 @@
     <div
       class="volume-card xs-12 sm-6 md-4 lg-3 xl-2"
       *ngFor="let volume of volumes"
+      [class.ativo]="volume.ativo"
+      (click)="selecionarVolume(volume)"
     >
-      <div class="volume-header">Volume {{ volume.numeroVolume }}</div>
+      <div class="volume-header">
+        Volume {{ volume.numeroVolume }}
+
+        <button
+          mat-icon-button
+          color="warn"
+          *ngIf="volume.ativo"
+          (click)="encerrarVolume(volume); $event.stopPropagation()"
+        >
+          <mat-icon fontSet="material-symbols-outlined">lock</mat-icon>
+        </button>
+      </div>
 
       <div class="volume-item" *ngFor="let item of volume.itens">
         <div class="image-container">
