@@ -208,6 +208,16 @@ export class SeparacaoComponent implements OnInit {
     });
   }
 
+  // helper
+  mesmaChaveItem(
+    a: { idProduto: number; controle?: string },
+    b: { idProduto: number; controle?: string },
+  ) {
+    return (
+      a.idProduto === b.idProduto && (a.controle ?? '') === (b.controle ?? '')
+    );
+  }
+
   // acoes
   onIniciarConferencia(item: ItemPedidoDTO) {
     this.selecionarItem(item);
@@ -300,8 +310,8 @@ export class SeparacaoComponent implements OnInit {
     const restante = qtdPedido - qtdInformada;
     this.itemSelecionado.quantidade = restante;
 
-    const existente = this.dataSourceConferidos.data.find(
-      (i) => i.idProduto === this.itemSelecionado!.idProduto,
+    const existente = this.dataSourceConferidos.data.find((i) =>
+      this.mesmaChaveItem(i, this.itemSelecionado!),
     );
 
     if (existente) {
