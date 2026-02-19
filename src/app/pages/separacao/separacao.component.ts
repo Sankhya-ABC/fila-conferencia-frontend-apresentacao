@@ -190,7 +190,10 @@ export class SeparacaoComponent implements OnInit {
         }
 
         // obter volumes
-        if (respDadosGerais.numeroConferencia) {
+        if (
+          respDadosGerais.numeroConferencia &&
+          respDadosGerais.codigoTipoMovimento === 'P'
+        ) {
           this.separacaoService
             .getVolumes(respDadosGerais.numeroConferencia)
             .subscribe({

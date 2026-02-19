@@ -264,25 +264,28 @@
 </div>
 
 <!-- VOLUMES -->
-<section class="volumes-container" *ngIf="volumes.length > 0">
+<section class="volumes" *ngIf="dadosGerais.codigoTipoMovimento === 'P'">
   <h3>Volumes</h3>
-
-  <div class="volumes-grid">
-    <div class="volume-card" *ngFor="let volume of volumes">
+  <div class="grid">
+    <div
+      class="volume-card xs-12 sm-6 md-4 lg-3 xl-2"
+      *ngFor="let volume of volumes"
+    >
       <div class="volume-header">Volume {{ volume.numeroVolume }}</div>
 
       <div class="volume-item" *ngFor="let item of volume.itens">
-        <div class="produto-imagem">
+        <div class="image-container">
           <img
             *ngIf="item.imagem"
             [src]="'data:image/png;base64,' + item.imagem"
+            alt="Imagem do produto"
           />
-          <mat-icon *ngIf="!item.imagem" fontSet="material-symbols-outlined">
-            hide_image
-          </mat-icon>
+          <mat-icon *ngIf="!item.imagem" fontSet="material-symbols-outlined"
+            >hide_image</mat-icon
+          >
         </div>
 
-        <div class="produto-info">
+        <div class="volume-info">
           <strong>{{ item.descricaoProduto }}</strong>
           <div class="quantidade">
             = {{ item.quantidade }} {{ item.unidade }}
