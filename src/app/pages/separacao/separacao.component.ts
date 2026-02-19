@@ -256,6 +256,31 @@ export class SeparacaoComponent implements OnInit {
     }
   }
 
+  onDevolverItemConferido(item: ItemPedidoDTO) {
+    this.dataSourceConferidos.data = this.dataSourceConferidos.data.filter(
+      (i) => i !== item,
+    );
+
+    const existentePedido = this.dataSourcePedidos.data.find((i) =>
+      this.mesmaChaveItem(i, item),
+    );
+
+    if (existentePedido) {
+      existentePedido.quantidade += item.quantidade;
+    } else {
+      this.dataSourcePedidos.data.push({ ...item });
+    }
+
+    this.dataSourcePedidos._updateChangeSubscription();
+    this.dataSourceConferidos._updateChangeSubscription();
+
+    this.removerItemDosVolumes(item);
+  }
+
+  removerItemDosVolumes(item: ItemPedidoDTO) {
+    //
+  }
+
   onBlurQuantidade() {
     const ctrl = this.quantidadeCtrl;
     if (!ctrl) return;

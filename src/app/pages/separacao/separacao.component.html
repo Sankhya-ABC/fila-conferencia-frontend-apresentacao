@@ -183,12 +183,12 @@
       <mat-cell *matCellDef="let e">
         <div class="acoes-container">
           <span
-            matTooltip="Conferir"
+            matTooltip="Desfazer"
             matTooltipClass="tooltip"
             matTooltipPosition="above"
           >
-            <button mat-icon-button (click)="onIniciarConferencia(e)">
-              <mat-icon fontSet="material-symbols-outlined">search</mat-icon>
+            <button mat-icon-button (click)="onDevolverItemConferido(e)">
+              <mat-icon fontSet="material-symbols-outlined">replay</mat-icon>
             </button>
           </span>
         </div>
