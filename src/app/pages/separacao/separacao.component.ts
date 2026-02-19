@@ -451,12 +451,23 @@ export class SeparacaoComponent implements OnInit {
     if (this.dataSourcePedidos.data.length > 0) {
       this.criarNovoVolume();
     }
+
+    this.volumes = [...this.volumes].sort(
+      (a, b) => b.numeroVolume - a.numeroVolume,
+    );
+
+    this.garantirVolumeAtivo();
   }
 
   selecionarVolume(volume: VolumeFrontDTO) {
     this.volumes.forEach((v) => (v.ativo = false));
+
     volume.ativo = true;
     this.volumeAtivo = volume;
+
+    this.volumes = this.volumes.filter((v) => v !== volume);
+
+    this.volumes.unshift(volume);
   }
 
   removerItemDosVolumes(item: ItemPedidoDTO) {
