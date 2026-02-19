@@ -176,6 +176,9 @@ export class SeparacaoComponent implements OnInit {
                         console.error(err);
                       },
                     });
+                } else {
+                  this.dataSourcePedidos.data = respItensPedido;
+                  this.dataSourceConferidos.data = [];
                 }
               },
               error: (err) => {
