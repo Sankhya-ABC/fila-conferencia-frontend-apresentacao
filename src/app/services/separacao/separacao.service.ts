@@ -7,7 +7,7 @@ import {
   ItensConferidosResponse,
   PostIniciarConferenciaParams,
   PostIniciarConferenciaResponse,
-  VolumeResponse,
+  VolumeDTO,
 } from './separacao.model';
 
 @Injectable({
@@ -37,8 +37,8 @@ export class SeparacaoService {
     );
   }
 
-  getVolumes(numeroConferencia: number): Observable<VolumeResponse[]> {
-    return this.http.get<VolumeResponse[]>('/separacoes/volumes', {
+  getVolumes(numeroConferencia: number): Observable<VolumeDTO[]> {
+    return this.http.get<VolumeDTO[]>('/separacoes/volumes', {
       params: { numeroConferencia },
     });
   }

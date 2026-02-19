@@ -197,28 +197,7 @@ export class SeparacaoComponent implements OnInit {
           this.separacaoService
             .getVolumes(respDadosGerais.numeroConferencia)
             .subscribe({
-              next: (resp) => {
-                const map = new Map<number, VolumeDTO>();
-
-                resp.forEach((item) => {
-                  if (!map.has(item.numeroVolume)) {
-                    map.set(item.numeroVolume, {
-                      numeroVolume: item.numeroVolume,
-                      itens: [],
-                    });
-                  }
-
-                  map.get(item.numeroVolume)!.itens.push({
-                    idProduto: item.idProduto,
-                    descricaoProduto: item.descricaoProduto,
-                    imagem: item.imagem,
-                    quantidade: item.quantidade,
-                    unidade: item.unidade,
-                  });
-                });
-
-                this.volumes = Array.from(map.values());
-              },
+              next: (resp) => (this.volumes = resp),
               error: (err) => console.error(err),
             });
         }

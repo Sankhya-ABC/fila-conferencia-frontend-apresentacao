@@ -30,15 +30,6 @@ export interface VolumeDTO {
   }[];
 }
 
-export interface VolumeResponse {
-  numeroVolume: number;
-  idProduto: number;
-  descricaoProduto: string;
-  imagem: string;
-  quantidade: number;
-  unidade: string;
-}
-
 export interface DadosBasicosPedidoDTO {
   numeroUnico: number;
   numeroNota: number;
