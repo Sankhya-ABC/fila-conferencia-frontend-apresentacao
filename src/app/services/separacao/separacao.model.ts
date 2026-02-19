@@ -19,6 +19,26 @@ export interface ItemPedidoDTO {
   complemento: string;
 }
 
+export interface VolumeDTO {
+  numeroVolume: number;
+  itens: {
+    idProduto: number;
+    descricaoProduto: string;
+    imagem: string | null;
+    quantidade: number;
+    unidade: string;
+  }[];
+}
+
+export interface VolumeResponse {
+  numeroVolume: number;
+  idProduto: number;
+  descricaoProduto: string;
+  imagem: string;
+  quantidade: number;
+  unidade: string;
+}
+
 export interface DadosBasicosPedidoDTO {
   numeroUnico: number;
   numeroNota: number;

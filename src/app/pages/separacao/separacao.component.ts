@@ -13,6 +13,7 @@ import { AuthService } from '../../services/auth/auth.service';
 import {
   DadosBasicosPedidoDTO,
   ItemPedidoDTO,
+  VolumeDTO,
 } from '../../services/separacao/separacao.model';
 import { SeparacaoService } from '../../services/separacao/separacao.service';
 import { ModalComponent } from '../../shared/components/modal/modal.component';
@@ -80,6 +81,7 @@ export class SeparacaoComponent implements OnInit {
   dadosGerais!: DadosBasicosPedidoDTO;
   numeroUnico: number | null = null;
   idUsuario = this.authService.getUser().idUsuario;
+  volumes: VolumeDTO[] = [];
 
   // form
   form!: FormGroup;
@@ -121,6 +123,7 @@ export class SeparacaoComponent implements OnInit {
               },
             });
         }
+
         // obter itens pedidos
         if (respDadosGerais.numeroUnico) {
           this.separacaoService
@@ -183,6 +186,37 @@ export class SeparacaoComponent implements OnInit {
               error: (err) => {
                 console.error(err);
               },
+            });
+        }
+
+        // obter volumes
+        if (respDadosGerais.numeroConferencia) {
+          this.separacaoService
+            .getVolumes(respDadosGerais.numeroConferencia)
+            .subscribe({
+              next: (resp) => {
+                const map = new Map<number, VolumeDTO>();
+
+                resp.forEach((item) => {
+                  if (!map.has(item.numeroVolume)) {
+                    map.set(item.numeroVolume, {
+                      numeroVolume: item.numeroVolume,
+                      itens: [],
+                    });
+                  }
+
+                  map.get(item.numeroVolume)!.itens.push({
+                    idProduto: item.idProduto,
+                    descricaoProduto: item.descricaoProduto,
+                    imagem: item.imagem,
+                    quantidade: item.quantidade,
+                    unidade: item.unidade,
+                  });
+                });
+
+                this.volumes = Array.from(map.values());
+              },
+              error: (err) => console.error(err),
             });
         }
       },

@@ -263,6 +263,36 @@
   </mat-table>
 </div>
 
+<!-- VOLUMES -->
+<section class="volumes-container" *ngIf="volumes.length > 0">
+  <h3>Volumes</h3>
+
+  <div class="volumes-grid">
+    <div class="volume-card" *ngFor="let volume of volumes">
+      <div class="volume-header">Volume {{ volume.numeroVolume }}</div>
+
+      <div class="volume-item" *ngFor="let item of volume.itens">
+        <div class="produto-imagem">
+          <img
+            *ngIf="item.imagem"
+            [src]="'data:image/png;base64,' + item.imagem"
+          />
+          <mat-icon *ngIf="!item.imagem" fontSet="material-symbols-outlined">
+            hide_image
+          </mat-icon>
+        </div>
+
+        <div class="produto-info">
+          <strong>{{ item.descricaoProduto }}</strong>
+          <div class="quantidade">
+            = {{ item.quantidade }} {{ item.unidade }}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- TEMPLATE DO MODAL: ITEM NÃO ENCONTRADO -->
 <ng-template #modalItemNaoEncontrado let-fechar="fechar">
   <div class="modal-item-nao-encontrado">
