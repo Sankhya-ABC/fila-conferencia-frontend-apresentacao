@@ -312,7 +312,7 @@
         <button
           mat-icon-button
           color="warn"
-          *ngIf="volume.ativo"
+          *ngIf="volume.ativo && aindaHaItensParaConferir"
           (click)="encerrarVolume(volume); $event.stopPropagation()"
         >
           <mat-icon fontSet="material-symbols-outlined">lock</mat-icon>

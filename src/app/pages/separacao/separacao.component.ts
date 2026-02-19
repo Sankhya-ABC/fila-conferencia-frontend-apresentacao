@@ -251,6 +251,14 @@ export class SeparacaoComponent implements OnInit {
     return controle?.trim() || '';
   }
 
+  get aindaHaItensParaConferir(): boolean {
+    return this.dataSourcePedidos.data.length > 0;
+  }
+
+  get quantidadeCtrl() {
+    return this.form.get('quantidade');
+  }
+
   // acoes
   onIniciarConferencia(item: ItemPedidoDTO) {
     const itensDoProduto = this.dataSourcePedidos.data.filter(
@@ -369,6 +377,26 @@ export class SeparacaoComponent implements OnInit {
     this.dataSourceConferidos._updateChangeSubscription();
 
     this.removerItemDosVolumes(item);
+
+    this.reativarUltimoVolumeSeNecessario();
+  }
+
+  reativarUltimoVolumeSeNecessario() {
+    if (!this.aindaHaItensParaConferir) return;
+
+    if (!this.volumes.length) return;
+
+    this.volumes.forEach((v) => (v.ativo = false));
+
+    const ultimo = [...this.volumes].sort(
+      (a, b) => b.numeroVolume - a.numeroVolume,
+    )[0];
+
+    ultimo.ativo = true;
+    this.volumeAtivo = ultimo;
+
+    this.volumes = this.volumes.filter((v) => v !== ultimo);
+    this.volumes.unshift(ultimo);
   }
 
   onBlurQuantidade() {
@@ -585,9 +613,5 @@ export class SeparacaoComponent implements OnInit {
     this.volumes.unshift(novoVolume);
     this.volumes = [...this.volumes];
     this.volumeAtivo = novoVolume;
-  }
-
-  get quantidadeCtrl() {
-    return this.form.get('quantidade');
   }
 }
