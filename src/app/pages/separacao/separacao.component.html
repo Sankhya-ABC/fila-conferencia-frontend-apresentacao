@@ -178,6 +178,23 @@
 <h3>Itens Conferidos</h3>
 <div class="table-container itens-conferidos">
   <mat-table [dataSource]="dataSourceConferidos" class="mat-elevation-z8">
+    <ng-container matColumnDef="acoes" sticky>
+      <mat-header-cell *matHeaderCellDef>Ações</mat-header-cell>
+      <mat-cell *matCellDef="let e">
+        <div class="acoes-container">
+          <span
+            matTooltip="Conferir"
+            matTooltipClass="tooltip"
+            matTooltipPosition="above"
+          >
+            <button mat-icon-button (click)="onIniciarConferencia(e)">
+              <mat-icon fontSet="material-symbols-outlined">search</mat-icon>
+            </button>
+          </span>
+        </div>
+      </mat-cell>
+    </ng-container>
+
     <ng-container matColumnDef="imagem"
       ><mat-header-cell *matHeaderCellDef style="text-align: center"
         >Imagem</mat-header-cell

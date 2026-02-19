@@ -61,6 +61,7 @@ export class SeparacaoComponent implements OnInit {
   ];
 
   displayedColumnsConferidos = [
+    'acoes',
     'imagem',
     'idProduto',
     'nomeProduto',
