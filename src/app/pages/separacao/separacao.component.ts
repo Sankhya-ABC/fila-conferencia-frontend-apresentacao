@@ -17,6 +17,8 @@ import {
 } from '../../services/separacao/separacao.model';
 import { SeparacaoService } from '../../services/separacao/separacao.service';
 import { ModalComponent } from '../../shared/components/modal/modal.component';
+import { MatOption } from '@angular/material/core';
+import { MatSelect } from '@angular/material/select';
 
 @Component({
   selector: 'app-separacao',
@@ -30,6 +32,8 @@ import { ModalComponent } from '../../shared/components/modal/modal.component';
     MatButtonModule,
     MatIconModule,
     MatCardModule,
+    MatOption,
+    MatSelect,
   ],
   templateUrl: './separacao.component.html',
   styleUrl: './separacao.component.scss',
@@ -59,6 +63,7 @@ export class SeparacaoComponent implements OnInit {
     'controle',
     'complemento',
   ];
+  dataSourcePedidos = new MatTableDataSource<ItemPedidoDTO>([]);
 
   displayedColumnsConferidos = [
     'acoes',
@@ -75,8 +80,6 @@ export class SeparacaoComponent implements OnInit {
     'controle',
     'complemento',
   ];
-
-  dataSourcePedidos = new MatTableDataSource<ItemPedidoDTO>([]);
   dataSourceConferidos = new MatTableDataSource<ItemPedidoDTO>([]);
 
   dadosGerais!: DadosBasicosPedidoDTO;
@@ -89,6 +92,8 @@ export class SeparacaoComponent implements OnInit {
 
   // control
   itemSelecionado: ItemPedidoDTO | null = null;
+  controlesDisponiveis: string[] = [];
+  produtoIdentificado = false;
 
   // template
   @ViewChild('modalItemNaoEncontrado')
@@ -103,7 +108,7 @@ export class SeparacaoComponent implements OnInit {
     this.form = this.fb.group({
       identificador: [''],
       quantidade: [null],
-      controle: [{ value: '', disabled: true }],
+      controle: [''],
     });
 
     // obter dados básicos
@@ -231,17 +236,47 @@ export class SeparacaoComponent implements OnInit {
     const identificador = identificadorRaw.toString().trim();
     const identificadorNumero = Number(identificador);
 
-    const item = this.dataSourcePedidos.data.find(
+    const itensDoProduto = this.dataSourcePedidos.data.filter(
       (i) =>
         i.idProduto === identificadorNumero ||
         i.codigoBarras?.some((cb) => cb.toString() === identificador),
     );
 
-    if (!item) {
+    if (itensDoProduto.length === 0) {
       this.abrirModalItemNaoEncontrado();
       this.limparFormulario();
       return;
     }
+
+    this.controlesDisponiveis = Array.from(
+      new Set(itensDoProduto.map((i) => i.controle ?? '')),
+    );
+
+    const controleInicial = this.controlesDisponiveis[0];
+
+    this.form.patchValue({
+      controle: controleInicial,
+    });
+
+    const item = itensDoProduto.find(
+      (i) => (i.controle ?? '') === controleInicial,
+    )!;
+
+    this.selecionarItem(item);
+
+    this.produtoIdentificado = true;
+  }
+
+  onControleChange(controle: string) {
+    if (!this.itemSelecionado) return;
+
+    const item = this.dataSourcePedidos.data.find(
+      (i) =>
+        i.idProduto === this.itemSelecionado!.idProduto &&
+        (i.controle ?? '') === controle,
+    );
+
+    if (!item) return;
 
     this.selecionarItem(item);
   }
@@ -374,6 +409,8 @@ export class SeparacaoComponent implements OnInit {
 
   limparFormulario() {
     this.itemSelecionado = null;
+    this.controlesDisponiveis = [];
+    this.produtoIdentificado = false;
 
     this.form.reset();
 

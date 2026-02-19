@@ -51,9 +51,25 @@
     </mat-error>
   </mat-form-field>
 
-  <mat-form-field appearance="outline" class="xs-12 sm-6 md-3 lg-3 xl-2">
+  <mat-form-field
+    appearance="outline"
+    class="xs-12 sm-6 md-3 lg-3 xl-2"
+    [class.identificado]="produtoIdentificado"
+  >
     <mat-label>Controle</mat-label>
-    <input matInput formControlName="controle" readonly />
+
+    <mat-select
+      formControlName="controle"
+      (selectionChange)="onControleChange($event.value)"
+      [disabled]="controlesDisponiveis.length <= 1"
+    >
+      <mat-option
+        *ngFor="let controle of controlesDisponiveis"
+        [value]="controle"
+      >
+        {{ controle || "Sem controle" }}
+      </mat-option>
+    </mat-select>
   </mat-form-field>
 
   <button
