@@ -306,16 +306,26 @@
       [class.ativo]="volume.ativo"
       (click)="selecionarVolume(volume)"
     >
-      <div class="volume-header">
-        Volume {{ volume.numeroVolume }}
+      <div
+        class="volume-header"
+        *ngIf="volume.ativo && aindaHaItensParaConferir"
+      >
+        <button
+          mat-icon-button
+          (click)="removerVolume(volume); $event.stopPropagation()"
+          matTooltip="Remover volume"
+        >
+          <mat-icon fontSet="material-symbols-outlined">remove</mat-icon>
+        </button>
+
+        <span>Volume {{ volume.numeroVolume }}</span>
 
         <button
           mat-icon-button
-          color="warn"
-          *ngIf="volume.ativo && aindaHaItensParaConferir"
           (click)="encerrarVolume(volume); $event.stopPropagation()"
+          matTooltip="Encerrar volume"
         >
-          <mat-icon fontSet="material-symbols-outlined">lock</mat-icon>
+          <mat-icon fontSet="material-symbols-outlined">add</mat-icon>
         </button>
       </div>
 

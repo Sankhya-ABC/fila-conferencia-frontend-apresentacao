@@ -504,6 +504,72 @@ export class SeparacaoComponent implements OnInit {
     }
   }
 
+  devolverItensDoVolume(volume: VolumeFrontDTO) {
+    volume.itens.forEach((itemVolume) => {
+      const conferidos = this.dataSourceConferidos.data;
+      const idxConferido = conferidos.findIndex(
+        (i) =>
+          i.idProduto === itemVolume.idProduto &&
+          (i.controle ?? '') === (itemVolume.controle ?? ''),
+      );
+
+      if (idxConferido !== -1) {
+        conferidos[idxConferido].quantidade -= itemVolume.quantidade;
+
+        if (conferidos[idxConferido].quantidade <= 0) {
+          conferidos.splice(idxConferido, 1);
+        }
+      }
+
+      const pedidos = this.dataSourcePedidos.data;
+      const existentePedido = pedidos.find(
+        (i) =>
+          i.idProduto === itemVolume.idProduto &&
+          (i.controle ?? '') === (itemVolume.controle ?? ''),
+      );
+
+      if (existentePedido) {
+        existentePedido.quantidade += itemVolume.quantidade;
+      } else {
+        pedidos.push({
+          idProduto: itemVolume.idProduto,
+          nomeProduto: itemVolume.descricaoProduto,
+          imagem: itemVolume.imagem,
+          quantidade: itemVolume.quantidade,
+          unidade: itemVolume.unidade,
+          controle: itemVolume.controle,
+        } as ItemPedidoDTO);
+      }
+    });
+
+    this.dataSourcePedidos._updateChangeSubscription();
+    this.dataSourceConferidos._updateChangeSubscription();
+  }
+
+  removerVolume(volume: VolumeFrontDTO) {
+    this.devolverItensDoVolume(volume);
+
+    this.volumes = this.volumes.filter((v) => v !== volume);
+
+    if (this.dataSourcePedidos.data.length && this.volumes.length) {
+      this.volumes.forEach((v) => (v.ativo = false));
+
+      const ultimo = [...this.volumes].sort(
+        (a, b) => b.numeroVolume - a.numeroVolume,
+      )[0];
+
+      ultimo.ativo = true;
+      this.volumeAtivo = ultimo;
+
+      this.volumes = this.volumes
+        .filter((v) => v !== ultimo)
+        .concat(ultimo)
+        .reverse();
+    } else {
+      this.volumeAtivo = undefined as any;
+    }
+  }
+
   onConferir() {
     if (!this.itemSelecionado) return;
 
