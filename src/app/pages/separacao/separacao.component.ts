@@ -266,6 +266,10 @@ export class SeparacaoComponent implements OnInit {
     return Math.max(...this.volumes.map((v) => v.numeroVolume)) + 1;
   }
 
+  removerVolumesVazios() {
+    this.volumes = this.volumes.filter((v) => v.itens.length > 0);
+  }
+
   get aindaHaItensParaConferir(): boolean {
     return this.dataSourcePedidos.data.length > 0;
   }
@@ -703,9 +707,16 @@ export class SeparacaoComponent implements OnInit {
   }
 
   verificarSeFinalizouConferencia() {
-    if (this.dataSourcePedidos.data.length === 0) {
-      this.reordenarVolumesFinalizacao();
-    }
+    if (this.dataSourcePedidos.data.length !== 0) return;
+
+    this.removerVolumesVazios();
+
+    this.volumes.forEach((v) => (v.ativo = false));
+    this.volumeAtivo = undefined as any;
+
+    this.volumes = [...this.volumes].sort(
+      (a, b) => b.numeroVolume - a.numeroVolume,
+    );
   }
 
   reordenarVolumesFinalizacao() {
