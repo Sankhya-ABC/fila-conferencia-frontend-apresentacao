@@ -278,7 +278,63 @@ export class SeparacaoComponent implements OnInit {
     return this.dataSourcePedidos.data.length === 0;
   }
 
+  get todosItensNosVolumes(): boolean {
+    if (!this.conferenciaFinalizada) return false;
+
+    const chave = (i: { idProduto: number; controle?: string }) =>
+      `${i.idProduto}#${i.controle ?? ''}`;
+
+    const itensVolumes = new Map<string, number>();
+
+    this.volumes.forEach((v) => {
+      v.itens.forEach((i) => {
+        const k = chave(i);
+        itensVolumes.set(k, (itensVolumes.get(k) || 0) + i.quantidade);
+      });
+    });
+
+    return this.dataSourceConferidos.data.every((i) => {
+      return itensVolumes.get(chave(i)) === i.quantidade;
+    });
+  }
+
+  get todosVolumesComDimensoes(): boolean {
+    return (
+      this.volumes.length > 0 &&
+      this.volumes.every(
+        (v) => !!v.largura && !!v.comprimento && !!v.altura && !!v.peso,
+      )
+    );
+  }
+
+  get podeConfirmarConferencia(): boolean {
+    if (!this.conferenciaFinalizada) return false;
+
+    if (this.dadosGerais.codigoTipoMovimento === 'P') {
+      return this.todosItensNosVolumes && this.todosVolumesComDimensoes;
+    }
+
+    return true;
+  }
+
+  get deveMostrarBotaoConfirmar(): boolean {
+    if (!this.conferenciaFinalizada) return false;
+
+    if (this.dadosGerais.codigoTipoMovimento === 'P') {
+      return this.todosItensNosVolumes;
+    }
+
+    return true;
+  }
+
   // acoes
+  confirmarConferencia() {
+    console.log('Conferência confirmada', {
+      volumes: this.volumes,
+      conferidos: this.dataSourceConferidos.data,
+    });
+  }
+
   onIniciarConferencia(item: ItemPedidoDTO) {
     const itensDoProduto = this.dataSourcePedidos.data.filter(
       (i) => i.idProduto === item.idProduto,

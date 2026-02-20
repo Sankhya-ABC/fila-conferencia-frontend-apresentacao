@@ -17,7 +17,8 @@ h4 {
 .dados-gerais,
 .itens-pedidos,
 .itens-conferidos,
-.volumes {
+.volumes,
+.confirmar-conferencia {
   margin-bottom: $space-24;
 }
 
@@ -158,6 +159,29 @@ h4 {
           color: var(--color-text-secondary);
         }
       }
+    }
+  }
+}
+
+// CONFIRMAR CONFERÊNCIA
+.confirmar-conferencia {
+  button {
+    grid-column: 1 / span 12;
+
+    @media (min-width: $sm) {
+      grid-column: 7 / span 6;
+    }
+
+    @media (min-width: $md) {
+      grid-column: 10 / span 3;
+    }
+
+    @media (min-width: $lg) {
+      grid-column: 10 / span 3;
+    }
+
+    @media (min-width: $xl) {
+      grid-column: 11 / span 2;
     }
   }
 }
