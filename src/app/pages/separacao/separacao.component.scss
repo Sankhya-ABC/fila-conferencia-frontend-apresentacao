@@ -96,26 +96,42 @@ h4 {
       color: var(--color-on-primary);
       padding: $space-9;
       border-radius: $space-12 $space-12 0 0;
-      display: flex;
-      justify-content: center;
-      align-items: center;
 
       &.inativo {
         opacity: 0.8;
       }
 
-      span {
-        padding: 0 5px;
-      }
-
-      button {
-        padding: 0 !important;
-        height: 25px !important;
-        width: 25px !important;
-
+      .buttons-container {
         display: flex;
         justify-content: center;
         align-items: center;
+        margin-bottom: $space-9;
+
+        span {
+          padding: 0 5px;
+        }
+
+        button {
+          padding: 0 !important;
+          height: 25px !important;
+          width: 25px !important;
+
+          display: flex;
+          justify-content: center;
+          align-items: center;
+        }
+      }
+
+      .dimensoes-container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: $space-6;
+
+        mat-form-field {
+          font-size: 12px;
+          text-align: center;
+        }
       }
     }
 

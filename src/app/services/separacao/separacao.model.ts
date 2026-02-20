@@ -31,6 +31,11 @@ export interface VolumeItemDTO {
 export interface VolumeDTO {
   numeroVolume: number;
   itens: VolumeItemDTO[];
+
+  largura?: number | null;
+  comprimento?: number | null;
+  altura?: number | null;
+  peso?: number | null;
 }
 
 export interface VolumeFrontDTO extends VolumeDTO {

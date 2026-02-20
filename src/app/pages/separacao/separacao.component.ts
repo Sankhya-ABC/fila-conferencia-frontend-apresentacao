@@ -1,6 +1,11 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  FormsModule,
+  ReactiveFormsModule,
+} from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatOption } from '@angular/material/core';
@@ -26,6 +31,7 @@ import { ModalComponent } from '../../shared/components/modal/modal.component';
   imports: [
     CommonModule,
     ReactiveFormsModule,
+    FormsModule,
     MatTableModule,
     MatFormFieldModule,
     MatInputModule,
@@ -101,9 +107,6 @@ export class SeparacaoComponent implements OnInit {
   // template
   @ViewChild('modalItemNaoEncontrado')
   modalItemNaoEncontradoTpl!: TemplateRef<any>;
-
-  @ViewChild('modalIniciarCubagemTpl')
-  modalIniciarCubagemTpl!: TemplateRef<any>;
 
   ngOnInit(): void {
     this.numeroUnico = Number(this.route.snapshot.paramMap.get('numeroUnico'));
@@ -646,7 +649,6 @@ export class SeparacaoComponent implements OnInit {
   verificarSeFinalizouConferencia() {
     if (this.dataSourcePedidos.data.length === 0) {
       this.reordenarVolumesFinalizacao();
-      this.abrirModalIniciarCubagem();
     }
   }
 
@@ -683,19 +685,6 @@ export class SeparacaoComponent implements OnInit {
     });
   }
 
-  abrirModalIniciarCubagem() {
-    this.dialog.open(ModalComponent, {
-      data: {
-        template: this.modalIniciarCubagemTpl,
-      },
-      disableClose: true,
-    });
-  }
-
-  iniciarCubagem() {
-    this.criarNovoVolume();
-  }
-
   criarNovoVolume() {
     if (this.existeVolumeVazio()) {
       return;
@@ -709,6 +698,11 @@ export class SeparacaoComponent implements OnInit {
       numeroVolume: this.proximoNumeroVolume(),
       ativo: true,
       itens: [],
+
+      largura: null,
+      comprimento: null,
+      altura: null,
+      peso: null,
     };
 
     this.volumes.push(novoVolume);

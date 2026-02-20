@@ -307,26 +307,70 @@
       (click)="selecionarVolume(volume)"
     >
       <div class="volume-header" [class.inativo]="!volume.ativo">
-        <button
-          mat-icon-button
-          *ngIf="volume.itens.length > 0"
-          (click)="removerVolume(volume); $event.stopPropagation()"
-          matTooltip="Remover volume"
-        >
-          <mat-icon fontSet="material-symbols-outlined">remove</mat-icon>
-        </button>
+        <div class="buttons-container">
+          <button
+            mat-icon-button
+            *ngIf="volume.itens.length > 0"
+            (click)="removerVolume(volume); $event.stopPropagation()"
+            matTooltip="Remover volume"
+          >
+            <mat-icon fontSet="material-symbols-outlined">remove</mat-icon>
+          </button>
 
-        <span>Volume {{ volume.numeroVolume }}</span>
+          <span>Volume {{ volume.numeroVolume }}</span>
 
-        <button
-          mat-icon-button
-          *ngIf="volume.ativo && aindaHaItensParaConferir"
-          (click)="encerrarVolume(volume); $event.stopPropagation()"
-          [disabled]="existeVolumeVazio()"
-          matTooltip="Encerrar volume"
-        >
-          <mat-icon fontSet="material-symbols-outlined">add</mat-icon>
-        </button>
+          <button
+            mat-icon-button
+            *ngIf="volume.ativo && aindaHaItensParaConferir"
+            (click)="encerrarVolume(volume); $event.stopPropagation()"
+            [disabled]="existeVolumeVazio()"
+            matTooltip="Encerrar volume"
+          >
+            <mat-icon fontSet="material-symbols-outlined">add</mat-icon>
+          </button>
+        </div>
+
+        <div class="dimensoes-container" (click)="$event.stopPropagation()">
+          <mat-form-field appearance="fill">
+            <mat-label>Largura</mat-label>
+            <input
+              matInput
+              type="number"
+              placeholder="L"
+              [(ngModel)]="volume.largura"
+            />
+          </mat-form-field>
+
+          <mat-form-field appearance="fill">
+            <mat-label>Comprimento</mat-label>
+            <input
+              matInput
+              type="number"
+              placeholder="C"
+              [(ngModel)]="volume.comprimento"
+            />
+          </mat-form-field>
+
+          <mat-form-field appearance="fill">
+            <mat-label>Altura</mat-label>
+            <input
+              matInput
+              type="number"
+              placeholder="A"
+              [(ngModel)]="volume.altura"
+            />
+          </mat-form-field>
+
+          <mat-form-field appearance="fill">
+            <mat-label>Peso</mat-label>
+            <input
+              matInput
+              type="number"
+              placeholder="Kg"
+              [(ngModel)]="volume.peso"
+            />
+          </mat-form-field>
+        </div>
       </div>
 
       <div class="volume-item" *ngFor="let item of volume.itens">
@@ -362,38 +406,5 @@
       <strong>{{ form.get("codigoBarras")?.value }}</strong>
       não pertence a este pedido.
     </p>
-  </div>
-</ng-template>
-
-<!-- TEMPLATE DO MODAL: INICIAR CUBAGEM -->
-<ng-template #modalIniciarCubagemTpl let-fechar="fechar">
-  <div class="modal-iniciar-cubagem">
-    <mat-icon fontSet="material-symbols-outlined" class="icone">
-      inventory_2
-    </mat-icon>
-
-    <h4>Conferência finalizada</h4>
-    <p>Todos os itens do pedido foram conferidos com sucesso!</p>
-    <p>Deseja iniciar a cubagem agora?</p>
-
-    <div class="grid">
-      <button
-        mat-raised-button
-        color="warn"
-        (click)="fechar()"
-        class="xs-12 sm-6"
-      >
-        Fechar
-      </button>
-
-      <button
-        mat-raised-button
-        color="primary"
-        (click)="iniciarCubagem(); fechar()"
-        class="xs-12 sm-6"
-      >
-        Iniciar cubagem
-      </button>
-    </div>
   </div>
 </ng-template>
