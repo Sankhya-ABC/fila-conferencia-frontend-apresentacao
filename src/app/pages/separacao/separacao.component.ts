@@ -165,11 +165,16 @@ export class SeparacaoComponent implements OnInit {
       next: (dados) => {
         this.dadosGerais = dados;
 
-        if (dados.numeroConferencia) {
-          this.carregarItensPedido(dados.numeroUnico);
-          this.carregarItensConferidos(dados.numeroConferencia);
-          this.carregarVolumes(dados.numeroConferencia);
-        }
+        if (!dados.numeroConferencia) return;
+
+        this.separacaoService.getItensPedido(dados.numeroUnico).subscribe({
+          next: (itensPedido) => {
+            this.dataSourcePedidos.data = itensPedido;
+
+            this.carregarItensConferidos(dados.numeroConferencia);
+            this.carregarVolumes(dados.numeroConferencia);
+          },
+        });
       },
     });
   }
