@@ -15,7 +15,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelect } from '@angular/material/select';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from '../../services/auth/auth.service';
 import {
   DadosBasicosPedidoDTO,
@@ -49,6 +49,7 @@ export class SeparacaoComponent implements OnInit {
     private fb: FormBuilder,
     private separacaoService: SeparacaoService,
     private route: ActivatedRoute,
+    private router: Router,
     private dialog: MatDialog,
     private authService: AuthService,
   ) {}
@@ -127,6 +128,10 @@ export class SeparacaoComponent implements OnInit {
     this.separacaoService.getDadosBasicos(this.numeroUnico!).subscribe({
       next: (dados) => {
         this.dadosGerais = dados;
+
+        if (dados.codigoStatus !== 'AC' && dados.codigoStatus !== 'A') {
+          this.router.navigate(['/fila-conferencia']);
+        }
 
         if (dados.codigoStatus === 'AC') {
           this.iniciarConferencia(dados.numeroUnico);
