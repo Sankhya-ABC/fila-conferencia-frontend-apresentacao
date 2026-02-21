@@ -117,123 +117,113 @@ export class SeparacaoComponent implements OnInit {
       controle: [''],
     });
 
-    // obter dados básicos
-    this.separacaoService.getDadosBasicos(this.numeroUnico).subscribe({
-      next: (respDadosGerais) => {
-        this.dadosGerais = respDadosGerais;
+    if (!this.numeroUnico) return;
 
-        // iniciar conferência
-        if (respDadosGerais.codigoStatus === 'AC') {
-          this.separacaoService
-            .postIniciarConferencia({
-              idUsuario: this.idUsuario,
-              numeroUnico: respDadosGerais.numeroUnico,
-            })
-            .subscribe({
-              error: (err) => {
-                console.error(err);
-              },
-            });
+    this.inicializarConferencia();
+  }
+
+  // requests
+  inicializarConferencia() {
+    this.separacaoService.getDadosBasicos(this.numeroUnico!).subscribe({
+      next: (dados) => {
+        this.dadosGerais = dados;
+
+        if (dados.codigoStatus === 'AC') {
+          this.iniciarConferencia(dados.numeroUnico);
+          return;
         }
 
-        // obter itens pedidos
-        if (respDadosGerais.numeroUnico) {
-          this.separacaoService
-            .getItensPedido(respDadosGerais.numeroUnico!)
-            .subscribe({
-              next: (respItensPedido) => {
-                // obter itens conferidos
-                if (respDadosGerais.numeroConferencia) {
-                  this.separacaoService
-                    .getItensConferidos(respDadosGerais.numeroConferencia)
-                    .subscribe({
-                      // separar itens já conferidos dos itens do pedido
-                      next: (respItensConferidos) => {
-                        const chave = (i: {
-                          idProduto: number;
-                          controle?: string;
-                        }) => `${i.idProduto}#${i.controle ?? ''}`;
+        this.carregarEstadoConferencia();
+      },
+      error: (err) => console.error(err),
+    });
+  }
 
-                        const mapConferidos = new Map(
-                          respItensConferidos.map((i) => [
-                            chave(i),
-                            i.quantidade,
-                          ]),
-                        );
+  private iniciarConferencia(numeroUnico: number) {
+    this.separacaoService
+      .postIniciarConferencia({
+        idUsuario: this.idUsuario,
+        numeroUnico,
+      })
+      .subscribe({
+        next: () => {
+          this.inicializarConferencia();
+        },
+        error: (err) => console.error(err),
+      });
+  }
 
-                        const pedidos: ItemPedidoDTO[] = [];
-                        const conferidos: ItemPedidoDTO[] = [];
+  carregarEstadoConferencia() {
+    if (!this.dadosGerais?.numeroUnico) return;
 
-                        respItensPedido.forEach((item) => {
-                          const qtdConferida = mapConferidos.get(chave(item));
+    this.separacaoService.getDadosBasicos(this.numeroUnico!).subscribe({
+      next: (dados) => {
+        this.dadosGerais = dados;
 
-                          if (qtdConferida) {
-                            conferidos.push({
-                              ...item,
-                              quantidade: qtdConferida,
-                            });
-
-                            const restante = item.quantidade - qtdConferida;
-
-                            if (restante > 0) {
-                              pedidos.push({
-                                ...item,
-                                quantidade: restante,
-                              });
-                            }
-                          } else {
-                            pedidos.push(item);
-                          }
-                        });
-
-                        this.dataSourcePedidos.data = pedidos;
-                        this.dataSourceConferidos.data = conferidos;
-                      },
-                      error: (err) => {
-                        console.error(err);
-                      },
-                    });
-                } else {
-                  this.dataSourcePedidos.data = respItensPedido;
-                  this.dataSourceConferidos.data = [];
-                }
-              },
-              error: (err) => {
-                console.error(err);
-              },
-            });
-        }
-
-        // obter volumes
-        if (
-          respDadosGerais.numeroConferencia &&
-          respDadosGerais.codigoTipoMovimento === 'P'
-        ) {
-          this.separacaoService
-            .getVolumes(respDadosGerais.numeroConferencia)
-            .subscribe({
-              next: (resp) => {
-                this.volumes = resp.map((v) => ({
-                  ...v,
-                  ativo: false,
-                }));
-
-                this.garantirVolumeAtivo();
-              },
-              error: (err) => console.error(err),
-            });
-        }
-
-        // criar volume
-        if (
-          respDadosGerais.codigoTipoMovimento === 'P' &&
-          this.volumes.length === 0
-        ) {
-          this.criarNovoVolume();
+        if (dados.numeroConferencia) {
+          this.carregarItensPedido(dados.numeroUnico);
+          this.carregarItensConferidos(dados.numeroConferencia);
+          this.carregarVolumes(dados.numeroConferencia);
         }
       },
-      error: (err) => {
-        console.error(err);
+    });
+  }
+
+  carregarItensPedido(numeroUnico: number) {
+    this.separacaoService.getItensPedido(numeroUnico).subscribe({
+      next: (itens) => (this.dataSourcePedidos.data = itens),
+    });
+  }
+
+  carregarItensConferidos(numeroConferencia: number) {
+    this.separacaoService.getItensConferidos(numeroConferencia).subscribe({
+      next: (itensConferidos) => {
+        const chave = (i: { idProduto: number; controle?: string }) =>
+          `${i.idProduto}#${i.controle ?? ''}`;
+
+        const mapConferidos = new Map(
+          itensConferidos.map((i) => [chave(i), i.quantidade]),
+        );
+
+        const pedidosAtualizados: ItemPedidoDTO[] = [];
+        const conferidos: ItemPedidoDTO[] = [];
+
+        this.dataSourcePedidos.data.forEach((item) => {
+          const qtdConferida = mapConferidos.get(chave(item));
+
+          if (qtdConferida) {
+            conferidos.push({
+              ...item,
+              quantidade: qtdConferida,
+            });
+
+            const restante = item.quantidade - qtdConferida;
+
+            if (restante > 0) {
+              pedidosAtualizados.push({
+                ...item,
+                quantidade: restante,
+              });
+            }
+          } else {
+            pedidosAtualizados.push(item);
+          }
+        });
+
+        this.dataSourcePedidos.data = pedidosAtualizados;
+        this.dataSourceConferidos.data = conferidos;
+      },
+    });
+  }
+
+  carregarVolumes(numeroConferencia: number) {
+    this.separacaoService.getVolumes(numeroConferencia).subscribe({
+      next: (volumes) => {
+        this.volumes = volumes.map((v) => ({
+          ...v,
+          ativo: false,
+        }));
+        this.garantirVolumeAtivo();
       },
     });
   }
@@ -656,54 +646,27 @@ export class SeparacaoComponent implements OnInit {
   }
 
   onConferir() {
-    if (!this.itemSelecionado) return;
+    if (!this.itemSelecionado || !this.volumeAtivo) return;
 
-    const qtdCtrl = this.quantidadeCtrl;
-    if (!qtdCtrl || qtdCtrl.value === null || qtdCtrl.value <= 0) {
-      return;
-    }
+    const quantidade = Number(this.quantidadeCtrl?.value);
+    if (!quantidade || quantidade <= 0) return;
 
-    if (qtdCtrl.invalid) return;
-
-    const qtdInformada = Number(qtdCtrl.value);
-    const qtdPedido = Number(this.itemSelecionado.quantidade);
-
-    if (qtdInformada > qtdPedido) {
-      return;
-    }
-
-    const restante = qtdPedido - qtdInformada;
-    this.itemSelecionado.quantidade = restante;
-
-    const existente = this.dataSourceConferidos.data.find((i) =>
-      this.mesmaChaveItem(i, this.itemSelecionado!),
-    );
-
-    if (existente) {
-      existente.quantidade = existente.quantidade + qtdInformada;
-    } else {
-      this.dataSourceConferidos.data.push({
-        ...this.itemSelecionado,
-        quantidade: qtdInformada,
+    this.separacaoService
+      .postItemConferidoVolume({
+        numeroConferencia: this.dadosGerais.numeroConferencia!,
+        numeroVolume: this.volumeAtivo.numeroVolume,
+        idProduto: this.itemSelecionado.idProduto,
+        controle: this.itemSelecionado.controle ?? '',
+        quantidade,
+        unidade: this.itemSelecionado.unidade,
+      })
+      .subscribe({
+        next: () => {
+          this.limparFormulario();
+          this.carregarEstadoConferencia();
+        },
+        error: (err) => console.error(err),
       });
-    }
-
-    if (restante === 0) {
-      this.dataSourcePedidos.data = this.dataSourcePedidos.data.filter(
-        (i) => i !== this.itemSelecionado,
-      );
-    }
-
-    const itemConferido = { ...this.itemSelecionado };
-
-    this.dataSourcePedidos._updateChangeSubscription();
-    this.dataSourceConferidos._updateChangeSubscription();
-
-    this.adicionarItemAoVolume(itemConferido, qtdInformada);
-
-    this.limparFormulario();
-
-    this.verificarSeFinalizouConferencia();
   }
 
   verificarSeFinalizouConferencia() {

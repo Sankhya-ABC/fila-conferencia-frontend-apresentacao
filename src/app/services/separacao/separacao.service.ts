@@ -7,6 +7,7 @@ import {
   ItensConferidosResponse,
   PostIniciarConferenciaParams,
   PostIniciarConferenciaResponse,
+  PostItemConferidoVolumeParams,
   VolumeDTO,
 } from './separacao.model';
 
@@ -50,5 +51,11 @@ export class SeparacaoService {
       '/separacoes/iniciar-conferencia',
       body,
     );
+  }
+
+  postItemConferidoVolume(
+    body: PostItemConferidoVolumeParams,
+  ): Observable<null> {
+    return this.http.post<null>('/separacoes/item-conferido-volume', body);
   }
 }

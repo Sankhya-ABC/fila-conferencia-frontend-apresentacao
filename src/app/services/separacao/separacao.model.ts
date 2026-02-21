@@ -71,3 +71,12 @@ export interface PostIniciarConferenciaParams {
 export interface PostIniciarConferenciaResponse {
   numeroConferencia: number;
 }
+
+export interface PostItemConferidoVolumeParams {
+  numeroConferencia: number;
+  numeroVolume: number;
+  idProduto: number;
+  controle: string;
+  quantidade: number;
+  unidade: string;
+}
