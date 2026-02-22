@@ -338,6 +338,7 @@
               type="number"
               placeholder="L"
               [(ngModel)]="volume.largura"
+              (blur)="salvarDimensoes(volume)"
             />
           </mat-form-field>
 
@@ -348,6 +349,7 @@
               type="number"
               placeholder="C"
               [(ngModel)]="volume.comprimento"
+              (blur)="salvarDimensoes(volume)"
             />
           </mat-form-field>
 
@@ -358,6 +360,7 @@
               type="number"
               placeholder="A"
               [(ngModel)]="volume.altura"
+              (blur)="salvarDimensoes(volume)"
             />
           </mat-form-field>
 
@@ -368,6 +371,7 @@
               type="number"
               placeholder="Kg"
               [(ngModel)]="volume.peso"
+              (blur)="salvarDimensoes(volume)"
             />
           </mat-form-field>
         </div>

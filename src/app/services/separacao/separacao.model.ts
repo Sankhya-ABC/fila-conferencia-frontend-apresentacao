@@ -28,14 +28,26 @@ export interface VolumeItemDTO {
   controle?: string;
 }
 
-export interface VolumeDTO {
+export interface Dimensoes {
+  largura: number | null;
+  comprimento: number | null;
+  altura: number | null;
+  peso: number | null;
+}
+
+export interface VolumeDTO extends Dimensoes {
   numeroVolume: number;
   itens: VolumeItemDTO[];
 
-  largura?: number | null;
-  comprimento?: number | null;
-  altura?: number | null;
-  peso?: number | null;
+  largura: number | null;
+  comprimento: number | null;
+  altura: number | null;
+  peso: number | null;
+}
+
+export interface PostAtualizarDimensoesVolumeParams extends Dimensoes {
+  numeroConferencia: number;
+  numeroVolume: number;
 }
 
 export interface VolumeFrontDTO extends VolumeDTO {

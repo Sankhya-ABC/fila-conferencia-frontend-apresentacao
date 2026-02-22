@@ -453,6 +453,19 @@ export class SeparacaoComponent implements OnInit {
       });
   }
 
+  salvarDimensoes(volume: VolumeFrontDTO) {
+    this.separacaoService
+      .postAtualizarDimensoesVolume({
+        numeroConferencia: this.dadosGerais.numeroConferencia!,
+        numeroVolume: volume.numeroVolume,
+        largura: volume.largura,
+        comprimento: volume.comprimento,
+        altura: volume.altura,
+        peso: volume.peso,
+      })
+      .subscribe();
+  }
+
   onBlurQuantidade() {
     const ctrl = this.quantidadeCtrl;
     if (!ctrl) return;
