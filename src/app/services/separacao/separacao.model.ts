@@ -80,3 +80,9 @@ export interface PostItemConferidoVolumeParams {
   quantidade: number;
   unidade: string;
 }
+
+export interface PostRemoverVolumeParams {
+  numeroConferencia: number;
+  numeroVolume: number;
+  numeroUnico: number;
+}
