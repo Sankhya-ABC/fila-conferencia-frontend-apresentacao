@@ -5,6 +5,7 @@ import {
   DadosBasicosPedidoDTO,
   ItemPedidoDTO,
   ItensConferidosResponse,
+  PostDevolverItemConferidoParams,
   PostIniciarConferenciaParams,
   PostIniciarConferenciaResponse,
   PostItemConferidoVolumeParams,
@@ -62,5 +63,11 @@ export class SeparacaoService {
 
   postRemoverVolume(body: PostRemoverVolumeParams): Observable<null> {
     return this.http.post<null>('/separacoes/remover-volume', body);
+  }
+
+  postDevolverItemConferido(
+    body: PostDevolverItemConferidoParams,
+  ): Observable<null> {
+    return this.http.post<null>('/separacoes/devolver-item-conferido', body);
   }
 }

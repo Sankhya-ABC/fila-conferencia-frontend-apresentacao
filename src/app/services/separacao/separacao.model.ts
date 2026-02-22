@@ -86,3 +86,10 @@ export interface PostRemoverVolumeParams {
   numeroVolume: number;
   numeroUnico: number;
 }
+
+export interface PostDevolverItemConferidoParams {
+  numeroConferencia: number;
+  numeroUnico: number;
+  idProduto: number;
+  controle: string;
+}

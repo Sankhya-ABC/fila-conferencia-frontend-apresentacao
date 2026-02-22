@@ -438,44 +438,19 @@ export class SeparacaoComponent implements OnInit {
   }
 
   onDevolverItemConferido(item: ItemPedidoDTO) {
-    this.dataSourceConferidos.data = this.dataSourceConferidos.data.filter(
-      (i) => i !== item,
-    );
-
-    const existentePedido = this.dataSourcePedidos.data.find((i) =>
-      this.mesmaChaveItem(i, item),
-    );
-
-    if (existentePedido) {
-      existentePedido.quantidade += item.quantidade;
-    } else {
-      this.dataSourcePedidos.data.push({ ...item });
-    }
-
-    this.dataSourcePedidos._updateChangeSubscription();
-    this.dataSourceConferidos._updateChangeSubscription();
-
-    this.removerItemDosVolumes(item);
-
-    this.reativarUltimoVolumeSeNecessario();
-  }
-
-  reativarUltimoVolumeSeNecessario() {
-    if (!this.aindaHaItensParaConferir) return;
-
-    if (!this.volumes.length) return;
-
-    this.volumes.forEach((v) => (v.ativo = false));
-
-    const ultimo = [...this.volumes].sort(
-      (a, b) => b.numeroVolume - a.numeroVolume,
-    )[0];
-
-    ultimo.ativo = true;
-    this.volumeAtivo = ultimo;
-
-    this.volumes = this.volumes.filter((v) => v !== ultimo);
-    this.volumes.unshift(ultimo);
+    this.separacaoService
+      .postDevolverItemConferido({
+        numeroConferencia: this.dadosGerais.numeroConferencia!,
+        numeroUnico: this.numeroUnico!,
+        idProduto: item.idProduto,
+        controle: item.controle ?? '',
+      })
+      .subscribe({
+        next: () => {
+          this.carregarEstadoConferencia();
+        },
+        error: (err) => console.error(err),
+      });
   }
 
   onBlurQuantidade() {
@@ -577,12 +552,6 @@ export class SeparacaoComponent implements OnInit {
     this.volumes = this.volumes.filter((v) => v !== volume);
 
     this.volumes.unshift(volume);
-  }
-
-  removerItemDosVolumes(item: ItemPedidoDTO) {
-    for (const volume of this.volumes) {
-      volume.itens = volume.itens.filter((i) => !this.mesmaChaveItem(i, item));
-    }
   }
 
   removerVolume(volume: VolumeFrontDTO) {
