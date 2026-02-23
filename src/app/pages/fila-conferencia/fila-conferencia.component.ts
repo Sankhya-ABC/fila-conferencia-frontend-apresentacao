@@ -153,6 +153,19 @@ export class FilaConferenciaComponent implements OnInit {
     });
   }
 
+  onParceiroSelected(parceiro: ParceiroDTO): void {
+    this.filters.get('idParceiro')!.setValue(parceiro);
+    this.applyFilter();
+  }
+
+  onParceiroBlur(): void {
+    const value = this.filters.get('idParceiro')!.value;
+
+    if (!value) {
+      this.applyFilter();
+    }
+  }
+
   applyFilter(): void {
     this.loading = true;
     this.dataSource.data = [];

@@ -57,8 +57,17 @@
 
   <mat-form-field appearance="outline" class="xs-12 sm-12 md-8 lg-6 xl-4">
     <mat-label>Parceiro</mat-label>
-    <input matInput formControlName="idParceiro" [matAutocomplete]="auto" />
-    <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayParceiro">
+    <input
+      matInput
+      formControlName="idParceiro"
+      [matAutocomplete]="auto"
+      (blur)="onParceiroBlur()"
+    />
+    <mat-autocomplete
+      #auto="matAutocomplete"
+      [displayWith]="displayParceiro"
+      (optionSelected)="onParceiroSelected($event.option.value)"
+    >
       <mat-option *ngFor="let parceiro of listParceiro" [value]="parceiro">
         {{ displayParceiro(parceiro) }}
       </mat-option>
