@@ -48,6 +48,13 @@ export class SeparacaoService {
     });
   }
 
+  downloadEtiqueta(numeroConferencia: number) {
+    return this.http.get(`/separacoes/etiqueta/download`, {
+      params: { numeroConferencia },
+      responseType: 'blob',
+    });
+  }
+
   postIniciarConferencia(
     body: PostIniciarConferenciaParams,
   ): Observable<PostIniciarConferenciaResponse> {

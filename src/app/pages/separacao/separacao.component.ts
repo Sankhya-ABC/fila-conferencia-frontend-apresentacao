@@ -675,7 +675,25 @@ export class SeparacaoComponent implements OnInit {
   }
 
   imprimirEtiquetas() {
-    console.log('gerar arquivo com etiquetas');
+    const numeroConferencia = this.dadosGerais.numeroConferencia!;
+
+    this.separacaoService.downloadEtiqueta(numeroConferencia).subscribe({
+      next: (blob) => {
+        const url = window.URL.createObjectURL(blob);
+
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `etiquetas_conferencia_${numeroConferencia}.pdf`;
+        a.click();
+
+        window.URL.revokeObjectURL(url);
+
+        this.dialogRefConferenciaFinalizada?.close();
+      },
+      error: (err) => {
+        console.error('Erro ao baixar etiquetas', err);
+      },
+    });
   }
 
   criarNovoVolume() {
