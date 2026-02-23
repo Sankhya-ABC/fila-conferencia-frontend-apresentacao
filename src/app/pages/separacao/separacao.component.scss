@@ -68,8 +68,8 @@ h4 {
   }
 }
 
-// TEMPLATE DO MODAL: INICIAR CUBAGEM
-.modal-iniciar-cubagem {
+// TEMPLATE DO MODAL: CONFERÊNCIA FINALIZADA
+.modal-conferencia-finalizada {
   text-align: center;
 
   h4,
@@ -77,11 +77,7 @@ h4 {
     color: var(--color-primary);
   }
 
-  p {
-    margin-bottom: $space-9;
-  }
-
-  .grid {
+  .buttons-container {
     margin-top: $space-18;
   }
 }

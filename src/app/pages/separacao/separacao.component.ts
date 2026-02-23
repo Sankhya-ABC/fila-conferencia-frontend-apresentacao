@@ -9,7 +9,7 @@ import {
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatOption } from '@angular/material/core';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
@@ -108,6 +108,10 @@ export class SeparacaoComponent implements OnInit {
   // template
   @ViewChild('modalItemNaoEncontrado')
   modalItemNaoEncontradoTpl!: TemplateRef<any>;
+
+  @ViewChild('modalConferenciaFinalizada')
+  modalConferenciaFinalizadaTpl!: TemplateRef<any>;
+  dialogRefConferenciaFinalizada?: MatDialogRef<ModalComponent>;
 
   ngOnInit(): void {
     this.numeroUnico = Number(this.route.snapshot.paramMap.get('numeroUnico'));
@@ -339,7 +343,7 @@ export class SeparacaoComponent implements OnInit {
       })
       .subscribe({
         next: () => {
-          this.router.navigate(['/fila-conferencia']);
+          this.abrirModalConferenciaFinalizada();
         },
       });
   }
@@ -654,6 +658,24 @@ export class SeparacaoComponent implements OnInit {
         template: this.modalItemNaoEncontradoTpl,
       },
     });
+  }
+
+  abrirModalConferenciaFinalizada() {
+    this.dialogRefConferenciaFinalizada = this.dialog.open(ModalComponent, {
+      data: {
+        template: this.modalConferenciaFinalizadaTpl,
+      },
+      disableClose: true,
+    });
+  }
+
+  voltarParaFila() {
+    this.dialogRefConferenciaFinalizada?.close();
+    this.router.navigate(['/fila-conferencia']);
+  }
+
+  imprimirEtiquetas() {
+    console.log('gerar arquivo com etiquetas');
   }
 
   criarNovoVolume() {

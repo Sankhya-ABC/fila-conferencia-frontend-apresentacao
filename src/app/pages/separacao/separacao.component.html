@@ -425,3 +425,29 @@
     </p>
   </div>
 </ng-template>
+
+<!-- TEMPLATE DO MODAL: CONFERENCIA FINALIZADA -->
+<ng-template #modalConferenciaFinalizada let-fechar="fechar">
+  <div class="modal-conferencia-finalizada">
+    <mat-icon fontSet="material-symbols-outlined">check_circle</mat-icon>
+    <h4>Conferência Finalizada</h4>
+    <div class="grid buttons-container">
+      <button
+        mat-raised-button
+        color="warn"
+        class="xs-12 sm-6"
+        (click)="voltarParaFila()"
+      >
+        Sair
+      </button>
+      <button
+        mat-raised-button
+        color="primary"
+        class="xs-12 sm-6"
+        (click)="imprimirEtiquetas()"
+      >
+        Imprimir Etiquetas
+      </button>
+    </div>
+  </div>
+</ng-template>
