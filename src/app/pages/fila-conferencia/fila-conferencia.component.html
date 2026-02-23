@@ -4,9 +4,9 @@
     <mat-label>Status</mat-label>
     <mat-select
       formControlName="codigoStatus"
+      multiple
       (selectionChange)="applyFilter()"
     >
-      <mat-option [value]="null">Todos</mat-option>
       <mat-option *ngFor="let status of listStatus" [value]="status.codigo">
         {{ status.descricao }}
       </mat-option>

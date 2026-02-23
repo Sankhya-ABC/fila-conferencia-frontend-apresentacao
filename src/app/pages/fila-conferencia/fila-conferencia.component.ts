@@ -140,7 +140,7 @@ export class FilaConferenciaComponent implements OnInit {
 
   private criarForm(): void {
     this.filters = this.fb.group({
-      codigoStatus: [],
+      codigoStatus: [['A', 'AC']],
       numeroModial: [],
       numeroNota: [],
       numeroUnico: [],
@@ -157,10 +157,17 @@ export class FilaConferenciaComponent implements OnInit {
     this.loading = true;
     this.dataSource.data = [];
 
-    const params: FilaConferenciaFilter = this.filters.value;
+    const rawParams = this.filters.value;
+
+    const params: FilaConferenciaFilter = {
+      ...rawParams,
+      idParceiro: rawParams.idParceiro?.id ?? rawParams.idParceiro?.codparc,
+    };
+
     params.dataInicio = params.dataInicio
       ? formatDate(params.dataInicio, 'yyyy-MM-dd', 'en-US')
       : undefined;
+
     params.dataFim = params.dataFim
       ? formatDate(params.dataFim, 'yyyy-MM-dd', 'en-US')
       : undefined;
@@ -175,12 +182,8 @@ export class FilaConferenciaComponent implements OnInit {
       .getFilaConferencias(params)
       .pipe(finalize(() => (this.loading = false)))
       .subscribe({
-        next: (resp) => {
-          this.dataSource.data = resp;
-        },
-        error: () => {
-          this.dataSource.data = [];
-        },
+        next: (resp) => (this.dataSource.data = resp),
+        error: () => (this.dataSource.data = []),
       });
   }
 
