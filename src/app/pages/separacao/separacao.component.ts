@@ -332,11 +332,16 @@ export class SeparacaoComponent implements OnInit {
   }
 
   // acoes
-  confirmarConferencia() {
-    console.log('Conferência confirmada', {
-      volumes: this.volumes,
-      conferidos: this.dataSourceConferidos.data,
-    });
+  finalizarConferencia() {
+    this.separacaoService
+      .postFinalizarConferencia({
+        numeroConferencia: this.dadosGerais.numeroConferencia!,
+      })
+      .subscribe({
+        next: () => {
+          this.router.navigate(['/fila-conferencia']);
+        },
+      });
   }
 
   onIniciarConferencia(item: ItemPedidoDTO) {

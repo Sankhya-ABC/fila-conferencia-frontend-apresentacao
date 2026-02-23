@@ -7,6 +7,7 @@ import {
   ItensConferidosResponse,
   PostAtualizarDimensoesVolumeParams,
   PostDevolverItemConferidoParams,
+  PostFinalizarConferenciaParams,
   PostIniciarConferenciaParams,
   PostIniciarConferenciaResponse,
   PostItemConferidoVolumeParams,
@@ -76,5 +77,11 @@ export class SeparacaoService {
     body: PostAtualizarDimensoesVolumeParams,
   ): Observable<null> {
     return this.http.post<null>('/separacoes/dimensoes-volume', body);
+  }
+
+  postFinalizarConferencia(
+    body: PostFinalizarConferenciaParams,
+  ): Observable<null> {
+    return this.http.post<null>('/separacoes/finalizar-conferencia', body);
   }
 }
