@@ -7,6 +7,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { RouteStateService } from '../../../services/route-state/route-state.service';
+import { AuthService } from '../../../services/auth/auth.service';
 
 @Component({
   selector: 'app-header',
@@ -26,7 +27,10 @@ export class HeaderComponent {
   showHeader$: Observable<boolean>;
   title$: Observable<string>;
 
-  constructor(private routeState: RouteStateService) {
+  constructor(
+    private routeState: RouteStateService,
+    private authService: AuthService,
+  ) {
     this.showHeader$ = this.routeState.isLoginRoute$.pipe(
       map((isLogin) => !isLogin),
     );
@@ -34,7 +38,7 @@ export class HeaderComponent {
   }
 
   logout() {
-    console.log('logout');
+    this.authService.logout();
   }
 
   toggleTheme() {
