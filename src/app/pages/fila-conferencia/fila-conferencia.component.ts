@@ -229,7 +229,7 @@ export class FilaConferenciaComponent implements OnInit {
 
   // tooltips
   tooltipSeparar(data: FilaConferenciaDTO): string {
-    return data.codigoStatus === 'AC'
+    return data.codigoStatus === 'AC' || data.codigoStatus === 'A'
       ? `Separação`
       : `Disponível quando status é AGUARDANDO_CONFERENCIA ou EM_ANDAMENTO`;
   }
