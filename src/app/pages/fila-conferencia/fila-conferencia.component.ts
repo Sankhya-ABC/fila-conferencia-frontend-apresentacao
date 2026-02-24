@@ -231,13 +231,7 @@ export class FilaConferenciaComponent implements OnInit {
   tooltipSeparar(data: FilaConferenciaDTO): string {
     return data.codigoStatus === 'AC'
       ? `Separação`
-      : `Disponível quando status é AGUARDANDO_CONFERENCIA`;
-  }
-
-  tooltipCubagem(data: FilaConferenciaDTO): string {
-    return data.codigoStatus === 'A'
-      ? `Separação`
-      : `Disponível quando status é EM_ANDAMENTO`;
+      : `Disponível quando status é AGUARDANDO_CONFERENCIA ou EM_ANDAMENTO`;
   }
 
   tooltipImprimir(data: FilaConferenciaDTO): string {
