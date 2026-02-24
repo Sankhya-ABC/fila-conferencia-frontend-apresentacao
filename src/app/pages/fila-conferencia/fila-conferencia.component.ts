@@ -202,7 +202,18 @@ export class FilaConferenciaComponent implements OnInit {
 
   // filters
   onLimparCampos(): void {
-    this.filters.reset();
+    this.filters = this.fb.group({
+      codigoStatus: [['A', 'AC']],
+      numeroModial: [],
+      numeroNota: [],
+      numeroUnico: [],
+      dataInicio: [],
+      dataFim: [],
+      idParceiro: [],
+      codigoTipoMovimento: [],
+      codigoTipoOperacao: [],
+      codigoTipoEntrega: [],
+    });
     this.applyFilter();
   }
 
