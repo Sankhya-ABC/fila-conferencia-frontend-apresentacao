@@ -140,7 +140,7 @@ export class FilaConferenciaComponent implements OnInit {
 
   private criarForm(): void {
     this.filters = this.fb.group({
-      codigoStatus: [['A', 'AC']],
+      codigoStatus: [['A', 'AC', 'R', 'RA', 'RD', 'RF', 'Z']],
       numeroModial: [],
       numeroNota: [],
       numeroUnico: [],
@@ -202,18 +202,7 @@ export class FilaConferenciaComponent implements OnInit {
 
   // filters
   onLimparCampos(): void {
-    this.filters = this.fb.group({
-      codigoStatus: [['A', 'AC']],
-      numeroModial: [],
-      numeroNota: [],
-      numeroUnico: [],
-      dataInicio: [],
-      dataFim: [],
-      idParceiro: [],
-      codigoTipoMovimento: [],
-      codigoTipoOperacao: [],
-      codigoTipoEntrega: [],
-    });
+    this.criarForm();
     this.applyFilter();
   }
 
