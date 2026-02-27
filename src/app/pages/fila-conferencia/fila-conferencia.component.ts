@@ -27,6 +27,8 @@ import {
 import { FilaConferenciaService } from '../../services/fila-conferencia/fila-conferencia.service';
 import { ParceiroDTO } from '../../services/parceiro/parceiro.model';
 import { ParceiroService } from '../../services/parceiro/parceiro.service';
+import { EmpresaDTO } from '../../services/empresa/empresa.model';
+import { EmpresaService } from '../../services/empresa/empresa.service';
 
 @Component({
   selector: 'app-fila-conferencia',
@@ -56,6 +58,7 @@ export class FilaConferenciaComponent implements OnInit {
     private fb: FormBuilder,
     private filaConferenciaService: FilaConferenciaService,
     private parceiroService: ParceiroService,
+    private empresaService: EmpresaService,
     private router: Router,
   ) {}
 
@@ -96,6 +99,7 @@ export class FilaConferenciaComponent implements OnInit {
   listTipoOperacao: CodigoDescricao[] = [];
   listTipoEntrega: CodigoDescricao[] = [];
   listParceiro: ParceiroDTO[] = [];
+  listEmpresa: EmpresaDTO[] = [];
 
   // filters
   filters!: FormGroup;
@@ -135,6 +139,19 @@ export class FilaConferenciaComponent implements OnInit {
       }
     });
 
+    this.filters.get('idEmpresa')!.valueChanges.subscribe((value) => {
+      if (typeof value === 'string') {
+        if (!value) {
+          this.listEmpresa = [];
+          return;
+        }
+
+        this.empresaService
+          .getEmpresas({ search: value })
+          .subscribe((resp) => (this.listEmpresa = resp));
+      }
+    });
+
     this.applyFilter();
   }
 
@@ -147,14 +164,28 @@ export class FilaConferenciaComponent implements OnInit {
       dataInicio: [],
       dataFim: [],
       idParceiro: [],
+      idEmpresa: [],
       codigoTipoMovimento: [],
       codigoTipoOperacao: [],
       codigoTipoEntrega: [],
     });
   }
 
-  onParceiroSelected(parceiro: ParceiroDTO): void {
-    this.filters.get('idParceiro')!.setValue(parceiro);
+  // auto select filtro
+  onEmpresaBlur(): void {
+    const value = this.filters.get('idEmpresa')!.value;
+
+    if (!value) {
+      this.applyFilter();
+    }
+  }
+
+  displayEmpresa(empresa?: EmpresaDTO): string {
+    return empresa ? `${empresa.nome} - ${empresa.cpfCnpj}` : '';
+  }
+
+  onEmpresaSelected(empresa: EmpresaDTO): void {
+    this.filters.get('idEmpresa')!.setValue(empresa);
     this.applyFilter();
   }
 
@@ -166,6 +197,15 @@ export class FilaConferenciaComponent implements OnInit {
     }
   }
 
+  displayParceiro(parceiro?: ParceiroDTO): string {
+    return parceiro ? `${parceiro.nome} - ${parceiro.cpfCnpj}` : '';
+  }
+
+  onParceiroSelected(parceiro: ParceiroDTO): void {
+    this.filters.get('idParceiro')!.setValue(parceiro);
+    this.applyFilter();
+  }
+
   applyFilter(): void {
     this.loading = true;
     this.dataSource.data = [];
@@ -174,7 +214,8 @@ export class FilaConferenciaComponent implements OnInit {
 
     const params: FilaConferenciaFilter = {
       ...rawParams,
-      idParceiro: rawParams.idParceiro?.id ?? rawParams.idParceiro?.codparc,
+      idParceiro: rawParams.idParceiro?.id,
+      idEmpresa: rawParams.idEmpresa?.id,
     };
 
     params.dataInicio = params.dataInicio
@@ -216,10 +257,6 @@ export class FilaConferenciaComponent implements OnInit {
   }
 
   // formats
-  displayParceiro(parceiro?: ParceiroDTO): string {
-    return parceiro ? `${parceiro.nome} - ${parceiro.cpfCnpj}` : '';
-  }
-
   displayDate(date: string) {
     const day = date?.substring(0, 2);
     const month = date?.substring(2, 4);

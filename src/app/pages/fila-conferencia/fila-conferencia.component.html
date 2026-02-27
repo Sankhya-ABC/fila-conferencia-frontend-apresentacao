@@ -1,6 +1,6 @@
 <!-- Filtros -->
 <div class="filtros-container grid" [formGroup]="filters">
-  <mat-form-field appearance="outline" class="xs-12 sm-6 md-4 lg-3 xl-2">
+  <mat-form-field appearance="outline" class="xs-12 sm-6 md-3 lg-3 xl-2">
     <mat-label>Status</mat-label>
     <mat-select
       formControlName="codigoStatus"
@@ -13,22 +13,22 @@
     </mat-select>
   </mat-form-field>
 
-  <mat-form-field appearance="outline" class="xs-12 sm-6 md-4 lg-3 xl-2">
+  <mat-form-field appearance="outline" class="xs-12 sm-6 md-3 lg-3 xl-2">
     <mat-label>Número Modial</mat-label>
     <input matInput formControlName="numeroModial" (input)="applyFilter()" />
   </mat-form-field>
 
-  <mat-form-field appearance="outline" class="xs-12 sm-6 md-4 lg-3 xl-2">
+  <mat-form-field appearance="outline" class="xs-12 sm-6 md-3 lg-3 xl-2">
     <mat-label>Número Nota</mat-label>
     <input matInput formControlName="numeroNota" (input)="applyFilter()" />
   </mat-form-field>
 
-  <mat-form-field appearance="outline" class="xs-12 sm-6 md-4 lg-3 xl-2">
+  <mat-form-field appearance="outline" class="xs-12 sm-6 md-3 lg-3 xl-2">
     <mat-label>Número Único</mat-label>
     <input matInput formControlName="numeroUnico" (input)="applyFilter()" />
   </mat-form-field>
 
-  <mat-form-field appearance="outline" class="xs-12 sm-6 md-4 lg-3 xl-2">
+  <mat-form-field appearance="outline" class="xs-12 sm-6 md-3 lg-3 xl-2">
     <mat-label>Data Início</mat-label>
     <input
       matInput
@@ -43,7 +43,7 @@
     <mat-datepicker #pickerInicio></mat-datepicker>
   </mat-form-field>
 
-  <mat-form-field appearance="outline" class="xs-12 sm-6 md-4 lg-3 xl-2">
+  <mat-form-field appearance="outline" class="xs-12 sm-6 md-3 lg-3 xl-2">
     <mat-label>Data Fim</mat-label>
     <input
       matInput
@@ -55,7 +55,60 @@
     <mat-datepicker #pickerFim></mat-datepicker>
   </mat-form-field>
 
-  <mat-form-field appearance="outline" class="xs-12 sm-12 md-8 lg-6 xl-4">
+  <mat-form-field appearance="outline" class="xs-12 sm-6 md-3 lg-3 xl-2">
+    <mat-label>Tipo Movimento</mat-label>
+    <mat-select
+      formControlName="codigoTipoMovimento"
+      (selectionChange)="applyFilter()"
+      multiple
+    >
+      <mat-option [value]="null">Todos</mat-option>
+      <mat-option
+        *ngFor="let tipoMovimento of listTipoMovimento"
+        [value]="tipoMovimento.codigo"
+      >
+        {{ tipoMovimento.descricao }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" class="xs-12 sm-6 md-3 lg-3 xl-2">
+    <mat-label>Tipo Operação</mat-label>
+    <mat-select
+      formControlName="codigoTipoOperacao"
+      (selectionChange)="applyFilter()"
+      multiple
+    >
+      <mat-option [value]="null">Todos</mat-option>
+      <mat-option
+        *ngFor="let tipoOperacao of listTipoOperacao"
+        [value]="tipoOperacao.codigo"
+      >
+        {{ tipoOperacao.descricao }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" class="xs-12 sm-12 md-6 lg-6 xl-4">
+    <mat-label>Empresa</mat-label>
+    <input
+      matInput
+      formControlName="idEmpresa"
+      [matAutocomplete]="auto"
+      (blur)="onEmpresaBlur()"
+    />
+    <mat-autocomplete
+      #auto="matAutocomplete"
+      [displayWith]="displayEmpresa"
+      (optionSelected)="onEmpresaSelected($event.option.value)"
+    >
+      <mat-option *ngFor="let empresa of listEmpresa" [value]="empresa">
+        {{ displayEmpresa(empresa) }}
+      </mat-option>
+    </mat-autocomplete>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" class="xs-12 sm-12 md-6 lg-6 xl-4">
     <mat-label>Parceiro</mat-label>
     <input
       matInput
@@ -74,41 +127,7 @@
     </mat-autocomplete>
   </mat-form-field>
 
-  <mat-form-field appearance="outline" class="xs-12 sm-6 md-4 lg-3 xl-2">
-    <mat-label>Tipo Movimento</mat-label>
-    <mat-select
-      formControlName="codigoTipoMovimento"
-      (selectionChange)="applyFilter()"
-      multiple
-    >
-      <mat-option [value]="null">Todos</mat-option>
-      <mat-option
-        *ngFor="let tipoMovimento of listTipoMovimento"
-        [value]="tipoMovimento.codigo"
-      >
-        {{ tipoMovimento.descricao }}
-      </mat-option>
-    </mat-select>
-  </mat-form-field>
-
-  <mat-form-field appearance="outline" class="xs-12 sm-6 md-4 lg-3 xl-2">
-    <mat-label>Tipo Operação</mat-label>
-    <mat-select
-      formControlName="codigoTipoOperacao"
-      (selectionChange)="applyFilter()"
-      multiple
-    >
-      <mat-option [value]="null">Todos</mat-option>
-      <mat-option
-        *ngFor="let tipoOperacao of listTipoOperacao"
-        [value]="tipoOperacao.codigo"
-      >
-        {{ tipoOperacao.descricao }}
-      </mat-option>
-    </mat-select>
-  </mat-form-field>
-
-  <mat-form-field appearance="outline" class="xs-12 sm-6 md-4 lg-3 xl-2">
+  <mat-form-field appearance="outline" class="xs-12 sm-6 md-3 lg-3 xl-2">
     <mat-label>Tipo Entrega</mat-label>
     <mat-select
       formControlName="codigoTipoEntrega"
@@ -129,7 +148,7 @@
     mat-raised-button
     color="warn"
     (click)="onLimparCampos()"
-    class="xs-12 sm-6 md-4 lg-3 xl-2"
+    class="xs-12 sm-6 md-3 lg-3 xl-2"
   >
     Limpar campos
   </button>
