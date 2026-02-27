@@ -94,11 +94,11 @@
     <input
       matInput
       formControlName="idEmpresa"
-      [matAutocomplete]="auto"
+      [matAutocomplete]="autoEmpresa"
       (blur)="onEmpresaBlur()"
     />
     <mat-autocomplete
-      #auto="matAutocomplete"
+      #autoEmpresa="matAutocomplete"
       [displayWith]="displayEmpresa"
       (optionSelected)="onEmpresaSelected($event.option.value)"
     >
@@ -113,11 +113,11 @@
     <input
       matInput
       formControlName="idParceiro"
-      [matAutocomplete]="auto"
+      [matAutocomplete]="autoParceiro"
       (blur)="onParceiroBlur()"
     />
     <mat-autocomplete
-      #auto="matAutocomplete"
+      #autoParceiro="matAutocomplete"
       [displayWith]="displayParceiro"
       (optionSelected)="onParceiroSelected($event.option.value)"
     >
