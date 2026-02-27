@@ -4,8 +4,8 @@
     <mat-label>Status</mat-label>
     <mat-select
       formControlName="codigoStatus"
-      multiple
       (selectionChange)="applyFilter()"
+      multiple
     >
       <mat-option *ngFor="let status of listStatus" [value]="status.codigo">
         {{ status.descricao }}
@@ -79,6 +79,7 @@
     <mat-select
       formControlName="codigoTipoMovimento"
       (selectionChange)="applyFilter()"
+      multiple
     >
       <mat-option [value]="null">Todos</mat-option>
       <mat-option
@@ -95,6 +96,7 @@
     <mat-select
       formControlName="codigoTipoOperacao"
       (selectionChange)="applyFilter()"
+      multiple
     >
       <mat-option [value]="null">Todos</mat-option>
       <mat-option
@@ -111,6 +113,7 @@
     <mat-select
       formControlName="codigoTipoEntrega"
       (selectionChange)="applyFilter()"
+      multiple
     >
       <mat-option [value]="null">Todos</mat-option>
       <mat-option
