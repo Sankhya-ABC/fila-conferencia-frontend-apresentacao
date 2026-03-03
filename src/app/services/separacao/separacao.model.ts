@@ -100,7 +100,6 @@ export interface PostItemConferidoVolumeParams {
 export interface PostRemoverVolumeParams {
   numeroConferencia: number;
   numeroVolume: number;
-  numeroUnico: number;
 }
 
 export interface PostDevolverItemConferidoParams {

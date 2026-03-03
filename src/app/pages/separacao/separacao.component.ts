@@ -581,7 +581,6 @@ export class SeparacaoComponent implements OnInit {
       .postRemoverVolume({
         numeroConferencia: this.dadosGerais.numeroConferencia!,
         numeroVolume: volume.numeroVolume,
-        numeroUnico: this.numeroUnico!,
       })
       .subscribe({
         next: () => {
