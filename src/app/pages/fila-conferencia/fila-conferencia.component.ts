@@ -20,6 +20,8 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { Router } from '@angular/router';
 import { finalize } from 'rxjs';
 import { CodigoDescricao } from '../../services/dto/dominio.model';
+import { EmpresaDTO } from '../../services/empresa/empresa.model';
+import { EmpresaService } from '../../services/empresa/empresa.service';
 import {
   FilaConferenciaDTO,
   FilaConferenciaFilter,
@@ -27,8 +29,7 @@ import {
 import { FilaConferenciaService } from '../../services/fila-conferencia/fila-conferencia.service';
 import { ParceiroDTO } from '../../services/parceiro/parceiro.model';
 import { ParceiroService } from '../../services/parceiro/parceiro.service';
-import { EmpresaDTO } from '../../services/empresa/empresa.model';
-import { EmpresaService } from '../../services/empresa/empresa.service';
+import { SeparacaoService } from '../../services/separacao/separacao.service';
 
 @Component({
   selector: 'app-fila-conferencia',
@@ -60,6 +61,7 @@ export class FilaConferenciaComponent implements OnInit {
     private parceiroService: ParceiroService,
     private empresaService: EmpresaService,
     private router: Router,
+    private separacaoService: SeparacaoService,
   ) {}
 
   // tabela
@@ -253,7 +255,23 @@ export class FilaConferenciaComponent implements OnInit {
   }
 
   onImprimirEtiqueta(fila: FilaConferenciaDTO): void {
-    console.log('Imprimir etiqueta clicado', fila);
+    const numeroConferencia = fila?.numeroConferencia!;
+
+    this.separacaoService.downloadEtiqueta(numeroConferencia).subscribe({
+      next: (blob) => {
+        const url = window.URL.createObjectURL(blob);
+
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `etiquetas_conferencia_${numeroConferencia}.pdf`;
+        a.click();
+
+        window.URL.revokeObjectURL(url);
+      },
+      error: (err) => {
+        console.error('Erro ao baixar etiquetas', err);
+      },
+    });
   }
 
   // formats
