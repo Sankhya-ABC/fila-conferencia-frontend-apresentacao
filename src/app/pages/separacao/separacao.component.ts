@@ -195,28 +195,37 @@ export class SeparacaoComponent implements OnInit {
         const chave = (i: { idProduto: number; controle?: string }) =>
           `${i.idProduto}#${i.controle ?? ''}`;
 
-        const mapConferidos = new Map(
-          itensConferidos.map((i) => [chave(i), i.quantidadeConvertida]),
-        );
+        const mapConferidos = new Map<string, number>();
+
+        itensConferidos.forEach((i) => {
+          const k = chave(i);
+          const atual = mapConferidos.get(k) || 0;
+          mapConferidos.set(k, atual + Number(i.quantidadeConvertida));
+        });
 
         const pedidosAtualizados: ItemPedidoDTO[] = [];
         const conferidos: ItemPedidoDTO[] = [];
 
         this.dataSourcePedidos.data.forEach((item) => {
-          const qtdConferida = mapConferidos.get(chave(item));
+          const qtdConferida = mapConferidos.get(chave(item)) || 0;
 
-          if (qtdConferida) {
+          if (qtdConferida > 0) {
+            const fator = item.quantidadeBase / item.quantidadeConvertida;
+
+            const qtdBaseConferida = Number((qtdConferida * fator).toFixed(5));
+
             conferidos.push({
               ...item,
               quantidadeConvertida: qtdConferida,
+              quantidadeBase: qtdBaseConferida,
             });
 
-            const restanteConvertido = item.quantidadeConvertida - qtdConferida;
-
-            const fator = item.quantidadeBase / item.quantidadeConvertida;
+            const restanteConvertido = Number(
+              (item.quantidadeConvertida - qtdConferida).toFixed(5),
+            );
 
             const restanteBase = Number(
-              (restanteConvertido * fator).toFixed(5),
+              (item.quantidadeBase - qtdBaseConferida).toFixed(5),
             );
 
             if (restanteConvertido > 0) {

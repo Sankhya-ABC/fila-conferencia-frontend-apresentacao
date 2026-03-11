@@ -6,9 +6,12 @@ export interface ItemPedidoDTO {
 
   codigoBarras?: string[];
 
-  quantidadeBase: number;
   unidade: string;
+  quantidadeBase: number;
   quantidadeConvertida: number;
+
+  quantidadeBaseConferida: number;
+  quantidadeConvertidaConferida: number;
 
   idMarca: number;
   nomeMarca: string;
