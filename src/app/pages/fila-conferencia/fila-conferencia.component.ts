@@ -25,8 +25,8 @@ import { EmpresaService } from '../../services/empresa/empresa.service';
 import {
   FilaConferenciaDTO,
   FilaConferenciaFilter,
-} from '../../services/fila-conferencia/fila-conferencia.model';
-import { FilaConferenciaService } from '../../services/fila-conferencia/fila-conferencia.service';
+} from '../../services/conferencia/conferencia.model';
+import { ConferenciaService } from '../../services/conferencia/conferencia.service';
 import { ParceiroDTO } from '../../services/parceiro/parceiro.model';
 import { ParceiroService } from '../../services/parceiro/parceiro.service';
 import { SeparacaoService } from '../../services/separacao/separacao.service';
@@ -57,7 +57,7 @@ import { SeparacaoService } from '../../services/separacao/separacao.service';
 export class FilaConferenciaComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
-    private filaConferenciaService: FilaConferenciaService,
+    private conferenciaService: ConferenciaService,
     private parceiroService: ParceiroService,
     private empresaService: EmpresaService,
     private router: Router,
@@ -112,19 +112,19 @@ export class FilaConferenciaComponent implements OnInit {
   ngOnInit(): void {
     this.criarForm();
 
-    this.filaConferenciaService
+    this.conferenciaService
       .getStatus()
       .subscribe((data) => (this.listStatus = data));
 
-    this.filaConferenciaService
+    this.conferenciaService
       .getTipoMovimento()
       .subscribe((data) => (this.listTipoMovimento = data));
 
-    this.filaConferenciaService
+    this.conferenciaService
       .getTipoOperacao()
       .subscribe((data) => (this.listTipoOperacao = data));
 
-    this.filaConferenciaService
+    this.conferenciaService
       .getTipoEntrega()
       .subscribe((data) => (this.listTipoEntrega = data));
 
@@ -234,7 +234,7 @@ export class FilaConferenciaComponent implements OnInit {
         delete params[k as keyof FilaConferenciaFilter],
     );
 
-    this.filaConferenciaService
+    this.conferenciaService
       .getFilaConferencias(params)
       .pipe(finalize(() => (this.loading = false)))
       .subscribe({
