@@ -211,12 +211,19 @@ export class SeparacaoComponent implements OnInit {
               quantidadeConvertida: qtdConferida,
             });
 
-            const restante = item.quantidadeConvertida - qtdConferida;
+            const restanteConvertido = item.quantidadeConvertida - qtdConferida;
 
-            if (restante > 0) {
+            const fator = item.quantidadeBase / item.quantidadeConvertida;
+
+            const restanteBase = Number(
+              (restanteConvertido * fator).toFixed(5),
+            );
+
+            if (restanteConvertido > 0) {
               pedidosAtualizados.push({
                 ...item,
-                quantidadeConvertida: restante,
+                quantidadeConvertida: restanteConvertido,
+                quantidadeBase: restanteBase,
               });
             }
           } else {
