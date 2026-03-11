@@ -19,7 +19,7 @@ import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { Router } from '@angular/router';
 import { finalize } from 'rxjs';
-import { CodigoDescricao } from '../../services/dto/dominio.model';
+import { CodigoDescricao } from '../../services/dominio/dominio.model';
 import { EmpresaDTO } from '../../services/empresa/empresa.model';
 import { EmpresaService } from '../../services/empresa/empresa.service';
 import {
@@ -30,6 +30,7 @@ import { ConferenciaService } from '../../services/conferencia/conferencia.servi
 import { ParceiroDTO } from '../../services/parceiro/parceiro.model';
 import { ParceiroService } from '../../services/parceiro/parceiro.service';
 import { SeparacaoService } from '../../services/separacao/separacao.service';
+import { DominioService } from '../../services/dominio/dominio.service';
 
 @Component({
   selector: 'app-fila-conferencia',
@@ -58,6 +59,7 @@ export class FilaConferenciaComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private conferenciaService: ConferenciaService,
+    private dominioService: DominioService,
     private parceiroService: ParceiroService,
     private empresaService: EmpresaService,
     private router: Router,
@@ -112,19 +114,19 @@ export class FilaConferenciaComponent implements OnInit {
   ngOnInit(): void {
     this.criarForm();
 
-    this.conferenciaService
+    this.dominioService
       .getStatus()
       .subscribe((data) => (this.listStatus = data));
 
-    this.conferenciaService
+    this.dominioService
       .getTipoMovimento()
       .subscribe((data) => (this.listTipoMovimento = data));
 
-    this.conferenciaService
+    this.dominioService
       .getTipoOperacao()
       .subscribe((data) => (this.listTipoOperacao = data));
 
-    this.conferenciaService
+    this.dominioService
       .getTipoEntrega()
       .subscribe((data) => (this.listTipoEntrega = data));
 
