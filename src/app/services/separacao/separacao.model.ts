@@ -8,6 +8,7 @@ export interface ItemPedidoDTO {
 
   quantidade: number;
   unidade: string;
+  quantidadeConvertida: number;
 
   idMarca: number;
   nomeMarca: string;

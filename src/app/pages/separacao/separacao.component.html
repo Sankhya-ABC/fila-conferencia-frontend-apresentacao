@@ -127,30 +127,30 @@
       ><mat-header-cell *matHeaderCellDef>ID Produto</mat-header-cell
       ><mat-cell *matCellDef="let e">{{ e.idProduto }}</mat-cell></ng-container
     >
-
     <ng-container matColumnDef="codigoBarras"
       ><mat-header-cell *matHeaderCellDef>Código de Barras</mat-header-cell
       ><mat-cell *matCellDef="let e">{{
         e.codigoBarras?.join(", ")
       }}</mat-cell></ng-container
     >
-
     <ng-container matColumnDef="nomeProduto"
       ><mat-header-cell *matHeaderCellDef>Produto</mat-header-cell
       ><mat-cell *matCellDef="let e">{{
         e.nomeProduto
       }}</mat-cell></ng-container
     >
-
     <ng-container matColumnDef="quantidade"
-      ><mat-header-cell *matHeaderCellDef>Quantidade</mat-header-cell
-      ><mat-cell *matCellDef="let e">{{ e.quantidade }}</mat-cell></ng-container
+      ><mat-header-cell *matHeaderCellDef>Quantidade Base</mat-header-cell
+      ><mat-cell *matCellDef="let e">{{
+        e.quantidade + " " + e.unidade
+      }}</mat-cell></ng-container
     >
-    <ng-container matColumnDef="unidade"
-      ><mat-header-cell *matHeaderCellDef>Unidade</mat-header-cell
-      ><mat-cell *matCellDef="let e">{{ e.unidade }}</mat-cell></ng-container
+    <ng-container matColumnDef="quantidadeConvertida"
+      ><mat-header-cell *matHeaderCellDef>Quantidade Convertida</mat-header-cell
+      ><mat-cell *matCellDef="let e">{{
+        e.quantidadeConvertida + " UN"
+      }}</mat-cell></ng-container
     >
-
     <ng-container matColumnDef="idMarca"
       ><mat-header-cell *matHeaderCellDef>ID Marca</mat-header-cell
       ><mat-cell *matCellDef="let e">{{ e.idMarca }}</mat-cell></ng-container
@@ -232,30 +232,30 @@
       ><mat-header-cell *matHeaderCellDef>ID Produto</mat-header-cell
       ><mat-cell *matCellDef="let e">{{ e.idProduto }}</mat-cell></ng-container
     >
-
     <ng-container matColumnDef="codigoBarras"
       ><mat-header-cell *matHeaderCellDef>Código de Barras</mat-header-cell
       ><mat-cell *matCellDef="let e">{{
         e.codigoBarras?.join(", ")
       }}</mat-cell></ng-container
     >
-
     <ng-container matColumnDef="nomeProduto"
       ><mat-header-cell *matHeaderCellDef>Produto</mat-header-cell
       ><mat-cell *matCellDef="let e">{{
         e.nomeProduto
       }}</mat-cell></ng-container
     >
-
     <ng-container matColumnDef="quantidade"
-      ><mat-header-cell *matHeaderCellDef>Quantidade</mat-header-cell
-      ><mat-cell *matCellDef="let e">{{ e.quantidade }}</mat-cell></ng-container
+      ><mat-header-cell *matHeaderCellDef>Quantidade Base</mat-header-cell
+      ><mat-cell *matCellDef="let e">{{
+        e.quantidade + " " + e.unidade
+      }}</mat-cell></ng-container
     >
-    <ng-container matColumnDef="unidade"
-      ><mat-header-cell *matHeaderCellDef>Unidade</mat-header-cell
-      ><mat-cell *matCellDef="let e">{{ e.unidade }}</mat-cell></ng-container
+    <ng-container matColumnDef="quantidadeConvertida"
+      ><mat-header-cell *matHeaderCellDef>Quantidade Convertida</mat-header-cell
+      ><mat-cell *matCellDef="let e">{{
+        e.quantidadeConvertida + " UN"
+      }}</mat-cell></ng-container
     >
-
     <ng-container matColumnDef="idMarca"
       ><mat-header-cell *matHeaderCellDef>ID Marca</mat-header-cell
       ><mat-cell *matCellDef="let e">{{ e.idMarca }}</mat-cell></ng-container
