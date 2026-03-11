@@ -6,7 +6,7 @@ export interface ItemPedidoDTO {
 
   codigoBarras?: string[];
 
-  quantidade: number;
+  quantidadeBase: number;
   unidade: string;
   quantidadeConvertida: number;
 
@@ -24,7 +24,7 @@ export interface VolumeItemDTO {
   idProduto: number;
   descricaoProduto: string;
   imagem: string | null;
-  quantidade: number;
+  quantidadeConvertida: number;
   unidade: string;
   controle?: string;
 }
@@ -73,7 +73,7 @@ export interface DadosBasicosPedidoDTO {
 
 export interface ItensConferidosResponse {
   idProduto: number;
-  quantidade: number;
+  quantidadeConvertida: number;
 }
 
 export interface PostIniciarConferenciaParams {
@@ -94,7 +94,7 @@ export interface PostItemConferidoVolumeParams {
   numeroVolume: number;
   idProduto: number;
   controle: string;
-  quantidade: number;
+  quantidadeConvertida: number;
   unidade: string;
 }
 

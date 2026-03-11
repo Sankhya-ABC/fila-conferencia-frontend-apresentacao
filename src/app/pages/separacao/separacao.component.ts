@@ -61,7 +61,7 @@ export class SeparacaoComponent implements OnInit {
     'idProduto',
     'nomeProduto',
     'codigoBarras',
-    'quantidade',
+    'quantidadeBase',
     'quantidadeConvertida',
     'idMarca',
     'nomeMarca',
@@ -78,7 +78,7 @@ export class SeparacaoComponent implements OnInit {
     'idProduto',
     'nomeProduto',
     'codigoBarras',
-    'quantidade',
+    'quantidadeBase',
     'quantidadeConvertida',
     'idMarca',
     'nomeMarca',
@@ -118,7 +118,7 @@ export class SeparacaoComponent implements OnInit {
 
     this.form = this.fb.group({
       identificador: [''],
-      quantidade: [null],
+      quantidadeConvertida: [null],
       controle: [''],
     });
 
@@ -196,7 +196,7 @@ export class SeparacaoComponent implements OnInit {
           `${i.idProduto}#${i.controle ?? ''}`;
 
         const mapConferidos = new Map(
-          itensConferidos.map((i) => [chave(i), i.quantidade]),
+          itensConferidos.map((i) => [chave(i), i.quantidadeConvertida]),
         );
 
         const pedidosAtualizados: ItemPedidoDTO[] = [];
@@ -208,15 +208,15 @@ export class SeparacaoComponent implements OnInit {
           if (qtdConferida) {
             conferidos.push({
               ...item,
-              quantidade: qtdConferida,
+              quantidadeConvertida: qtdConferida,
             });
 
-            const restante = item.quantidade - qtdConferida;
+            const restante = item.quantidadeConvertida - qtdConferida;
 
             if (restante > 0) {
               pedidosAtualizados.push({
                 ...item,
-                quantidade: restante,
+                quantidadeConvertida: restante,
               });
             }
           } else {
@@ -278,8 +278,8 @@ export class SeparacaoComponent implements OnInit {
     return this.dataSourcePedidos.data.length > 0;
   }
 
-  get quantidadeCtrl() {
-    return this.form.get('quantidade');
+  get quantidadeConvertidaCtrl() {
+    return this.form.get('quantidadeConvertida');
   }
 
   get conferenciaFinalizada(): boolean {
@@ -297,12 +297,15 @@ export class SeparacaoComponent implements OnInit {
     this.volumes.forEach((v) => {
       v.itens.forEach((i) => {
         const k = chave(i);
-        itensVolumes.set(k, (itensVolumes.get(k) || 0) + i.quantidade);
+        itensVolumes.set(
+          k,
+          (itensVolumes.get(k) || 0) + i.quantidadeConvertida,
+        );
       });
     });
 
     return this.dataSourceConferidos.data.every((i) => {
-      return itensVolumes.get(chave(i)) === i.quantidade;
+      return itensVolumes.get(chave(i)) === i.quantidadeConvertida;
     });
   }
 
@@ -402,8 +405,8 @@ export class SeparacaoComponent implements OnInit {
 
     this.produtoIdentificado = true;
 
-    if (this.quantidadeCtrl?.value) {
-      this.onBlurQuantidade();
+    if (this.quantidadeConvertidaCtrl?.value) {
+      this.onBlurQuantidadeConvertida();
     }
   }
 
@@ -475,8 +478,8 @@ export class SeparacaoComponent implements OnInit {
       .subscribe();
   }
 
-  onBlurQuantidade() {
-    const ctrl = this.quantidadeCtrl;
+  onBlurQuantidadeConvertida() {
+    const ctrl = this.quantidadeConvertidaCtrl;
     if (!ctrl) return;
 
     if (ctrl.value === null || ctrl.value === '') {
@@ -496,7 +499,7 @@ export class SeparacaoComponent implements OnInit {
       return;
     }
 
-    const max = Number(this.itemSelecionado.quantidade);
+    const max = Number(this.itemSelecionado.quantidadeConvertida);
 
     if (valor > max) {
       ctrl.setErrors({
@@ -525,7 +528,7 @@ export class SeparacaoComponent implements OnInit {
     }
   }
 
-  adicionarItemAoVolume(item: ItemPedidoDTO, quantidade: number) {
+  adicionarItemAoVolume(item: ItemPedidoDTO, quantidadeConvertida: number) {
     this.garantirVolumeAtivo();
 
     const existente = this.volumeAtivo.itens.find((i) =>
@@ -533,13 +536,13 @@ export class SeparacaoComponent implements OnInit {
     );
 
     if (existente) {
-      existente.quantidade += quantidade;
+      existente.quantidadeConvertida += quantidadeConvertida;
     } else {
       this.volumeAtivo.itens.push({
         idProduto: item.idProduto,
         descricaoProduto: item.nomeProduto,
         imagem: item.imagem || null,
-        quantidade,
+        quantidadeConvertida,
         unidade: item.unidade,
         controle: item.controle ?? '',
       });
@@ -592,8 +595,8 @@ export class SeparacaoComponent implements OnInit {
   onConferir() {
     if (!this.itemSelecionado || !this.volumeAtivo) return;
 
-    const quantidade = Number(this.quantidadeCtrl?.value);
-    if (!quantidade || quantidade <= 0) return;
+    const quantidadeConvertida = Number(this.quantidadeConvertidaCtrl?.value);
+    if (!quantidadeConvertida || quantidadeConvertida <= 0) return;
 
     this.separacaoService
       .postItemConferidoVolume({
@@ -601,7 +604,7 @@ export class SeparacaoComponent implements OnInit {
         numeroVolume: this.volumeAtivo.numeroVolume,
         idProduto: this.itemSelecionado.idProduto,
         controle: this.itemSelecionado.controle ?? '',
-        quantidade,
+        quantidadeConvertida,
         unidade: this.itemSelecionado.unidade,
       })
       .subscribe({
