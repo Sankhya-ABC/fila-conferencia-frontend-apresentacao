@@ -1,0 +1,13 @@
+.toast {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.title {
+  font-weight: 600;
+}
+
+.message {
+  font-size: 13px;
+}

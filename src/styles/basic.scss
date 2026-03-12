@@ -66,6 +66,12 @@ button {
   font-size: typography.$font-xs;
 }
 
+.toast-error.mat-mdc-snack-bar-container {
+  --mdc-snackbar-container-color: var(--color-warn);
+  --mat-mdc-snack-bar-button-color: var(--color-text-primary);
+  color: var(--color-text-primary);
+}
+
 .spinner-container {
   display: flex;
   flex-direction: column;
