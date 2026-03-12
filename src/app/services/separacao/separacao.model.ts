@@ -28,6 +28,7 @@ export interface VolumeItemDTO {
   descricaoProduto: string;
   imagem: string | null;
   quantidadeConvertida: number;
+  quantidadeBase: number;
   unidade: string;
   controle?: string;
 }

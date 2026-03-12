@@ -559,6 +559,7 @@ export class SeparacaoComponent implements OnInit {
         descricaoProduto: item.nomeProduto,
         imagem: item.imagem || null,
         quantidadeConvertida,
+        quantidadeBase: item.quantidadeBase,
         unidade: item.unidade,
         controle: item.controle ?? '',
       });
