@@ -109,8 +109,6 @@ export class FilaConferenciaComponent implements OnInit {
   filters!: FormGroup;
 
   // requests
-  loading = false;
-
   ngOnInit(): void {
     this.criarForm();
 
@@ -211,7 +209,6 @@ export class FilaConferenciaComponent implements OnInit {
   }
 
   applyFilter(): void {
-    this.loading = true;
     this.dataSource.data = [];
 
     const rawParams = this.filters.value;
@@ -236,13 +233,10 @@ export class FilaConferenciaComponent implements OnInit {
         delete params[k as keyof FilaConferenciaFilter],
     );
 
-    this.conferenciaService
-      .getFilaConferencias(params)
-      .pipe(finalize(() => (this.loading = false)))
-      .subscribe({
-        next: (resp) => (this.dataSource.data = resp),
-        error: () => (this.dataSource.data = []),
-      });
+    this.conferenciaService.getFilaConferencias(params).subscribe({
+      next: (resp) => (this.dataSource.data = resp),
+      error: () => (this.dataSource.data = []),
+    });
   }
 
   // filters

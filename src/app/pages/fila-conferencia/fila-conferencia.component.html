@@ -155,12 +155,7 @@
 </div>
 
 <!-- Tabela -->
-<div class="spinner-container" *ngIf="loading">
-  <div class="spinner"></div>
-  <span>Carregando dados...</span>
-</div>
-
-<div class="table-container" *ngIf="!loading">
+<div class="table-container">
   <mat-table [dataSource]="dataSource" class="mat-elevation-z8">
     <ng-container matColumnDef="acoes" sticky>
       <mat-header-cell *matHeaderCellDef>Ações</mat-header-cell>

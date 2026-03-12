@@ -71,26 +71,3 @@ button {
   --mat-mdc-snack-bar-button-color: var(--color-text-primary);
   color: var(--color-text-primary);
 }
-
-.spinner-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: spacing.$space-9;
-
-  .spinner {
-    width: 48px;
-    height: 48px;
-    border: 4px solid #ddd;
-    border-top-color: var(--color-primary);
-    border-radius: 50%;
-    animation: spin 0.9s linear infinite;
-  }
-
-  @keyframes spin {
-    to {
-      transform: rotate(360deg);
-    }
-  }
-}
