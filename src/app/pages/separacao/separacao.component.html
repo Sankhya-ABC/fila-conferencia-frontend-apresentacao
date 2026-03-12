@@ -21,7 +21,7 @@
 </section>
 
 <!-- FORM -->
-<form [formGroup]="form" class="form-conferencia grid">
+<form [formGroup]="formConferencia" class="form-conferencia grid">
   <mat-form-field appearance="outline" class="xs-12 sm-6 md-3 lg-3 xl-2">
     <mat-label>Código de Barras/ID do produto</mat-label>
     <input
@@ -298,8 +298,8 @@
   </mat-table>
 </div>
 
-<!-- VOLUMES -->
-<section class="volumes" *ngIf="dadosGerais.codigoTipoMovimento === 'P'">
+<!-- VOLUMES (DETALHADOS) -->
+<section class="volumes-detalhados" *ngIf="isVolumesDetalhados()">
   <h3>Volumes</h3>
   <div class="grid">
     <div
@@ -403,6 +403,92 @@
   </div>
 </section>
 
+<!-- VOLUMES (NÃO DETALHADOS) -->
+<section class="volumes-nao-detalhados" *ngIf="isVolumesNaoDetalhados()">
+  <h3>Volumes</h3>
+  <form [formGroup]="formCubagem" class="form-cubagem grid">
+    <mat-form-field appearance="outline" class="xs-12 sm-6 md-3 lg-3 xl-2">
+      <mat-label>Quantidade</mat-label>
+      <input
+        matInput
+        type="number"
+        formControlName="quantidade"
+        (blur)="onBlurFieldsFormCubagem('quantidade')"
+      />
+
+      <mat-error *ngIf="quantidadeCubagemCtrl?.hasError('menorOuIgualAZero')">
+        Quantidade deve ser maior que zero
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="xs-12 sm-6 md-3 lg-3 xl-2">
+      <mat-label>Largura</mat-label>
+      <input
+        matInput
+        type="number"
+        formControlName="largura"
+        (blur)="onBlurFieldsFormCubagem('largura')"
+      />
+
+      <mat-error *ngIf="larguraCubagemCtrl?.hasError('menorOuIgualAZero')">
+        Largura deve ser maior que zero
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="xs-12 sm-6 md-3 lg-3 xl-2">
+      <mat-label>Comprimento</mat-label>
+      <input
+        matInput
+        type="number"
+        formControlName="comprimento"
+        (blur)="onBlurFieldsFormCubagem('comprimento')"
+      />
+
+      <mat-error *ngIf="comprimentoCubagemCtrl?.hasError('menorOuIgualAZero')">
+        Comprimento deve ser maior que zero
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="xs-12 sm-6 md-3 lg-3 xl-2">
+      <mat-label>Altura</mat-label>
+      <input
+        matInput
+        type="number"
+        formControlName="altura"
+        (blur)="onBlurFieldsFormCubagem('altura')"
+      />
+
+      <mat-error *ngIf="alturaCubagemCtrl?.hasError('menorOuIgualAZero')">
+        Altura deve ser maior que zero
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="xs-12 sm-6 md-3 lg-3 xl-2">
+      <mat-label>Peso</mat-label>
+      <input
+        matInput
+        type="number"
+        formControlName="peso"
+        (blur)="onBlurFieldsFormCubagem('peso')"
+      />
+
+      <mat-error *ngIf="pesoCubagemCtrl?.hasError('menorOuIgualAZero')">
+        Peso deve ser maior que zero
+      </mat-error>
+    </mat-form-field>
+
+    <button
+      mat-raised-button
+      color="primary"
+      (click)="gerarVolumesLote()"
+      class="xs-12 sm-6 md-3 lg-3 xl-2"
+      [disabled]="isGerarVolumeLoteDisabled()"
+    >
+      Gerar Volumes em Lote
+    </button>
+  </form>
+</section>
+
 <section class="confirmar-conferencia grid">
   <button
     mat-raised-button
@@ -423,7 +509,7 @@
     <h4>Item não encontrado</h4>
     <p>
       O código de barras informado
-      <strong>{{ form.get("codigoBarras")?.value }}</strong>
+      <strong>{{ formConferencia.get("codigoBarras")?.value }}</strong>
       não pertence a este pedido.
     </p>
   </div>

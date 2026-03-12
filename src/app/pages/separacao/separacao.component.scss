@@ -17,7 +17,8 @@ h4 {
 .dados-gerais,
 .itens-pedidos,
 .itens-conferidos,
-.volumes,
+.volumes-detalhados,
+.volumes-nao-detalhados,
 .confirmar-conferencia {
   margin-bottom: $space-24;
 }
@@ -83,7 +84,7 @@ h4 {
 }
 
 // VOLUMES
-.volumes {
+.volumes-detalhados {
   .volume-card {
     background-color: var(--color-surface);
     border-radius: $space-12;

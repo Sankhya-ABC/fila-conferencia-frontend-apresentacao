@@ -5,6 +5,7 @@ import {
   FormGroup,
   FormsModule,
   ReactiveFormsModule,
+  Validators,
 } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -98,7 +99,8 @@ export class SeparacaoComponent implements OnInit {
   volumeAtivo!: VolumeFrontDTO;
 
   // form
-  form!: FormGroup;
+  formConferencia!: FormGroup;
+  formCubagem!: FormGroup;
 
   // control
   itemSelecionado: ItemPedidoDTO | null = null;
@@ -116,10 +118,18 @@ export class SeparacaoComponent implements OnInit {
   ngOnInit(): void {
     this.numeroUnico = Number(this.route.snapshot.paramMap.get('numeroUnico'));
 
-    this.form = this.fb.group({
+    this.formConferencia = this.fb.group({
       identificador: [''],
       quantidadeConvertida: [null],
       controle: [''],
+    });
+
+    this.formCubagem = this.fb.group({
+      quantidade: [null, Validators.min(1)],
+      largura: [null, Validators.min(0.1)],
+      comprimento: [null, Validators.min(0.1)],
+      altura: [null, Validators.min(0.1)],
+      peso: [null, Validators.min(0.1)],
     });
 
     if (!this.numeroUnico) return;
@@ -295,7 +305,7 @@ export class SeparacaoComponent implements OnInit {
   }
 
   get quantidadeConvertidaCtrl() {
-    return this.form.get('quantidadeConvertida');
+    return this.formConferencia.get('quantidadeConvertida');
   }
 
   get conferenciaFinalizada(): boolean {
@@ -337,8 +347,12 @@ export class SeparacaoComponent implements OnInit {
   get podeConfirmarConferencia(): boolean {
     if (!this.conferenciaFinalizada) return false;
 
-    if (this.dadosGerais.codigoTipoMovimento === 'P') {
+    if (this.isVolumesDetalhados()) {
       return this.todosItensNosVolumes && this.todosVolumesComDimensoes;
+    }
+
+    if (this.isVolumesNaoDetalhados()) {
+      return this.todosVolumesComDimensoes;
     }
 
     return true;
@@ -376,7 +390,7 @@ export class SeparacaoComponent implements OnInit {
   }
 
   onIdentificadorInserido() {
-    const identificadorRaw = this.form.get('identificador')?.value;
+    const identificadorRaw = this.formConferencia.get('identificador')?.value;
     if (!identificadorRaw) return;
 
     const identificador = identificadorRaw.toString().trim();
@@ -414,7 +428,7 @@ export class SeparacaoComponent implements OnInit {
   selecionarItem(item: ItemPedidoDTO) {
     this.itemSelecionado = item;
 
-    this.form.patchValue({
+    this.formConferencia.patchValue({
       identificador: item.idProduto,
       controle: this.normalizarControle(item.controle),
     });
@@ -449,7 +463,7 @@ export class SeparacaoComponent implements OnInit {
           : this.controlesDisponiveis[0]);
     }
 
-    this.form.patchValue({
+    this.formConferencia.patchValue({
       controle: controleSelecionado,
     });
 
@@ -662,9 +676,9 @@ export class SeparacaoComponent implements OnInit {
     this.controlesDisponiveis = [];
     this.produtoIdentificado = false;
 
-    this.form.reset();
+    this.formConferencia.reset();
 
-    Object.values(this.form.controls).forEach((ctrl) => {
+    Object.values(this.formConferencia.controls).forEach((ctrl) => {
       ctrl.setErrors(null);
       ctrl.markAsPristine();
       ctrl.markAsUntouched();
@@ -737,5 +751,88 @@ export class SeparacaoComponent implements OnInit {
 
     this.volumes.push(novoVolume);
     this.volumeAtivo = novoVolume;
+  }
+
+  // cubagem de pedido
+  isVolumesDetalhados(): boolean {
+    return (
+      this.dadosGerais?.codigoTipoMovimento === 'P' &&
+      this.dadosGerais?.descricaoTipoOperacao ===
+        'CUBAGEM DE PEDIDO VOLUME DETALHADO'
+    );
+  }
+
+  isVolumesNaoDetalhados(): boolean {
+    return (
+      this.dadosGerais?.codigoTipoMovimento === 'P' &&
+      this.dadosGerais?.descricaoTipoOperacao === 'CUBAGEM DE PEDIDO'
+    );
+  }
+
+  get quantidadeCubagemCtrl() {
+    return this.formCubagem.get('quantidade');
+  }
+
+  get larguraCubagemCtrl() {
+    return this.formCubagem.get('largura');
+  }
+
+  get comprimentoCubagemCtrl() {
+    return this.formCubagem.get('comprimento');
+  }
+
+  get alturaCubagemCtrl() {
+    return this.formCubagem.get('altura');
+  }
+
+  get pesoCubagemCtrl() {
+    return this.formCubagem.get('peso');
+  }
+
+  onBlurFieldsFormCubagem(
+    key: 'quantidade' | 'largura' | 'comprimento' | 'altura' | 'peso',
+  ) {
+    const ctrl = this.formCubagem.get(key);
+
+    if (!ctrl) return;
+
+    const value = ctrl.value;
+
+    if (value === null || value === '') {
+      ctrl.setErrors(null);
+      return;
+    }
+
+    const valor = Number(value);
+
+    if (Number.isNaN(valor)) {
+      ctrl.setErrors({ invalido: true });
+      return;
+    }
+
+    if (valor <= 0) {
+      ctrl.setErrors({ menorOuIgualAZero: true });
+      return;
+    }
+
+    ctrl.setErrors(null);
+  }
+
+  isGerarVolumeLoteDisabled(): boolean {
+    const values = [
+      this.quantidadeCubagemCtrl?.value,
+      this.larguraCubagemCtrl?.value,
+      this.comprimentoCubagemCtrl?.value,
+      this.alturaCubagemCtrl?.value,
+      this.pesoCubagemCtrl?.value,
+    ];
+
+    return values.some((v) => !v || Number(v) <= 0);
+  }
+
+  gerarVolumesLote() {
+    if (this.formCubagem.valid) {
+      // Lógica para gerar os volumes em lote com base nos valores do formulário
+    }
   }
 }
