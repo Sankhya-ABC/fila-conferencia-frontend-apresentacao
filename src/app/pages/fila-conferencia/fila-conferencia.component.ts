@@ -159,7 +159,7 @@ export class FilaConferenciaComponent implements OnInit {
 
   private criarForm(): void {
     this.filters = this.fb.group({
-      codigoStatus: [['A', 'AC', 'R', 'RA', 'RD', 'RF', 'Z']],
+      codigoStatus: [['A', 'AC', 'R', 'RA', 'RD', 'Z']],
       numeroModial: [],
       numeroNota: [],
       numeroUnico: [],

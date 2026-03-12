@@ -67,6 +67,7 @@ export interface DadosBasicosPedidoDTO {
 
   codigoStatus: string;
   codigoTipoMovimento: string;
+  descricaoTipoOperacao: string;
 
   idParceiro: number;
   nomeParceiro: string;
