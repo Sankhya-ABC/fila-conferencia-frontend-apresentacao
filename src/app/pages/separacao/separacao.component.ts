@@ -358,16 +358,6 @@ export class SeparacaoComponent implements OnInit {
     return true;
   }
 
-  get deveMostrarBotaoConfirmar(): boolean {
-    if (!this.conferenciaFinalizada) return false;
-
-    if (this.dadosGerais.codigoTipoMovimento === 'P') {
-      return this.todosItensNosVolumes;
-    }
-
-    return true;
-  }
-
   // acoes
   finalizarConferencia() {
     this.separacaoService
@@ -632,7 +622,7 @@ export class SeparacaoComponent implements OnInit {
     this.separacaoService
       .postItemConferidoVolume({
         numeroConferencia: this.dadosGerais.numeroConferencia!,
-        numeroVolume: this.volumeAtivo.numeroVolume,
+        numeroVolume: this.volumeAtivo.numeroVolume || 1,
         idProduto: this.itemSelecionado.idProduto,
         controle: this.itemSelecionado.controle ?? '',
         quantidadeConvertida,
@@ -835,4 +825,10 @@ export class SeparacaoComponent implements OnInit {
       // Lógica para gerar os volumes em lote com base nos valores do formulário
     }
   }
+
+  deletarVolumeLote(volume?: any) {
+    //
+  }
+
+  salvarDimensoesVolumeLote(volume?: any) {}
 }

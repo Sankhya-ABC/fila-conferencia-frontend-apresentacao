@@ -487,6 +487,73 @@
       Gerar Volumes em Lote
     </button>
   </form>
+
+  <div class="grid">
+    <div
+      class="volume-card xs-12 sm-6 md-4 lg-3 xl-2"
+      *ngFor="let volume of volumes"
+    >
+      <div class="volume-header">
+        <div class="buttons-container">
+          <button
+            mat-icon-button
+            (click)="deletarVolumeLote(volume); $event.stopPropagation()"
+            matTooltip="Remover volume"
+          >
+            <mat-icon fontSet="material-symbols-outlined">remove</mat-icon>
+          </button>
+
+          <span>{{ volume["quantidadeLote"] }} UN</span>
+        </div>
+
+        <div class="dimensoes-container" (click)="$event.stopPropagation()">
+          <mat-form-field appearance="fill">
+            <mat-label>Largura</mat-label>
+            <input
+              matInput
+              type="number"
+              placeholder="L"
+              [(ngModel)]="volume.largura"
+              (blur)="salvarDimensoesVolumeLote(volume)"
+            />
+          </mat-form-field>
+
+          <mat-form-field appearance="fill">
+            <mat-label>Comprimento</mat-label>
+            <input
+              matInput
+              type="number"
+              placeholder="C"
+              [(ngModel)]="volume.comprimento"
+              (blur)="salvarDimensoesVolumeLote(volume)"
+            />
+          </mat-form-field>
+
+          <mat-form-field appearance="fill">
+            <mat-label>Altura</mat-label>
+            <input
+              matInput
+              type="number"
+              placeholder="A"
+              [(ngModel)]="volume.altura"
+              (blur)="salvarDimensoesVolumeLote(volume)"
+            />
+          </mat-form-field>
+
+          <mat-form-field appearance="fill">
+            <mat-label>Peso</mat-label>
+            <input
+              matInput
+              type="number"
+              placeholder="Kg"
+              [(ngModel)]="volume.peso"
+              (blur)="salvarDimensoesVolumeLote(volume)"
+            />
+          </mat-form-field>
+        </div>
+      </div>
+    </div>
+  </div>
 </section>
 
 <section class="confirmar-conferencia grid">
@@ -494,7 +561,6 @@
     mat-raised-button
     color="primary"
     class="xs-12 sm-6 md-3 lg-3 xl-2"
-    *ngIf="deveMostrarBotaoConfirmar"
     [disabled]="!podeConfirmarConferencia"
     (click)="finalizarConferencia()"
   >

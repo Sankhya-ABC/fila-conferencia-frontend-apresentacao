@@ -41,6 +41,7 @@ export interface Dimensoes {
 }
 
 export interface VolumeDTO extends Dimensoes {
+  quantidadeLote?: number;
   numeroVolume: number;
   itens: VolumeItemDTO[];
 
