@@ -821,14 +821,57 @@ export class SeparacaoComponent implements OnInit {
   }
 
   gerarVolumesLote() {
-    if (this.formCubagem.valid) {
-      // Lógica para gerar os volumes em lote com base nos valores do formulário
-    }
+    if (!this.formCubagem.valid) return;
+
+    const payload = {
+      numeroConferencia: this.dadosGerais.numeroConferencia,
+      quantidadeLote: this.formCubagem.value.quantidade,
+      altura: this.formCubagem.value.altura,
+      largura: this.formCubagem.value.largura,
+      comprimento: this.formCubagem.value.comprimento,
+      peso: this.formCubagem.value.peso,
+    };
+
+    this.separacaoService.gerarVolumesLote(payload).subscribe(() => {
+      this.carregarVolumes(this.dadosGerais.numeroConferencia);
+      this.formCubagem.reset();
+    });
   }
 
-  deletarVolumeLote(volume?: any) {
-    //
+  deletarVolumeLote(volume: any) {
+    const payload = {
+      numeroConferencia: this.dadosGerais.numeroConferencia,
+      altura: volume.altura,
+      largura: volume.largura,
+      comprimento: volume.comprimento,
+      peso: volume.peso,
+    };
+
+    this.separacaoService.deletarVolumeLote(payload).subscribe(() => {
+      this.carregarVolumes(this.dadosGerais.numeroConferencia);
+    });
   }
 
-  salvarDimensoesVolumeLote(volume?: any) {}
+  salvarDimensoesVolumeLote(volume: any) {
+    const payload = {
+      numeroConferencia: this.dadosGerais.numeroConferencia,
+
+      alturaAntiga: volume._alturaAntiga ?? volume.altura,
+      larguraAntiga: volume._larguraAntiga ?? volume.largura,
+      comprimentoAntigo: volume._comprimentoAntigo ?? volume.comprimento,
+      pesoAntigo: volume._pesoAntigo ?? volume.peso,
+
+      altura: volume.altura,
+      largura: volume.largura,
+      comprimento: volume.comprimento,
+      peso: volume.peso,
+    };
+
+    this.separacaoService.salvarDimensoesVolumeLote(payload).subscribe(() => {
+      volume._alturaAntiga = volume.altura;
+      volume._larguraAntiga = volume.largura;
+      volume._comprimentoAntigo = volume.comprimento;
+      volume._pesoAntigo = volume.peso;
+    });
+  }
 }

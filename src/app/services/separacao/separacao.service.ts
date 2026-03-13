@@ -91,4 +91,16 @@ export class SeparacaoService {
   ): Observable<null> {
     return this.http.post<null>('/separacoes/finalizar-conferencia', body);
   }
+
+  gerarVolumesLote(body: any): Observable<null> {
+    return this.http.post<null>('/separacoes/gerar-volumes-lote', body);
+  }
+
+  deletarVolumeLote(body: any): Observable<null> {
+    return this.http.post<null>('/separacoes/deletar-volume-lote', body);
+  }
+
+  salvarDimensoesVolumeLote(body: any): Observable<null> {
+    return this.http.post<null>('/separacoes/dimensoes-volume-lote', body);
+  }
 }
