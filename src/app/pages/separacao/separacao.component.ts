@@ -261,6 +261,10 @@ export class SeparacaoComponent implements OnInit {
       next: (volumes) => {
         this.volumes = volumes.map((v) => ({
           ...v,
+          _alturaAntiga: v.altura,
+          _larguraAntiga: v.largura,
+          _comprimentoAntigo: v.comprimento,
+          _pesoAntigo: v.peso,
           ativo: false,
         }));
         this.garantirVolumeAtivo();
@@ -535,11 +539,14 @@ export class SeparacaoComponent implements OnInit {
 
   garantirVolumeAtivo() {
     if (!this.volumes.length) {
-      this.criarNovoVolume();
+      if (this.isVolumesDetalhados()) {
+        this.criarNovoVolume();
+      }
       return;
     }
 
     const ativo = this.volumes.find((v) => v.ativo);
+
     if (!ativo) {
       this.volumes[0].ativo = true;
       this.volumeAtivo = this.volumes[0];
@@ -747,8 +754,7 @@ export class SeparacaoComponent implements OnInit {
   isVolumesDetalhados(): boolean {
     return (
       this.dadosGerais?.codigoTipoMovimento === 'P' &&
-      this.dadosGerais?.descricaoTipoOperacao ===
-        'CUBAGEM DE PEDIDO VOLUME DETALHADO'
+      this.dadosGerais?.descricaoTipoOperacao !== 'CUBAGEM DE PEDIDO'
     );
   }
 
