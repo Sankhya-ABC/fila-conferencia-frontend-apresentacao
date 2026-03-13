@@ -621,7 +621,9 @@ export class SeparacaoComponent implements OnInit {
   }
 
   onConferir() {
-    if (!this.itemSelecionado || !this.volumeAtivo) return;
+    if (!this.itemSelecionado) return;
+
+    if (this.isVolumesDetalhados() && !this.volumeAtivo) return;
 
     const quantidadeConvertida = Number(this.quantidadeConvertidaCtrl?.value);
     if (!quantidadeConvertida || quantidadeConvertida <= 0) return;
@@ -629,7 +631,7 @@ export class SeparacaoComponent implements OnInit {
     this.separacaoService
       .postItemConferidoVolume({
         numeroConferencia: this.dadosGerais.numeroConferencia!,
-        numeroVolume: this.volumeAtivo.numeroVolume || 1,
+        numeroVolume: this.volumeAtivo?.numeroVolume || 1,
         idProduto: this.itemSelecionado.idProduto,
         controle: this.itemSelecionado.controle ?? '',
         quantidadeConvertida,
