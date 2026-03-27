@@ -26,6 +26,7 @@ import {
 import { SeparacaoService } from '../../services/separacao/separacao.service';
 import { ModalComponent } from '../../shared/components/modal/modal.component';
 import { ConferenciaService } from '../../services/conferencia/conferencia.service';
+import { ArquivoService } from '../../services/arquivo/arquivo.service';
 
 @Component({
   selector: 'app-separacao',
@@ -51,6 +52,7 @@ export class SeparacaoComponent implements OnInit {
     private fb: FormBuilder,
     private conferenciaService: ConferenciaService,
     private separacaoService: SeparacaoService,
+    private arquivoService: ArquivoService,
     private route: ActivatedRoute,
     private router: Router,
     private dialog: MatDialog,
@@ -711,7 +713,7 @@ export class SeparacaoComponent implements OnInit {
   imprimirEtiquetas() {
     const numeroConferencia = this.dadosGerais.numeroConferencia!;
 
-    this.separacaoService.downloadEtiqueta(numeroConferencia).subscribe({
+    this.arquivoService.downloadEtiqueta(numeroConferencia).subscribe({
       next: (blob) => {
         const url = window.URL.createObjectURL(blob);
 

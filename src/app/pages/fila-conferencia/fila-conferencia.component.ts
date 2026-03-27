@@ -31,6 +31,7 @@ import { ParceiroDTO } from '../../services/parceiro/parceiro.model';
 import { ParceiroService } from '../../services/parceiro/parceiro.service';
 import { SeparacaoService } from '../../services/separacao/separacao.service';
 import { DominioService } from '../../services/dominio/dominio.service';
+import { ArquivoService } from '../../services/arquivo/arquivo.service';
 
 @Component({
   selector: 'app-fila-conferencia',
@@ -63,7 +64,7 @@ export class FilaConferenciaComponent implements OnInit {
     private parceiroService: ParceiroService,
     private empresaService: EmpresaService,
     private router: Router,
-    private separacaoService: SeparacaoService,
+    private arquivoService: ArquivoService,
   ) {}
 
   // tabela
@@ -253,7 +254,7 @@ export class FilaConferenciaComponent implements OnInit {
   onImprimirEtiqueta(fila: FilaConferenciaDTO): void {
     const numeroConferencia = fila?.numeroConferencia!;
 
-    this.separacaoService.downloadEtiqueta(numeroConferencia).subscribe({
+    this.arquivoService.downloadEtiqueta(numeroConferencia).subscribe({
       next: (blob) => {
         const url = window.URL.createObjectURL(blob);
 
