@@ -5,6 +5,7 @@ import { CodigoDescricao } from '../dominio/dominio.model';
 import {
   FilaConferenciaDTO,
   FilaConferenciaFilter,
+  PostFinalizarConferenciaParams,
   PostIniciarConferenciaParams,
   PostIniciarConferenciaResponse,
 } from './conferencia.model';
@@ -40,5 +41,11 @@ export class ConferenciaService {
       '/conferencias/iniciar-conferencia',
       body,
     );
+  }
+
+  postFinalizarConferencia(
+    body: PostFinalizarConferenciaParams,
+  ): Observable<null> {
+    return this.http.post<null>('/conferencias/finalizar-conferencia', body);
   }
 }

@@ -7,7 +7,6 @@ import {
   ItensConferidosResponse,
   PostAtualizarDimensoesVolumeParams,
   PostDevolverItemConferidoParams,
-  PostFinalizarConferenciaParams,
   PostItemConferidoVolumeParams,
   PostRemoverVolumeParams,
   VolumeDTO,
@@ -73,12 +72,6 @@ export class SeparacaoService {
     body: PostAtualizarDimensoesVolumeParams,
   ): Observable<null> {
     return this.http.post<null>('/separacoes/dimensoes-volume', body);
-  }
-
-  postFinalizarConferencia(
-    body: PostFinalizarConferenciaParams,
-  ): Observable<null> {
-    return this.http.post<null>('/separacoes/finalizar-conferencia', body);
   }
 
   gerarVolumesLote(body: any): Observable<null> {

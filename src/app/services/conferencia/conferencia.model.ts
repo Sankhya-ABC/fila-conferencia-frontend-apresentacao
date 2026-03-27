@@ -57,3 +57,7 @@ export interface PostIniciarConferenciaParams {
 export interface PostIniciarConferenciaResponse {
   numeroConferencia: number;
 }
+
+export interface PostFinalizarConferenciaParams {
+  numeroConferencia: number;
+}

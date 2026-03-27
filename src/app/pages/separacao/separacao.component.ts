@@ -366,7 +366,7 @@ export class SeparacaoComponent implements OnInit {
 
   // acoes
   finalizarConferencia() {
-    this.separacaoService
+    this.conferenciaService
       .postFinalizarConferencia({
         numeroConferencia: this.dadosGerais.numeroConferencia!,
       })

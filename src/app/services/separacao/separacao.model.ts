@@ -82,10 +82,6 @@ export interface ItensConferidosResponse {
   quantidadeConvertida: number;
 }
 
-export interface PostFinalizarConferenciaParams {
-  numeroConferencia: number;
-}
-
 export interface PostItemConferidoVolumeParams {
   numeroConferencia: number;
   numeroVolume: number;
