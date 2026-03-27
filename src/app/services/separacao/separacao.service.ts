@@ -8,8 +8,6 @@ import {
   PostAtualizarDimensoesVolumeParams,
   PostDevolverItemConferidoParams,
   PostFinalizarConferenciaParams,
-  PostIniciarConferenciaParams,
-  PostIniciarConferenciaResponse,
   PostItemConferidoVolumeParams,
   PostRemoverVolumeParams,
   VolumeDTO,
@@ -53,15 +51,6 @@ export class SeparacaoService {
       params: { numeroConferencia },
       responseType: 'blob',
     });
-  }
-
-  postIniciarConferencia(
-    body: PostIniciarConferenciaParams,
-  ): Observable<PostIniciarConferenciaResponse> {
-    return this.http.post<PostIniciarConferenciaResponse>(
-      '/separacoes/iniciar-conferencia',
-      body,
-    );
   }
 
   postItemConferidoVolume(

@@ -25,6 +25,7 @@ import {
 } from '../../services/separacao/separacao.model';
 import { SeparacaoService } from '../../services/separacao/separacao.service';
 import { ModalComponent } from '../../shared/components/modal/modal.component';
+import { ConferenciaService } from '../../services/conferencia/conferencia.service';
 
 @Component({
   selector: 'app-separacao',
@@ -48,6 +49,7 @@ import { ModalComponent } from '../../shared/components/modal/modal.component';
 export class SeparacaoComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
+    private conferenciaService: ConferenciaService,
     private separacaoService: SeparacaoService,
     private route: ActivatedRoute,
     private router: Router,
@@ -159,7 +161,7 @@ export class SeparacaoComponent implements OnInit {
   }
 
   private iniciarConferencia(numeroUnico: number) {
-    this.separacaoService
+    this.conferenciaService
       .postIniciarConferencia({
         idUsuario: this.idUsuario,
         numeroUnico,

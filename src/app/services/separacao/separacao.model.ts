@@ -82,15 +82,6 @@ export interface ItensConferidosResponse {
   quantidadeConvertida: number;
 }
 
-export interface PostIniciarConferenciaParams {
-  idUsuario: number;
-  numeroUnico: number;
-}
-
-export interface PostIniciarConferenciaResponse {
-  numeroConferencia: number;
-}
-
 export interface PostFinalizarConferenciaParams {
   numeroConferencia: number;
 }

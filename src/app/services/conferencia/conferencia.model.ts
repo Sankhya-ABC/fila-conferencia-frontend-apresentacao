@@ -48,3 +48,12 @@ export interface FilaConferenciaFilter {
   codigoTipoOperacao?: string;
   codigoTipoEntrega?: string;
 }
+
+export interface PostIniciarConferenciaParams {
+  idUsuario: number;
+  numeroUnico: number;
+}
+
+export interface PostIniciarConferenciaResponse {
+  numeroConferencia: number;
+}
