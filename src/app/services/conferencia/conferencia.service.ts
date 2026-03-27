@@ -1,8 +1,8 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { CodigoDescricao } from '../dominio/dominio.model';
 import {
+  DadosBasicosPedidoDTO,
   FilaConferenciaDTO,
   FilaConferenciaFilter,
   PostFinalizarConferenciaParams,
@@ -31,6 +31,12 @@ export class ConferenciaService {
 
     return this.http.get<FilaConferenciaDTO[]>('/conferencias', {
       params: httpParams,
+    });
+  }
+
+  getDadosBasicos(numeroUnico: number): Observable<DadosBasicosPedidoDTO> {
+    return this.http.get<DadosBasicosPedidoDTO>('/conferencias/dados-basicos', {
+      params: { numeroUnico },
     });
   }
 

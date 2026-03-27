@@ -2,7 +2,6 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import {
-  DadosBasicosPedidoDTO,
   ItemPedidoDTO,
   ItensConferidosResponse,
   PostAtualizarDimensoesVolumeParams,
@@ -17,12 +16,6 @@ import {
 })
 export class SeparacaoService {
   constructor(private http: HttpClient) {}
-
-  getDadosBasicos(numeroUnico: number): Observable<DadosBasicosPedidoDTO> {
-    return this.http.get<DadosBasicosPedidoDTO>('/separacoes/dados-basicos', {
-      params: { numeroUnico },
-    });
-  }
 
   getItensPedido(numeroUnico: number): Observable<ItemPedidoDTO[]> {
     return this.http.get<ItemPedidoDTO[]>('/separacoes/itens-pedidos', {

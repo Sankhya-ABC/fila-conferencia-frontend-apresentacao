@@ -17,16 +17,16 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelect } from '@angular/material/select';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
+import { ArquivoService } from '../../services/arquivo/arquivo.service';
 import { AuthService } from '../../services/auth/auth.service';
+import { DadosBasicosPedidoDTO } from '../../services/conferencia/conferencia.model';
+import { ConferenciaService } from '../../services/conferencia/conferencia.service';
 import {
-  DadosBasicosPedidoDTO,
   ItemPedidoDTO,
   VolumeFrontDTO,
 } from '../../services/separacao/separacao.model';
 import { SeparacaoService } from '../../services/separacao/separacao.service';
 import { ModalComponent } from '../../shared/components/modal/modal.component';
-import { ConferenciaService } from '../../services/conferencia/conferencia.service';
-import { ArquivoService } from '../../services/arquivo/arquivo.service';
 
 @Component({
   selector: 'app-separacao',
@@ -143,7 +143,7 @@ export class SeparacaoComponent implements OnInit {
 
   // requests
   inicializarConferencia() {
-    this.separacaoService.getDadosBasicos(this.numeroUnico!).subscribe({
+    this.conferenciaService.getDadosBasicos(this.numeroUnico!).subscribe({
       next: (dados) => {
         this.dadosGerais = dados;
 
@@ -179,7 +179,7 @@ export class SeparacaoComponent implements OnInit {
   carregarEstadoConferencia() {
     if (!this.dadosGerais?.numeroUnico) return;
 
-    this.separacaoService.getDadosBasicos(this.numeroUnico!).subscribe({
+    this.conferenciaService.getDadosBasicos(this.numeroUnico!).subscribe({
       next: (dados) => {
         this.dadosGerais = dados;
 
