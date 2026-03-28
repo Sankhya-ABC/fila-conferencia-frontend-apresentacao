@@ -25,11 +25,6 @@ export interface ItemPedidoDTO {
   complemento: string;
 }
 
-export interface PostAtualizarDimensoesVolumeParams extends Dimensoes {
-  numeroConferencia: number;
-  numeroVolume: number;
-}
-
 export interface ItensConferidosResponse {
   idProduto: number;
   quantidadeConvertida: number;

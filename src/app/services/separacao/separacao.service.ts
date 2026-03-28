@@ -4,7 +4,6 @@ import { Observable } from 'rxjs';
 import {
   ItemPedidoDTO,
   ItensConferidosResponse,
-  PostAtualizarDimensoesVolumeParams,
   PostDevolverItemConferidoParams,
   PostItemConferidoVolumeParams,
   PostRemoverVolumeParams,
@@ -49,9 +48,5 @@ export class SeparacaoService {
 
   deletarVolumeLote(body: any): Observable<null> {
     return this.http.post<null>('/separacoes/deletar-volume-lote', body);
-  }
-
-  salvarDimensoesVolumeLote(body: any): Observable<null> {
-    return this.http.post<null>('/separacoes/dimensoes-volume-lote', body);
   }
 }

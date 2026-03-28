@@ -495,7 +495,7 @@ export class SeparacaoComponent implements OnInit {
 
   salvarDimensoes(volume: VolumeFrontDTO) {
     this.volumeService
-      .postAtualizarDimensoesVolume({
+      .postAtualizarDimensoesVolumeDetalhado({
         numeroConferencia: this.dadosGerais.numeroConferencia!,
         numeroVolume: volume.numeroVolume,
         largura: volume.largura,
@@ -867,6 +867,7 @@ export class SeparacaoComponent implements OnInit {
   salvarDimensoesVolumeLote(volume: any) {
     const payload = {
       numeroConferencia: this.dadosGerais.numeroConferencia,
+      numeroVolume: null,
 
       alturaAntiga: volume._alturaAntiga ?? volume.altura,
       larguraAntiga: volume._larguraAntiga ?? volume.largura,
@@ -879,11 +880,13 @@ export class SeparacaoComponent implements OnInit {
       peso: volume.peso,
     };
 
-    this.separacaoService.salvarDimensoesVolumeLote(payload).subscribe(() => {
-      volume._alturaAntiga = volume.altura;
-      volume._larguraAntiga = volume.largura;
-      volume._comprimentoAntigo = volume.comprimento;
-      volume._pesoAntigo = volume.peso;
-    });
+    this.volumeService
+      .postAtualizarDimensoesVolumeNaoDetalhadoLote(payload)
+      .subscribe(() => {
+        volume._alturaAntiga = volume.altura;
+        volume._larguraAntiga = volume.largura;
+        volume._comprimentoAntigo = volume.comprimento;
+        volume._pesoAntigo = volume.peso;
+      });
   }
 }

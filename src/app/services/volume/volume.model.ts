@@ -29,3 +29,15 @@ export interface VolumeDTO extends Dimensoes {
 export interface VolumeFrontDTO extends VolumeDTO {
   ativo?: boolean;
 }
+
+export interface PostAtualizarDimensoesVolumeDetalhadoParams extends Dimensoes {
+  numeroConferencia: number;
+  numeroVolume: number | null;
+}
+
+export interface PostAtualizarDimensoesVolumeNaoDetalhadoLoteParams extends PostAtualizarDimensoesVolumeDetalhadoParams {
+  alturaAntiga?: number;
+  larguraAntiga?: number;
+  comprimentoAntigo?: number;
+  pesoAntigo?: number;
+}

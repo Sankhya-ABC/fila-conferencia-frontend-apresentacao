@@ -1,8 +1,11 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { VolumeDTO } from './volume.model';
-import { PostAtualizarDimensoesVolumeParams } from '../separacao/separacao.model';
+import {
+  PostAtualizarDimensoesVolumeDetalhadoParams,
+  PostAtualizarDimensoesVolumeNaoDetalhadoLoteParams,
+  VolumeDTO,
+} from './volume.model';
 
 @Injectable({
   providedIn: 'root',
@@ -20,9 +23,15 @@ export class VolumeService {
     return this.http.post<null>('/volumes/gerar-volumes-lote', body);
   }
 
-  postAtualizarDimensoesVolume(
-    body: PostAtualizarDimensoesVolumeParams,
+  postAtualizarDimensoesVolumeDetalhado(
+    body: PostAtualizarDimensoesVolumeDetalhadoParams,
   ): Observable<null> {
     return this.http.post<null>('/volumes/dimensoes-volume', body);
+  }
+
+  postAtualizarDimensoesVolumeNaoDetalhadoLote(
+    body: PostAtualizarDimensoesVolumeNaoDetalhadoLoteParams,
+  ): Observable<null> {
+    return this.http.post<null>('/volumes/dimensoes-volume-lote', body);
   }
 }
