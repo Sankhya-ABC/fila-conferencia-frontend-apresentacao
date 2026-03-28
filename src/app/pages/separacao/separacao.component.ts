@@ -494,7 +494,7 @@ export class SeparacaoComponent implements OnInit {
   }
 
   salvarDimensoes(volume: VolumeFrontDTO) {
-    this.separacaoService
+    this.volumeService
       .postAtualizarDimensoesVolume({
         numeroConferencia: this.dadosGerais.numeroConferencia!,
         numeroVolume: volume.numeroVolume,

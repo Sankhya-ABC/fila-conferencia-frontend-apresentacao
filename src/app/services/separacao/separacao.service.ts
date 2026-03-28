@@ -47,12 +47,6 @@ export class SeparacaoService {
     return this.http.post<null>('/separacoes/devolver-item-conferido', body);
   }
 
-  postAtualizarDimensoesVolume(
-    body: PostAtualizarDimensoesVolumeParams,
-  ): Observable<null> {
-    return this.http.post<null>('/separacoes/dimensoes-volume', body);
-  }
-
   deletarVolumeLote(body: any): Observable<null> {
     return this.http.post<null>('/separacoes/deletar-volume-lote', body);
   }
