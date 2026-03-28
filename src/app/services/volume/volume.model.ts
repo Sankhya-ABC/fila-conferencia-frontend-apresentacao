@@ -41,3 +41,5 @@ export interface PostAtualizarDimensoesVolumeNaoDetalhadoLoteParams extends Post
   comprimentoAntigo?: number;
   pesoAntigo?: number;
 }
+
+export interface PostAtualizarDimensoesVolumeParams extends PostAtualizarDimensoesVolumeNaoDetalhadoLoteParams {}

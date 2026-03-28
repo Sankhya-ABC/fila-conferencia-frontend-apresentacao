@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import {
   PostAtualizarDimensoesVolumeDetalhadoParams,
   PostAtualizarDimensoesVolumeNaoDetalhadoLoteParams,
+  PostAtualizarDimensoesVolumeParams,
   VolumeDTO,
 } from './volume.model';
 
@@ -23,15 +24,9 @@ export class VolumeService {
     return this.http.post<null>('/volumes/gerar-volumes-lote', body);
   }
 
-  postAtualizarDimensoesVolumeDetalhado(
-    body: PostAtualizarDimensoesVolumeDetalhadoParams,
+  postAtualizarDimensoesVolume(
+    body: PostAtualizarDimensoesVolumeParams,
   ): Observable<null> {
     return this.http.post<null>('/volumes/dimensoes-volume', body);
-  }
-
-  postAtualizarDimensoesVolumeNaoDetalhadoLote(
-    body: PostAtualizarDimensoesVolumeNaoDetalhadoLoteParams,
-  ): Observable<null> {
-    return this.http.post<null>('/volumes/dimensoes-volume-lote', body);
   }
 }
