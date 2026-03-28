@@ -48,3 +48,33 @@ export interface FilaConferenciaFilter {
   codigoTipoOperacao?: string;
   codigoTipoEntrega?: string;
 }
+
+export interface DadosBasicosPedidoDTO {
+  numeroUnico: number;
+  numeroNota: number;
+  numeroModial: number;
+  numeroConferencia: number;
+
+  codigoStatus: string;
+  codigoTipoMovimento: string;
+  descricaoTipoOperacao: string;
+
+  idParceiro: number;
+  nomeParceiro: string;
+
+  idVendedor: number;
+  nomeVendedor: string;
+}
+
+export interface PostIniciarConferenciaParams {
+  idUsuario: number;
+  numeroUnico: number;
+}
+
+export interface PostIniciarConferenciaResponse {
+  numeroConferencia: number;
+}
+
+export interface PostFinalizarConferenciaParams {
+  numeroConferencia: number;
+}

@@ -17,14 +17,15 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelect } from '@angular/material/select';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
+import { ArquivoService } from '../../services/arquivo/arquivo.service';
 import { AuthService } from '../../services/auth/auth.service';
-import {
-  DadosBasicosPedidoDTO,
-  ItemPedidoDTO,
-  VolumeFrontDTO,
-} from '../../services/separacao/separacao.model';
+import { DadosBasicosPedidoDTO } from '../../services/conferencia/conferencia.model';
+import { ConferenciaService } from '../../services/conferencia/conferencia.service';
+import { ItemPedidoDTO } from '../../services/separacao/separacao.model';
 import { SeparacaoService } from '../../services/separacao/separacao.service';
 import { ModalComponent } from '../../shared/components/modal/modal.component';
+import { VolumeFrontDTO } from '../../services/volume/volume.model';
+import { VolumeService } from '../../services/volume/volume.service';
 
 @Component({
   selector: 'app-separacao',
@@ -48,7 +49,10 @@ import { ModalComponent } from '../../shared/components/modal/modal.component';
 export class SeparacaoComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
+    private conferenciaService: ConferenciaService,
     private separacaoService: SeparacaoService,
+    private arquivoService: ArquivoService,
+    private volumeService: VolumeService,
     private route: ActivatedRoute,
     private router: Router,
     private dialog: MatDialog,
@@ -139,7 +143,7 @@ export class SeparacaoComponent implements OnInit {
 
   // requests
   inicializarConferencia() {
-    this.separacaoService.getDadosBasicos(this.numeroUnico!).subscribe({
+    this.conferenciaService.getDadosBasicos(this.numeroUnico!).subscribe({
       next: (dados) => {
         this.dadosGerais = dados;
 
@@ -159,7 +163,7 @@ export class SeparacaoComponent implements OnInit {
   }
 
   private iniciarConferencia(numeroUnico: number) {
-    this.separacaoService
+    this.conferenciaService
       .postIniciarConferencia({
         idUsuario: this.idUsuario,
         numeroUnico,
@@ -175,7 +179,7 @@ export class SeparacaoComponent implements OnInit {
   carregarEstadoConferencia() {
     if (!this.dadosGerais?.numeroUnico) return;
 
-    this.separacaoService.getDadosBasicos(this.numeroUnico!).subscribe({
+    this.conferenciaService.getDadosBasicos(this.numeroUnico!).subscribe({
       next: (dados) => {
         this.dadosGerais = dados;
 
@@ -257,7 +261,7 @@ export class SeparacaoComponent implements OnInit {
   }
 
   carregarVolumes(numeroConferencia: number) {
-    this.separacaoService.getVolumes(numeroConferencia).subscribe({
+    this.volumeService.getVolumes(numeroConferencia).subscribe({
       next: (volumes) => {
         this.volumes = volumes.map((v) => ({
           ...v,
@@ -364,7 +368,7 @@ export class SeparacaoComponent implements OnInit {
 
   // acoes
   finalizarConferencia() {
-    this.separacaoService
+    this.conferenciaService
       .postFinalizarConferencia({
         numeroConferencia: this.dadosGerais.numeroConferencia!,
       })
@@ -490,7 +494,7 @@ export class SeparacaoComponent implements OnInit {
   }
 
   salvarDimensoes(volume: VolumeFrontDTO) {
-    this.separacaoService
+    this.volumeService
       .postAtualizarDimensoesVolume({
         numeroConferencia: this.dadosGerais.numeroConferencia!,
         numeroVolume: volume.numeroVolume,
@@ -709,7 +713,7 @@ export class SeparacaoComponent implements OnInit {
   imprimirEtiquetas() {
     const numeroConferencia = this.dadosGerais.numeroConferencia!;
 
-    this.separacaoService.downloadEtiqueta(numeroConferencia).subscribe({
+    this.arquivoService.downloadEtiqueta(numeroConferencia).subscribe({
       next: (blob) => {
         const url = window.URL.createObjectURL(blob);
 
@@ -721,6 +725,7 @@ export class SeparacaoComponent implements OnInit {
         window.URL.revokeObjectURL(url);
 
         this.dialogRefConferenciaFinalizada?.close();
+        this.router.navigate(['/fila-conferencia']);
       },
       error: (err) => {
         console.error('Erro ao baixar etiquetas', err);
@@ -840,7 +845,7 @@ export class SeparacaoComponent implements OnInit {
       peso: this.formCubagem.value.peso,
     };
 
-    this.separacaoService.gerarVolumesLote(payload).subscribe(() => {
+    this.volumeService.gerarVolumesLote(payload).subscribe(() => {
       this.carregarVolumes(this.dadosGerais.numeroConferencia);
       this.formCubagem.reset();
     });
@@ -855,7 +860,7 @@ export class SeparacaoComponent implements OnInit {
       peso: volume.peso,
     };
 
-    this.separacaoService.deletarVolumeLote(payload).subscribe(() => {
+    this.volumeService.deletarVolumesLote(payload).subscribe(() => {
       this.carregarVolumes(this.dadosGerais.numeroConferencia);
     });
   }
@@ -863,6 +868,7 @@ export class SeparacaoComponent implements OnInit {
   salvarDimensoesVolumeLote(volume: any) {
     const payload = {
       numeroConferencia: this.dadosGerais.numeroConferencia,
+      numeroVolume: null,
 
       alturaAntiga: volume._alturaAntiga ?? volume.altura,
       larguraAntiga: volume._larguraAntiga ?? volume.largura,
@@ -875,7 +881,7 @@ export class SeparacaoComponent implements OnInit {
       peso: volume.peso,
     };
 
-    this.separacaoService.salvarDimensoesVolumeLote(payload).subscribe(() => {
+    this.volumeService.postAtualizarDimensoesVolume(payload).subscribe(() => {
       volume._alturaAntiga = volume.altura;
       volume._larguraAntiga = volume.largura;
       volume._comprimentoAntigo = volume.comprimento;

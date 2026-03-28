@@ -1,8 +1,14 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { CodigoDescricao } from '../dominio/dominio.model';
-import { FilaConferenciaDTO, FilaConferenciaFilter } from './conferencia.model';
+import {
+  DadosBasicosPedidoDTO,
+  FilaConferenciaDTO,
+  FilaConferenciaFilter,
+  PostFinalizarConferenciaParams,
+  PostIniciarConferenciaParams,
+  PostIniciarConferenciaResponse,
+} from './conferencia.model';
 
 @Injectable({
   providedIn: 'root',
@@ -26,5 +32,26 @@ export class ConferenciaService {
     return this.http.get<FilaConferenciaDTO[]>('/conferencias', {
       params: httpParams,
     });
+  }
+
+  getDadosBasicos(numeroUnico: number): Observable<DadosBasicosPedidoDTO> {
+    return this.http.get<DadosBasicosPedidoDTO>('/conferencias/dados-basicos', {
+      params: { numeroUnico },
+    });
+  }
+
+  postIniciarConferencia(
+    body: PostIniciarConferenciaParams,
+  ): Observable<PostIniciarConferenciaResponse> {
+    return this.http.post<PostIniciarConferenciaResponse>(
+      '/conferencias/iniciar-conferencia',
+      body,
+    );
+  }
+
+  postFinalizarConferencia(
+    body: PostFinalizarConferenciaParams,
+  ): Observable<null> {
+    return this.http.post<null>('/conferencias/finalizar-conferencia', body);
   }
 }
