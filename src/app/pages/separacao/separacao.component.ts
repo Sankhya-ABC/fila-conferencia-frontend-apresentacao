@@ -725,6 +725,7 @@ export class SeparacaoComponent implements OnInit {
         window.URL.revokeObjectURL(url);
 
         this.dialogRefConferenciaFinalizada?.close();
+        this.router.navigate(['/fila-conferencia']);
       },
       error: (err) => {
         console.error('Erro ao baixar etiquetas', err);
