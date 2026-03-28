@@ -53,10 +53,6 @@ export class SeparacaoService {
     return this.http.post<null>('/separacoes/dimensoes-volume', body);
   }
 
-  gerarVolumesLote(body: any): Observable<null> {
-    return this.http.post<null>('/separacoes/gerar-volumes-lote', body);
-  }
-
   deletarVolumeLote(body: any): Observable<null> {
     return this.http.post<null>('/separacoes/deletar-volume-lote', body);
   }

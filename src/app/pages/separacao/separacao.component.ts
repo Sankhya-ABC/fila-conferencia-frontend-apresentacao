@@ -844,7 +844,7 @@ export class SeparacaoComponent implements OnInit {
       peso: this.formCubagem.value.peso,
     };
 
-    this.separacaoService.gerarVolumesLote(payload).subscribe(() => {
+    this.volumeService.gerarVolumesLote(payload).subscribe(() => {
       this.carregarVolumes(this.dadosGerais.numeroConferencia);
       this.formCubagem.reset();
     });

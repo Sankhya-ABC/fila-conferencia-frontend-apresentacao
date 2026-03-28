@@ -14,4 +14,8 @@ export class VolumeService {
       params: { numeroConferencia },
     });
   }
+
+  gerarVolumesLote(body: any): Observable<null> {
+    return this.http.post<null>('/volumes/gerar-volumes-lote', body);
+  }
 }
