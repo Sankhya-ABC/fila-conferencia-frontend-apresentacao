@@ -2,6 +2,8 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import {
+  DeletarVolumesLoteParams,
+  GerarVolumesLoteParams,
   PostAtualizarDimensoesVolumeDetalhadoParams,
   PostAtualizarDimensoesVolumeNaoDetalhadoLoteParams,
   PostAtualizarDimensoesVolumeParams,
@@ -20,8 +22,12 @@ export class VolumeService {
     });
   }
 
-  gerarVolumesLote(body: any): Observable<null> {
+  gerarVolumesLote(body: GerarVolumesLoteParams): Observable<null> {
     return this.http.post<null>('/volumes/gerar-volumes-lote', body);
+  }
+
+  deletarVolumesLote(body: DeletarVolumesLoteParams): Observable<null> {
+    return this.http.post<null>('/volumes/deletar-volumes-lote', body);
   }
 
   postAtualizarDimensoesVolume(

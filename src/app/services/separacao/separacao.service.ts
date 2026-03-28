@@ -45,8 +45,4 @@ export class SeparacaoService {
   ): Observable<null> {
     return this.http.post<null>('/separacoes/devolver-item-conferido', body);
   }
-
-  deletarVolumeLote(body: any): Observable<null> {
-    return this.http.post<null>('/separacoes/deletar-volume-lote', body);
-  }
 }

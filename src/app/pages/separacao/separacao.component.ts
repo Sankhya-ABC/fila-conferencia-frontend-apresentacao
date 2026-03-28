@@ -859,7 +859,7 @@ export class SeparacaoComponent implements OnInit {
       peso: volume.peso,
     };
 
-    this.separacaoService.deletarVolumeLote(payload).subscribe(() => {
+    this.volumeService.deletarVolumesLote(payload).subscribe(() => {
       this.carregarVolumes(this.dadosGerais.numeroConferencia);
     });
   }

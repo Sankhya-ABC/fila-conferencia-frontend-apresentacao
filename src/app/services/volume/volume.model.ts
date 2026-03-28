@@ -43,3 +43,15 @@ export interface PostAtualizarDimensoesVolumeNaoDetalhadoLoteParams extends Post
 }
 
 export interface PostAtualizarDimensoesVolumeParams extends PostAtualizarDimensoesVolumeNaoDetalhadoLoteParams {}
+
+export interface GerarVolumesLoteParams extends Omit<
+  PostAtualizarDimensoesVolumeDetalhadoParams,
+  'numeroVolume'
+> {
+  quantidadeLote: number;
+}
+
+export interface DeletarVolumesLoteParams extends Omit<
+  PostAtualizarDimensoesVolumeDetalhadoParams,
+  'numeroVolume'
+> {}
