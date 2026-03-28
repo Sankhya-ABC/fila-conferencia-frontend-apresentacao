@@ -1,3 +1,5 @@
+import { Dimensoes } from '../volume/volume.model';
+
 export interface ItemPedidoDTO {
   imagem?: string;
 
@@ -23,41 +25,9 @@ export interface ItemPedidoDTO {
   complemento: string;
 }
 
-export interface VolumeItemDTO {
-  idProduto: number;
-  descricaoProduto: string;
-  imagem: string | null;
-  quantidadeConvertida: number;
-  quantidadeBase: number;
-  unidade: string;
-  controle?: string;
-}
-
-export interface Dimensoes {
-  largura: number | null;
-  comprimento: number | null;
-  altura: number | null;
-  peso: number | null;
-}
-
-export interface VolumeDTO extends Dimensoes {
-  quantidadeLote?: number;
-  numeroVolume: number;
-  itens: VolumeItemDTO[];
-
-  largura: number | null;
-  comprimento: number | null;
-  altura: number | null;
-  peso: number | null;
-}
-
 export interface PostAtualizarDimensoesVolumeParams extends Dimensoes {
   numeroConferencia: number;
   numeroVolume: number;
-}
-
-export interface VolumeFrontDTO extends VolumeDTO {
-  ativo?: boolean;
 }
 
 export interface ItensConferidosResponse {

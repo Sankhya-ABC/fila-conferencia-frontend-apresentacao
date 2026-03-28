@@ -21,12 +21,11 @@ import { ArquivoService } from '../../services/arquivo/arquivo.service';
 import { AuthService } from '../../services/auth/auth.service';
 import { DadosBasicosPedidoDTO } from '../../services/conferencia/conferencia.model';
 import { ConferenciaService } from '../../services/conferencia/conferencia.service';
-import {
-  ItemPedidoDTO,
-  VolumeFrontDTO,
-} from '../../services/separacao/separacao.model';
+import { ItemPedidoDTO } from '../../services/separacao/separacao.model';
 import { SeparacaoService } from '../../services/separacao/separacao.service';
 import { ModalComponent } from '../../shared/components/modal/modal.component';
+import { VolumeFrontDTO } from '../../services/volume/volume.model';
+import { VolumeService } from '../../services/volume/volume.service';
 
 @Component({
   selector: 'app-separacao',
@@ -53,6 +52,7 @@ export class SeparacaoComponent implements OnInit {
     private conferenciaService: ConferenciaService,
     private separacaoService: SeparacaoService,
     private arquivoService: ArquivoService,
+    private volumeService: VolumeService,
     private route: ActivatedRoute,
     private router: Router,
     private dialog: MatDialog,
@@ -261,7 +261,7 @@ export class SeparacaoComponent implements OnInit {
   }
 
   carregarVolumes(numeroConferencia: number) {
-    this.separacaoService.getVolumes(numeroConferencia).subscribe({
+    this.volumeService.getVolumes(numeroConferencia).subscribe({
       next: (volumes) => {
         this.volumes = volumes.map((v) => ({
           ...v,

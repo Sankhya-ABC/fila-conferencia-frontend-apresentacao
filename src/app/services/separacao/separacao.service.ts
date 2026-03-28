@@ -8,7 +8,6 @@ import {
   PostDevolverItemConferidoParams,
   PostItemConferidoVolumeParams,
   PostRemoverVolumeParams,
-  VolumeDTO,
 } from './separacao.model';
 
 @Injectable({
@@ -30,12 +29,6 @@ export class SeparacaoService {
       '/separacoes/itens-conferidos',
       { params: { numeroConferencia } },
     );
-  }
-
-  getVolumes(numeroConferencia: number): Observable<VolumeDTO[]> {
-    return this.http.get<VolumeDTO[]>('/separacoes/volumes', {
-      params: { numeroConferencia },
-    });
   }
 
   postItemConferidoVolume(
