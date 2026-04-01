@@ -141,6 +141,23 @@ export class SeparacaoComponent implements OnInit {
     this.inicializarConferencia();
   }
 
+  // conferir
+  onSubmitConferencia(): void {
+    this.formConferencia.markAllAsTouched();
+
+    this.onBlurQuantidadeConvertida();
+
+    if (
+      this.formConferencia.invalid ||
+      !this.itemSelecionado ||
+      this.quantidadeConvertidaCtrl?.invalid
+    ) {
+      return;
+    }
+
+    this.onConferir();
+  }
+
   // requests
   inicializarConferencia() {
     this.conferenciaService.getDadosBasicos(this.numeroUnico!).subscribe({

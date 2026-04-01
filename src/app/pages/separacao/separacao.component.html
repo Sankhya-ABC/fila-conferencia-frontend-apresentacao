@@ -21,7 +21,11 @@
 </section>
 
 <!-- FORM -->
-<form [formGroup]="formConferencia" class="form-conferencia grid">
+<form
+  [formGroup]="formConferencia"
+  (ngSubmit)="onSubmitConferencia()"
+  class="form-conferencia grid"
+>
   <mat-form-field appearance="outline" class="xs-12 sm-6 md-3 lg-3 xl-2">
     <mat-label>Código de Barras/ID do produto</mat-label>
     <input
@@ -75,7 +79,7 @@
   <button
     mat-raised-button
     color="primary"
-    (click)="onConferir()"
+    type="submit"
     [disabled]="
       !itemSelecionado ||
       !quantidadeConvertidaCtrl?.value ||
