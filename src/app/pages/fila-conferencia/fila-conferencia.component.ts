@@ -18,7 +18,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { Router } from '@angular/router';
-import { finalize } from 'rxjs';
+import { debounceTime, distinctUntilChanged, finalize } from 'rxjs';
 import { CodigoDescricao } from '../../services/dominio/dominio.model';
 import { EmpresaDTO } from '../../services/empresa/empresa.model';
 import { EmpresaService } from '../../services/empresa/empresa.service';
@@ -129,9 +129,11 @@ export class FilaConferenciaComponent implements OnInit {
       .getTipoEntrega()
       .subscribe((data) => (this.listTipoEntrega = data));
 
-    this.filters.get('idParceiro')!.valueChanges.subscribe((value) => {
-      if (typeof value === 'string') {
-        if (!value) {
+    this.filters
+      .get('idParceiro')!
+      .valueChanges.pipe(debounceTime(300), distinctUntilChanged())
+      .subscribe((value) => {
+        if (!value || typeof value !== 'string') {
           this.listParceiro = [];
           return;
         }
@@ -139,12 +141,13 @@ export class FilaConferenciaComponent implements OnInit {
         this.parceiroService
           .getParceiros({ search: value })
           .subscribe((resp) => (this.listParceiro = resp));
-      }
-    });
+      });
 
-    this.filters.get('idEmpresa')!.valueChanges.subscribe((value) => {
-      if (typeof value === 'string') {
-        if (!value) {
+    this.filters
+      .get('idEmpresa')!
+      .valueChanges.pipe(debounceTime(300), distinctUntilChanged())
+      .subscribe((value) => {
+        if (!value || typeof value !== 'string') {
           this.listEmpresa = [];
           return;
         }
@@ -152,8 +155,7 @@ export class FilaConferenciaComponent implements OnInit {
         this.empresaService
           .getEmpresas({ search: value })
           .subscribe((resp) => (this.listEmpresa = resp));
-      }
-    });
+      });
 
     this.applyFilter();
   }
@@ -175,38 +177,12 @@ export class FilaConferenciaComponent implements OnInit {
   }
 
   // auto select filtro
-  onEmpresaBlur(): void {
-    const value = this.filters.get('idEmpresa')!.value;
-
-    if (!value) {
-      this.applyFilter();
-    }
-  }
-
   displayEmpresa(empresa?: EmpresaDTO): string {
     return empresa ? `${empresa.nome} - ${empresa.cpfCnpj}` : '';
   }
 
-  onEmpresaSelected(empresa: EmpresaDTO): void {
-    this.filters.get('idEmpresa')!.setValue(empresa);
-    this.applyFilter();
-  }
-
-  onParceiroBlur(): void {
-    const value = this.filters.get('idParceiro')!.value;
-
-    if (!value) {
-      this.applyFilter();
-    }
-  }
-
   displayParceiro(parceiro?: ParceiroDTO): string {
     return parceiro ? `${parceiro.nome} - ${parceiro.cpfCnpj}` : '';
-  }
-
-  onParceiroSelected(parceiro: ParceiroDTO): void {
-    this.filters.get('idParceiro')!.setValue(parceiro);
-    this.applyFilter();
   }
 
   applyFilter(): void {
@@ -243,7 +219,6 @@ export class FilaConferenciaComponent implements OnInit {
   // filters
   onLimparCampos(): void {
     this.criarForm();
-    this.applyFilter();
   }
 
   // actions
