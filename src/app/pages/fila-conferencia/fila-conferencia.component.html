@@ -151,7 +151,7 @@
             <button
               mat-icon-button
               (click)="onSeparar(e)"
-              [disabled]="e.codigoStatus !== 'AC' && e.codigoStatus !== 'A'"
+              [disabled]="e.codigoStatus === 'F' || e.codigoStatus === 'D'"
             >
               <mat-icon fontSet="material-symbols-outlined">
                 deployed_code
@@ -167,7 +167,7 @@
             <button
               mat-icon-button
               (click)="onImprimirEtiqueta(e)"
-              [disabled]="e.codigoStatus !== 'F'"
+              [disabled]="e.codigoStatus !== 'F' && e.codigoStatus !== 'D'"
             >
               <mat-icon>print</mat-icon>
             </button>
