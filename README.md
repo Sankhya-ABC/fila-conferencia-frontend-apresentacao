@@ -1,27 +1,88 @@
-# FilaConferenciaFrontend
+# Fila de Conferência — Frontend
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 17.0.3.
+Interface web desenvolvida com **Angular 17** para gestão da fila de conferência de notas fiscais integrada ao ERP Sankhya. Permite visualizar, filtrar e processar itens da fila, além de realizar a separação de pedidos com geração de etiquetas.
 
-## Development server
+---
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+## 🛠️ Tecnologias
 
-## Code scaffolding
+- **Angular 17**
+- **Angular Material 17** (componentes de UI)
+- **TypeScript 5.2**
+- **Axios** (chamadas HTTP)
+- **RxJS 7**
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+---
 
-## Build
+## 📋 Pré-requisitos
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+- Node.js 20+
+- Angular CLI 17+
 
-## Running unit tests
+```bash
+npm install -g @angular/cli@17
+```
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+---
 
-## Running end-to-end tests
+## ⚙️ Configuração
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+Edite o arquivo de ambiente conforme o contexto de execução:
 
-## Further help
+**`src/environments/environment.development.ts`** (desenvolvimento):
+```ts
+export const environment = {
+  API_GATEWAY: 'http://localhost:3000',
+};
+```
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+**`src/environments/environment.ts`** (produção): atualize com a URL da API em produção.
+
+---
+
+## 🚀 Instalação e execução
+
+```bash
+npm install
+
+# Desenvolvimento
+npm start
+# Acesse: http://localhost:4200
+
+# Build de produção
+npm run build
+```
+
+---
+
+## 📄 Páginas
+
+| Rota | Página | Descrição |
+|---|---|---|
+| `/login` | Login | Autenticação via Sankhya |
+| `/fila-conferencia` | Fila de Conferência | Listagem e filtros da fila |
+| `/separacao/:numeroUnico` | Separação | Detalhe e processamento de uma nota |
+
+Rotas protegidas por `authGuard`. A rota `/login` redireciona para a fila caso o usuário já esteja autenticado (`loginGuard`).
+
+---
+
+## 🧩 Serviços principais
+
+| Serviço | Responsabilidade |
+|---|---|
+| `AuthService` | Login, logout e sessão do usuário |
+| `ConferenciaService` | Listagem da fila com filtros |
+| `SeparacaoService` | Dados de separação por NUNOTA |
+| `ParceiroService` | Busca de parceiros |
+| `EmpresaService` | Listagem de empresas |
+| `DominioService` | Opções de campos dinâmicos |
+
+---
+
+## 🧱 Componentes compartilhados
+
+- **Header** — barra de navegação com avatar e logout
+- **Loading Overlay** — indicador de carregamento global
+- **Toast** — notificações de feedback
+- **Modal** — diálogo reutilizável
