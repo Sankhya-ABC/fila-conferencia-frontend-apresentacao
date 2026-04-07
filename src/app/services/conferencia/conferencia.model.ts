@@ -36,7 +36,12 @@ export interface FilaConferenciaDTO {
   nomeUsuarioAlteracao: string;
 }
 
-export interface FilaConferenciaFilter {
+export interface PaginationFilter {
+  page?: number;
+  perPage?: number;
+}
+
+export interface FilaConferenciaFilter extends PaginationFilter {
   codigoStatus?: string;
   numeroModial?: string;
   numeroNota?: string;

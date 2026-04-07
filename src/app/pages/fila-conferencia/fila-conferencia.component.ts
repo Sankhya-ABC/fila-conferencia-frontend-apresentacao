@@ -18,7 +18,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { Router } from '@angular/router';
-import { finalize } from 'rxjs';
+import { debounceTime, distinctUntilChanged, finalize } from 'rxjs';
 import { CodigoDescricao } from '../../services/dominio/dominio.model';
 import { EmpresaDTO } from '../../services/empresa/empresa.model';
 import { EmpresaService } from '../../services/empresa/empresa.service';
@@ -97,6 +97,9 @@ export class FilaConferenciaComponent implements OnInit {
     'nomeUsuarioAlteracao',
   ];
   dataSource = new MatTableDataSource<FilaConferenciaDTO>([]);
+  page = 0;
+  perPage = 5;
+  total = 0;
 
   // selects
   listStatus: CodigoDescricao[] = [];
@@ -129,9 +132,11 @@ export class FilaConferenciaComponent implements OnInit {
       .getTipoEntrega()
       .subscribe((data) => (this.listTipoEntrega = data));
 
-    this.filters.get('idParceiro')!.valueChanges.subscribe((value) => {
-      if (typeof value === 'string') {
-        if (!value) {
+    this.filters
+      .get('idParceiro')!
+      .valueChanges.pipe(debounceTime(300), distinctUntilChanged())
+      .subscribe((value) => {
+        if (!value || typeof value !== 'string') {
           this.listParceiro = [];
           return;
         }
@@ -139,12 +144,13 @@ export class FilaConferenciaComponent implements OnInit {
         this.parceiroService
           .getParceiros({ search: value })
           .subscribe((resp) => (this.listParceiro = resp));
-      }
-    });
+      });
 
-    this.filters.get('idEmpresa')!.valueChanges.subscribe((value) => {
-      if (typeof value === 'string') {
-        if (!value) {
+    this.filters
+      .get('idEmpresa')!
+      .valueChanges.pipe(debounceTime(300), distinctUntilChanged())
+      .subscribe((value) => {
+        if (!value || typeof value !== 'string') {
           this.listEmpresa = [];
           return;
         }
@@ -152,8 +158,7 @@ export class FilaConferenciaComponent implements OnInit {
         this.empresaService
           .getEmpresas({ search: value })
           .subscribe((resp) => (this.listEmpresa = resp));
-      }
-    });
+      });
 
     this.applyFilter();
   }
@@ -175,38 +180,12 @@ export class FilaConferenciaComponent implements OnInit {
   }
 
   // auto select filtro
-  onEmpresaBlur(): void {
-    const value = this.filters.get('idEmpresa')!.value;
-
-    if (!value) {
-      this.applyFilter();
-    }
-  }
-
   displayEmpresa(empresa?: EmpresaDTO): string {
     return empresa ? `${empresa.nome} - ${empresa.cpfCnpj}` : '';
   }
 
-  onEmpresaSelected(empresa: EmpresaDTO): void {
-    this.filters.get('idEmpresa')!.setValue(empresa);
-    this.applyFilter();
-  }
-
-  onParceiroBlur(): void {
-    const value = this.filters.get('idParceiro')!.value;
-
-    if (!value) {
-      this.applyFilter();
-    }
-  }
-
   displayParceiro(parceiro?: ParceiroDTO): string {
     return parceiro ? `${parceiro.nome} - ${parceiro.cpfCnpj}` : '';
-  }
-
-  onParceiroSelected(parceiro: ParceiroDTO): void {
-    this.filters.get('idParceiro')!.setValue(parceiro);
-    this.applyFilter();
   }
 
   applyFilter(): void {
@@ -214,10 +193,13 @@ export class FilaConferenciaComponent implements OnInit {
 
     const rawParams = this.filters.value;
 
-    const params: FilaConferenciaFilter = {
+    const params: any = {
       ...rawParams,
       idParceiro: rawParams.idParceiro?.id,
       idEmpresa: rawParams.idEmpresa?.id,
+
+      page: this.page,
+      perPage: this.perPage,
     };
 
     params.dataInicio = params.dataInicio
@@ -228,22 +210,27 @@ export class FilaConferenciaComponent implements OnInit {
       ? formatDate(params.dataFim, 'yyyy-MM-dd', 'en-US')
       : undefined;
 
-    Object.keys(params).forEach(
-      (k) =>
-        params[k as keyof FilaConferenciaFilter] == null &&
-        delete params[k as keyof FilaConferenciaFilter],
-    );
+    Object.keys(params).forEach((k) => params[k] == null && delete params[k]);
 
     this.conferenciaService.getFilaConferencias(params).subscribe({
-      next: (resp) => (this.dataSource.data = resp),
+      next: (resp) => {
+        this.dataSource.data = resp.data;
+        this.total = resp.total;
+      },
       error: () => (this.dataSource.data = []),
     });
+  }
+
+  onPageChange(event: any) {
+    this.page = event.pageIndex;
+    this.perPage = event.pageSize;
+
+    this.applyFilter();
   }
 
   // filters
   onLimparCampos(): void {
     this.criarForm();
-    this.applyFilter();
   }
 
   // actions

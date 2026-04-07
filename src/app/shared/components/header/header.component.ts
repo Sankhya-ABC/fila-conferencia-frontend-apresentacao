@@ -37,6 +37,8 @@ export class HeaderComponent {
     this.title$ = this.routeState.routeTitle$;
   }
 
+  nome = this.authService.getUser().nome || '';
+
   logout() {
     this.authService.logout();
   }

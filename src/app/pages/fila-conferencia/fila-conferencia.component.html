@@ -2,11 +2,7 @@
 <div class="filtros-container grid" [formGroup]="filters">
   <mat-form-field appearance="outline" class="xs-12 sm-6 md-3 lg-3 xl-2">
     <mat-label>Status</mat-label>
-    <mat-select
-      formControlName="codigoStatus"
-      (selectionChange)="applyFilter()"
-      multiple
-    >
+    <mat-select formControlName="codigoStatus" multiple>
       <mat-option *ngFor="let status of listStatus" [value]="status.codigo">
         {{ status.descricao }}
       </mat-option>
@@ -15,17 +11,17 @@
 
   <mat-form-field appearance="outline" class="xs-12 sm-6 md-3 lg-3 xl-2">
     <mat-label>Número Modial</mat-label>
-    <input matInput formControlName="numeroModial" (input)="applyFilter()" />
+    <input matInput formControlName="numeroModial" />
   </mat-form-field>
 
   <mat-form-field appearance="outline" class="xs-12 sm-6 md-3 lg-3 xl-2">
     <mat-label>Número Nota</mat-label>
-    <input matInput formControlName="numeroNota" (input)="applyFilter()" />
+    <input matInput formControlName="numeroNota" />
   </mat-form-field>
 
   <mat-form-field appearance="outline" class="xs-12 sm-6 md-3 lg-3 xl-2">
     <mat-label>Número Único</mat-label>
-    <input matInput formControlName="numeroUnico" (input)="applyFilter()" />
+    <input matInput formControlName="numeroUnico" />
   </mat-form-field>
 
   <mat-form-field appearance="outline" class="xs-12 sm-6 md-3 lg-3 xl-2">
@@ -34,7 +30,6 @@
       matInput
       [matDatepicker]="pickerInicio"
       formControlName="dataInicio"
-      (dateChange)="applyFilter()"
     />
     <mat-datepicker-toggle
       matSuffix
@@ -45,23 +40,14 @@
 
   <mat-form-field appearance="outline" class="xs-12 sm-6 md-3 lg-3 xl-2">
     <mat-label>Data Fim</mat-label>
-    <input
-      matInput
-      [matDatepicker]="pickerFim"
-      formControlName="dataFim"
-      (dateChange)="applyFilter()"
-    />
+    <input matInput [matDatepicker]="pickerFim" formControlName="dataFim" />
     <mat-datepicker-toggle matSuffix [for]="pickerFim"></mat-datepicker-toggle>
     <mat-datepicker #pickerFim></mat-datepicker>
   </mat-form-field>
 
   <mat-form-field appearance="outline" class="xs-12 sm-6 md-3 lg-3 xl-2">
     <mat-label>Tipo Movimento</mat-label>
-    <mat-select
-      formControlName="codigoTipoMovimento"
-      (selectionChange)="applyFilter()"
-      multiple
-    >
+    <mat-select formControlName="codigoTipoMovimento" multiple>
       <mat-option [value]="null">Todos</mat-option>
       <mat-option
         *ngFor="let tipoMovimento of listTipoMovimento"
@@ -74,11 +60,7 @@
 
   <mat-form-field appearance="outline" class="xs-12 sm-6 md-3 lg-3 xl-2">
     <mat-label>Tipo Operação</mat-label>
-    <mat-select
-      formControlName="codigoTipoOperacao"
-      (selectionChange)="applyFilter()"
-      multiple
-    >
+    <mat-select formControlName="codigoTipoOperacao" multiple>
       <mat-option [value]="null">Todos</mat-option>
       <mat-option
         *ngFor="let tipoOperacao of listTipoOperacao"
@@ -95,12 +77,10 @@
       matInput
       formControlName="idEmpresa"
       [matAutocomplete]="autoEmpresa"
-      (blur)="onEmpresaBlur()"
     />
     <mat-autocomplete
       #autoEmpresa="matAutocomplete"
       [displayWith]="displayEmpresa"
-      (optionSelected)="onEmpresaSelected($event.option.value)"
     >
       <mat-option *ngFor="let empresa of listEmpresa" [value]="empresa">
         {{ displayEmpresa(empresa) }}
@@ -114,12 +94,10 @@
       matInput
       formControlName="idParceiro"
       [matAutocomplete]="autoParceiro"
-      (blur)="onParceiroBlur()"
     />
     <mat-autocomplete
       #autoParceiro="matAutocomplete"
       [displayWith]="displayParceiro"
-      (optionSelected)="onParceiroSelected($event.option.value)"
     >
       <mat-option *ngFor="let parceiro of listParceiro" [value]="parceiro">
         {{ displayParceiro(parceiro) }}
@@ -129,11 +107,7 @@
 
   <mat-form-field appearance="outline" class="xs-12 sm-6 md-3 lg-3 xl-2">
     <mat-label>Tipo Entrega</mat-label>
-    <mat-select
-      formControlName="codigoTipoEntrega"
-      (selectionChange)="applyFilter()"
-      multiple
-    >
+    <mat-select formControlName="codigoTipoEntrega" multiple>
       <mat-option [value]="null">Todos</mat-option>
       <mat-option
         *ngFor="let tipoEntrega of listTipoEntrega"
@@ -152,6 +126,14 @@
   >
     Limpar campos
   </button>
+  <button
+    mat-raised-button
+    color="primary"
+    (click)="applyFilter()"
+    class="xs-12 sm-6 md-3 lg-3 xl-2"
+  >
+    Pesquisar
+  </button>
 </div>
 
 <!-- Tabela -->
@@ -169,7 +151,7 @@
             <button
               mat-icon-button
               (click)="onSeparar(e)"
-              [disabled]="e.codigoStatus !== 'AC' && e.codigoStatus !== 'A'"
+              [disabled]="e.codigoStatus === 'F' || e.codigoStatus === 'D'"
             >
               <mat-icon fontSet="material-symbols-outlined">
                 deployed_code
@@ -185,7 +167,7 @@
             <button
               mat-icon-button
               (click)="onImprimirEtiqueta(e)"
-              [disabled]="e.codigoStatus !== 'F'"
+              [disabled]="e.codigoStatus !== 'F' && e.codigoStatus !== 'D'"
             >
               <mat-icon>print</mat-icon>
             </button>
@@ -334,4 +316,11 @@
     <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
     <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
   </mat-table>
+  <mat-paginator
+    [length]="total"
+    [pageSize]="perPage"
+    [pageSizeOptions]="[5, 10, 15, 25, 50]"
+    (page)="onPageChange($event)"
+  >
+  </mat-paginator>
 </div>
