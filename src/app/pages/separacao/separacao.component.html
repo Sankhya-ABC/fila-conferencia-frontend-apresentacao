@@ -30,6 +30,7 @@
     <mat-label>Código de Barras/ID do produto</mat-label>
     <input
       matInput
+      #inputIdentificador
       formControlName="identificador"
       (keyup.enter)="onIdentificadorInserido()"
       (blur)="onIdentificadorInserido()"

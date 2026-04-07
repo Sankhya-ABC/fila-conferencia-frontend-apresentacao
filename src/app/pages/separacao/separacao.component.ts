@@ -59,6 +59,10 @@ export class SeparacaoComponent implements OnInit {
     private authService: AuthService,
   ) {}
 
+  // read scanner
+  buffer = '';
+  lastKeyTime = Date.now();
+
   // data
   displayedColumnsPedidos = [
     'acoes',
@@ -119,7 +123,11 @@ export class SeparacaoComponent implements OnInit {
   modalConferenciaFinalizadaTpl!: TemplateRef<any>;
   dialogRefConferenciaFinalizada?: MatDialogRef<ModalComponent>;
 
+  @ViewChild('inputIdentificador') inputIdentificador!: any;
+
   ngOnInit(): void {
+    this.listenScanner();
+
     this.numeroUnico = Number(this.route.snapshot.paramMap.get('numeroUnico'));
 
     this.formConferencia = this.fb.group({
@@ -139,6 +147,60 @@ export class SeparacaoComponent implements OnInit {
     if (!this.numeroUnico) return;
 
     this.inicializarConferencia();
+  }
+
+  ngOnDestroy() {
+    window.removeEventListener('keydown', this.listenScanner);
+  }
+
+  // scanner
+  listenScanner() {
+    window.addEventListener('keydown', (event: KeyboardEvent) => {
+      const now = Date.now();
+      const diff = now - this.lastKeyTime;
+      this.lastKeyTime = now;
+
+      if (diff > 100) {
+        this.buffer = '';
+      }
+
+      if (event.key === 'Enter') {
+        this.processarLeitura(this.buffer);
+        this.buffer = '';
+        return;
+      }
+
+      if (event.key.length === 1) {
+        this.buffer += event.key;
+      }
+    });
+  }
+
+  processarLeitura(codigo: string) {
+    if (!codigo) return;
+
+    this.formConferencia.patchValue({
+      identificador: codigo,
+    });
+
+    this.onIdentificadorInserido();
+
+    this.focarCampoIdentificador();
+  }
+
+  focarCampoIdentificador() {
+    setTimeout(() => {
+      const el = this.inputIdentificador?._elementRef?.nativeElement;
+
+      if (el) {
+        el.focus();
+
+        el.scrollIntoView({
+          behavior: 'smooth',
+          block: 'center',
+        });
+      }
+    });
   }
 
   // conferir
