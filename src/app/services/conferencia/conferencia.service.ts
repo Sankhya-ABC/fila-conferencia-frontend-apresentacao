@@ -18,7 +18,7 @@ export class ConferenciaService {
 
   getFilaConferencias(
     params?: FilaConferenciaFilter,
-  ): Observable<FilaConferenciaDTO[]> {
+  ): Observable<{ data: FilaConferenciaDTO[]; total: number }> {
     let httpParams = new HttpParams();
 
     if (params) {
@@ -29,9 +29,10 @@ export class ConferenciaService {
       });
     }
 
-    return this.http.get<FilaConferenciaDTO[]>('/conferencias', {
-      params: httpParams,
-    });
+    return this.http.get<{ data: FilaConferenciaDTO[]; total: number }>(
+      '/conferencias',
+      { params: httpParams },
+    );
   }
 
   getDadosBasicos(numeroUnico: number): Observable<DadosBasicosPedidoDTO> {

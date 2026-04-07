@@ -97,6 +97,9 @@ export class FilaConferenciaComponent implements OnInit {
     'nomeUsuarioAlteracao',
   ];
   dataSource = new MatTableDataSource<FilaConferenciaDTO>([]);
+  page = 0;
+  perPage = 5;
+  total = 0;
 
   // selects
   listStatus: CodigoDescricao[] = [];
@@ -190,10 +193,13 @@ export class FilaConferenciaComponent implements OnInit {
 
     const rawParams = this.filters.value;
 
-    const params: FilaConferenciaFilter = {
+    const params: any = {
       ...rawParams,
       idParceiro: rawParams.idParceiro?.id,
       idEmpresa: rawParams.idEmpresa?.id,
+
+      page: this.page,
+      perPage: this.perPage,
     };
 
     params.dataInicio = params.dataInicio
@@ -204,16 +210,22 @@ export class FilaConferenciaComponent implements OnInit {
       ? formatDate(params.dataFim, 'yyyy-MM-dd', 'en-US')
       : undefined;
 
-    Object.keys(params).forEach(
-      (k) =>
-        params[k as keyof FilaConferenciaFilter] == null &&
-        delete params[k as keyof FilaConferenciaFilter],
-    );
+    Object.keys(params).forEach((k) => params[k] == null && delete params[k]);
 
     this.conferenciaService.getFilaConferencias(params).subscribe({
-      next: (resp) => (this.dataSource.data = resp),
+      next: (resp) => {
+        this.dataSource.data = resp.data;
+        this.total = resp.total;
+      },
       error: () => (this.dataSource.data = []),
     });
+  }
+
+  onPageChange(event: any) {
+    this.page = event.pageIndex;
+    this.perPage = event.pageSize;
+
+    this.applyFilter();
   }
 
   // filters
