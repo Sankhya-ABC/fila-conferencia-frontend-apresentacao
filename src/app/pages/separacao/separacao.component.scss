@@ -169,23 +169,30 @@ h4 {
 
 // CONFIRMAR CONFERÊNCIA
 .confirmar-conferencia {
+  display: flex;
+  justify-content: flex-end;
+  gap: 16px;
+  flex-wrap: wrap;
+
   button {
-    grid-column: 1 / span 12;
+    width: 100%;
+  }
 
-    @media (min-width: $sm) {
-      grid-column: 7 / span 6;
+  @media (min-width: $sm) {
+    button {
+      width: calc(50% - 8px);
     }
+  }
 
-    @media (min-width: $md) {
-      grid-column: 10 / span 3;
+  @media (min-width: $md) {
+    button {
+      width: calc(25% - 12px);
     }
+  }
 
-    @media (min-width: $lg) {
-      grid-column: 10 / span 3;
-    }
-
-    @media (min-width: $xl) {
-      grid-column: 11 / span 2;
+  @media (min-width: $xl) {
+    button {
+      width: calc(16.66% - 14px);
     }
   }
 }
