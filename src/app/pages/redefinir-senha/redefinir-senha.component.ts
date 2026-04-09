@@ -1,27 +1,32 @@
-import { CommonModule } from '@angular/common';
-import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import {
-  FormBuilder,
-  FormGroup,
-  ReactiveFormsModule,
-  Validators,
-} from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { HttpClient } from '@angular/common/http';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatButtonModule } from '@angular/material/button';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-redefinir-senha',
-  standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './redefinir-senha.component.html',
+  standalone: true,
+  imports: [
+    MatFormFieldModule,
+    MatInputModule,
+    MatButtonModule,
+    ReactiveFormsModule,
+  ],
 })
 export class RedefinirSenhaComponent implements OnInit {
   form!: FormGroup;
+
   token!: string;
   email!: string;
 
   loading = false;
   erro = '';
+  erroSenha = false;
 
   constructor(
     private fb: FormBuilder,
@@ -52,10 +57,11 @@ export class RedefinirSenhaComponent implements OnInit {
     const { senha, confirmarSenha } = this.form.value;
 
     if (senha !== confirmarSenha) {
-      this.erro = 'As senhas não coincidem';
+      this.erroSenha = true;
       return;
     }
 
+    this.erroSenha = false;
     this.loading = true;
     this.erro = '';
 

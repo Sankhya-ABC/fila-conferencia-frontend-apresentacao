@@ -1,21 +1,50 @@
-<div class="container">
-  <h2>Redefinir Senha</h2>
+<form class="login-page" [formGroup]="form" (ngSubmit)="onSubmit()">
+  <div class="login-form">
+    <div class="form-wrapper">
+      <h1>Redefinir Senha</h1>
+      <p class="subtitle">Crie uma nova senha para sua conta</p>
 
-  <form [formGroup]="form" (ngSubmit)="onSubmit()">
-    <div>
-      <label>Nova senha</label>
-      <input type="password" formControlName="senha" />
+      <mat-form-field appearance="outline">
+        <mat-label>Nova senha</mat-label>
+        <input matInput type="password" formControlName="senha" />
+
+        <mat-error *ngIf="form.controls.senha.hasError('required')">
+          Senha obrigatória
+        </mat-error>
+
+        <mat-error *ngIf="form.controls.senha.hasError('minlength')">
+          Mínimo de 6 caracteres
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Confirmar senha</mat-label>
+        <input matInput type="password" formControlName="confirmarSenha" />
+
+        <mat-error *ngIf="form.controls.confirmarSenha.hasError('required')">
+          Confirmação obrigatória
+        </mat-error>
+
+        <mat-error *ngIf="erroSenha"> As senhas não coincidem </mat-error>
+      </mat-form-field>
+
+      <button
+        mat-raised-button
+        color="primary"
+        type="submit"
+        [disabled]="form.invalid || loading"
+      >
+        {{ loading ? "Redefinindo..." : "Redefinir senha" }}
+      </button>
+
+      <p *ngIf="erro" class="erro">{{ erro }}</p>
     </div>
+  </div>
 
-    <div>
-      <label>Confirmar senha</label>
-      <input type="password" formControlName="confirmarSenha" />
+  <div class="login-image">
+    <div class="overlay">
+      <h2>Segurança</h2>
+      <p>Sua conta protegida com uma nova senha</p>
     </div>
-
-    <button type="submit" [disabled]="form.invalid || loading">
-      {{ loading ? "Enviando..." : "Redefinir senha" }}
-    </button>
-
-    <p *ngIf="erro" class="erro">{{ erro }}</p>
-  </form>
-</div>
+  </div>
+</form>

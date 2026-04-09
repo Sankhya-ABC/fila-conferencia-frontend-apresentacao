@@ -1,0 +1,32 @@
+.login-page {
+  display: flex;
+  height: 100vh;
+}
+
+.login-form {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.form-wrapper {
+  width: 100%;
+  max-width: 400px;
+}
+
+.login-image {
+  flex: 1;
+  background: url("/assets/bg.jpg") no-repeat center center;
+  background-size: cover;
+}
+
+.overlay {
+  color: white;
+  padding: 40px;
+}
+
+.erro {
+  color: red;
+  margin-top: 10px;
+}
