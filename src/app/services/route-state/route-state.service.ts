@@ -7,8 +7,9 @@ import { filter } from 'rxjs/operators';
   providedIn: 'root',
 })
 export class RouteStateService {
-  private _isLoginRoute$ = new BehaviorSubject<boolean>(false);
-  public isLoginRoute$ = this._isLoginRoute$.asObservable();
+  private routesToHideContainer = ['login', 'redefinir-senha', 'erro'];
+  private _hideContainer$ = new BehaviorSubject<boolean>(false);
+  public hideContainer$ = this._hideContainer$.asObservable();
 
   private _routeTitle$ = new BehaviorSubject<string>('');
   public routeTitle$ = this._routeTitle$.asObservable();
@@ -25,24 +26,20 @@ export class RouteStateService {
           this.router.routerState.snapshot.root,
         );
 
-        this._isLoginRoute$.next(
-          currentSnapshot.url
-            .map((u) => u.path)
-            .join('/')
-            .startsWith('login'),
+        const currentPath = currentSnapshot.url.map((u) => u.path).join('/');
+
+        const hide = this.routesToHideContainer.some((route) =>
+          currentPath.startsWith(route),
         );
+        this._hideContainer$.next(hide);
 
         const title = currentSnapshot?.['title'] ?? '';
         this._routeTitle$.next(title);
       });
   }
 
-  public isLoginRoute(): boolean {
-    return this._isLoginRoute$.value;
-  }
-
-  public getRouteTitle(): string {
-    return this._routeTitle$.value;
+  public hideContainer(): boolean {
+    return this._hideContainer$.value;
   }
 
   private getDeepestChild(

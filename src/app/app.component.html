@@ -1,9 +1,9 @@
 <app-header></app-header>
 
-<div *ngIf="showContainer$ | async" class="container">
+<div *ngIf="!(hideContainer$ | async)" class="container">
   <router-outlet></router-outlet>
 </div>
 
-<router-outlet *ngIf="!(showContainer$ | async)"></router-outlet>
+<router-outlet *ngIf="hideContainer$ | async"></router-outlet>
 
 <app-loading-overlay></app-loading-overlay>

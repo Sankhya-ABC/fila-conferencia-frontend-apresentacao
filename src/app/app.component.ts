@@ -19,11 +19,11 @@ import { LoadingOverlayComponent } from './shared/components/loading-overlay/loa
   styleUrl: './app.component.scss',
 })
 export class AppComponent {
-  showContainer$: Observable<boolean>;
+  hideContainer$: Observable<boolean>;
 
   constructor(private routeState: RouteStateService) {
-    this.showContainer$ = this.routeState.isLoginRoute$.pipe(
-      map((isLogin) => !isLogin),
+    this.hideContainer$ = this.routeState.hideContainer$.pipe(
+      map((hide) => hide),
     );
   }
 }

@@ -67,9 +67,7 @@ export class RedefinirSenhaComponent {
         next: () => {
           this.router.navigate(['/login']);
         },
-        error: () => {
-          this.router.navigate(['/erro']);
-        },
+        error: () => {},
         complete: () => {
           this.loading = false;
         },

@@ -2,21 +2,18 @@
 @use "../../../styles/typography" as *;
 @use "../../../styles/breakpoints" as *;
 
-.login-page {
-  height: 100vh;
+.redefinir-senha-page {
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+  height: 100vh;
 }
 
 // form
-.login-form {
-  background: var(--color-surface);
-  width: 50%;
+.redefinir-senha-form {
+  flex: 1;
   display: flex;
-  flex-direction: column;
   align-items: center;
+  justify-content: center;
+  background: var(--color-surface);
 }
 
 .form-wrapper {
@@ -37,13 +34,50 @@
   }
 }
 
+// image
+.redefinir-senha-image {
+  flex: 1;
+  background-image: url("/assets/images/fila-conferencia.jpg");
+  background-size: cover;
+  background-position: center;
+  position: relative;
+}
+
+.overlay {
+  position: absolute;
+  inset: 0;
+  background: var(--color-yellow);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: $space-30;
+
+  h2 {
+    font-size: $font-xl;
+    margin-bottom: $space-9;
+  }
+
+  p {
+    font-size: $font-sm;
+    max-width: 300px;
+  }
+}
+
 // mobile
 @media (max-width: $sm) {
-  .login-page {
+  .redefinir-senha-page {
     flex-direction: column;
   }
 
-  .login-form {
+  .redefinir-senha-image {
+    height: 180px;
+  }
+
+  .overlay {
+    justify-content: flex-end;
+  }
+
+  .redefinir-senha-form {
     flex: none;
   }
 }

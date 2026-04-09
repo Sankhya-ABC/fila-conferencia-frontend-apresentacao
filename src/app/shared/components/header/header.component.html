@@ -1,4 +1,4 @@
-<mat-toolbar class="header" *ngIf="showHeader$ | async">
+<mat-toolbar class="header" *ngIf="!(hideContainer$ | async)">
   <h2>{{ title$ | async }}</h2>
 
   <span class="spacer"></span>

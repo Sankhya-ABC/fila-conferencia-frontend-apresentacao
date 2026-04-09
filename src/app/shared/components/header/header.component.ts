@@ -24,15 +24,15 @@ import { AuthService } from '../../../services/auth/auth.service';
   styleUrls: ['./header.component.scss'],
 })
 export class HeaderComponent {
-  showHeader$: Observable<boolean>;
+  hideContainer$: Observable<boolean>;
   title$: Observable<string>;
 
   constructor(
     private routeState: RouteStateService,
     private authService: AuthService,
   ) {
-    this.showHeader$ = this.routeState.isLoginRoute$.pipe(
-      map((isLogin) => !isLogin),
+    this.hideContainer$ = this.routeState.hideContainer$.pipe(
+      map((hide) => hide),
     );
     this.title$ = this.routeState.routeTitle$;
   }
