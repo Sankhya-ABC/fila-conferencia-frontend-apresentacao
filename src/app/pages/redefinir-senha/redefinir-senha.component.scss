@@ -1,32 +1,49 @@
+@use "../../../styles/spacing" as *;
+@use "../../../styles/typography" as *;
+@use "../../../styles/breakpoints" as *;
+
 .login-page {
-  display: flex;
   height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
+// form
 .login-form {
-  flex: 1;
+  background: var(--color-surface);
+  width: 50%;
   display: flex;
-  justify-content: center;
+  flex-direction: column;
   align-items: center;
 }
 
 .form-wrapper {
   width: 100%;
-  max-width: 400px;
+  max-width: 360px;
+  padding: $space-24;
+  display: flex;
+  flex-direction: column;
+  gap: $space-12;
+
+  h1 {
+    font-size: $font-2xl;
+  }
+
+  .subtitle {
+    font-size: $font-sm;
+    color: var(--color-text-secondary);
+  }
 }
 
-.login-image {
-  flex: 1;
-  background: url("/assets/bg.jpg") no-repeat center center;
-  background-size: cover;
-}
+// mobile
+@media (max-width: $sm) {
+  .login-page {
+    flex-direction: column;
+  }
 
-.overlay {
-  color: white;
-  padding: 40px;
-}
-
-.erro {
-  color: red;
-  margin-top: 10px;
+  .login-form {
+    flex: none;
+  }
 }

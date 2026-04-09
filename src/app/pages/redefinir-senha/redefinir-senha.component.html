@@ -1,31 +1,23 @@
-<form class="login-page" [formGroup]="form" (ngSubmit)="onSubmit()">
+<form class="login-page" [formGroup]="form" (ngSubmit)="redefinirSenha()">
   <div class="login-form">
     <div class="form-wrapper">
       <h1>Redefinir Senha</h1>
-      <p class="subtitle">Crie uma nova senha para sua conta</p>
+      <p class="subtitle">Insira a nova senha.</p>
 
       <mat-form-field appearance="outline">
-        <mat-label>Nova senha</mat-label>
+        <mat-label>Senha</mat-label>
         <input matInput type="password" formControlName="senha" />
-
-        <mat-error *ngIf="form.controls.senha.hasError('required')">
-          Senha obrigatória
-        </mat-error>
-
-        <mat-error *ngIf="form.controls.senha.hasError('minlength')">
-          Mínimo de 6 caracteres
+        <mat-error *ngIf="form.controls.senha.invalid">
+          Campo obrigatório
         </mat-error>
       </mat-form-field>
 
       <mat-form-field appearance="outline">
-        <mat-label>Confirmar senha</mat-label>
-        <input matInput type="password" formControlName="confirmarSenha" />
-
-        <mat-error *ngIf="form.controls.confirmarSenha.hasError('required')">
-          Confirmação obrigatória
+        <mat-label>Confirmar Senha</mat-label>
+        <input matInput formControlName="confirmarSenha" />
+        <mat-error *ngIf="form.controls.confirmarSenha.invalid">
+          Campo obrigatório
         </mat-error>
-
-        <mat-error *ngIf="erroSenha"> As senhas não coincidem </mat-error>
       </mat-form-field>
 
       <button
@@ -34,17 +26,8 @@
         type="submit"
         [disabled]="form.invalid || loading"
       >
-        {{ loading ? "Redefinindo..." : "Redefinir senha" }}
+        {{ loading ? "Alterando..." : "Alterar" }}
       </button>
-
-      <p *ngIf="erro" class="erro">{{ erro }}</p>
-    </div>
-  </div>
-
-  <div class="login-image">
-    <div class="overlay">
-      <h2>Segurança</h2>
-      <p>Sua conta protegida com uma nova senha</p>
     </div>
   </div>
 </form>

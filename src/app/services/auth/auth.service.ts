@@ -4,7 +4,11 @@ import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { SESSION_KEYS } from '../../core/session';
-import { LoginRequest, LoginResponse } from './auth.model';
+import {
+  LoginRequest,
+  LoginResponse,
+  RedefinirSenhaParams,
+} from './auth.model';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
@@ -12,6 +16,10 @@ export class AuthService {
     private http: HttpClient,
     private router: Router,
   ) {}
+
+  redefinirSenha(body: RedefinirSenhaParams): Observable<null> {
+    return this.http.post<null>('/auths/redefinir-senha', body);
+  }
 
   login(body: LoginRequest): Observable<LoginResponse> {
     return this.http.post<LoginResponse>('/auths/login', body).pipe(

@@ -8,3 +8,9 @@ export interface LoginResponse {
   idUsuario: number;
   token: string;
 }
+
+export interface RedefinirSenhaParams {
+  senha: string;
+  token: string;
+  email: string;
+}
