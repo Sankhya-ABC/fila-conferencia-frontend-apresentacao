@@ -4,6 +4,8 @@ import { loginGuard } from './core/guards/login.guard';
 import { FilaConferenciaComponent } from './pages/fila-conferencia/fila-conferencia.component';
 import { LoginComponent } from './pages/login/login.component';
 import { SeparacaoComponent } from './pages/separacao/separacao.component';
+import { RedefinirSenhaComponent } from './pages/redefinir-senha/redefinir-senha.component';
+import { ErroComponent } from './pages/erro/erro.component';
 
 export const routes: Routes = [
   {
@@ -11,6 +13,14 @@ export const routes: Routes = [
     path: 'login',
     title: 'Login',
     component: LoginComponent,
+  },
+  {
+    path: 'redefinir-senha',
+    component: RedefinirSenhaComponent,
+  },
+  {
+    path: 'erro',
+    component: ErroComponent,
   },
   {
     canActivate: [authGuard],

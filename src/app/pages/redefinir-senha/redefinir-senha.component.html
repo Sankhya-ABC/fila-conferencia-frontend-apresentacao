@@ -1,0 +1,21 @@
+<div class="container">
+  <h2>Redefinir Senha</h2>
+
+  <form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <div>
+      <label>Nova senha</label>
+      <input type="password" formControlName="senha" />
+    </div>
+
+    <div>
+      <label>Confirmar senha</label>
+      <input type="password" formControlName="confirmarSenha" />
+    </div>
+
+    <button type="submit" [disabled]="form.invalid || loading">
+      {{ loading ? "Enviando..." : "Redefinir senha" }}
+    </button>
+
+    <p *ngIf="erro" class="erro">{{ erro }}</p>
+  </form>
+</div>
