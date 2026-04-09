@@ -28,13 +28,73 @@
       >
         {{ loading ? "Entrando..." : "Entrar" }}
       </button>
+
+      <button
+        mat-button
+        type="button"
+        class="link-esqueci"
+        (click)="abrirModalEsqueciSenha()"
+      >
+        Esqueci minha senha
+      </button>
     </div>
   </div>
 
   <div class="login-image">
     <div class="overlay">
-      <h2>Fila de Conferência</h2>
       <p>Agilidade, controle e precisão na expedição</p>
     </div>
   </div>
 </form>
+
+<!-- TEMPLATE: MODAL ESQUECI MINHA SENHA -->
+<ng-template #modalEsqueciSenha let-fechar="fechar">
+  <div class="modal-esqueci-senha">
+    <mat-icon fontSet="material-symbols-outlined">lock_reset</mat-icon>
+
+    <h4>Recuperar senha</h4>
+
+    <p>Informe seu e-mail para receber as instruções</p>
+
+    <form [formGroup]="formEsqueciSenha">
+      <mat-form-field appearance="outline" style="width: 100%">
+        <mat-label>Email</mat-label>
+        <input matInput formControlName="email" />
+
+        <mat-error *ngIf="formEsqueciSenha.controls.email.hasError('required')">
+          Email obrigatório
+        </mat-error>
+
+        <mat-error *ngIf="formEsqueciSenha.controls.email.hasError('email')">
+          Email inválido
+        </mat-error>
+      </mat-form-field>
+
+      <p *ngIf="erroEsqueciSenha" class="erro">
+        {{ erroEsqueciSenha }}
+      </p>
+
+      <div class="grid buttons-container">
+        <button
+          mat-raised-button
+          color="warn"
+          type="button"
+          class="xs-12 sm-6"
+          (click)="fechar()"
+        >
+          Cancelar
+        </button>
+
+        <button
+          mat-raised-button
+          color="primary"
+          class="xs-12 sm-6"
+          [disabled]="formEsqueciSenha.invalid || loadingEsqueciSenha"
+          (click)="enviarEsqueciSenha(fechar)"
+        >
+          {{ loadingEsqueciSenha ? "Enviando..." : "Enviar" }}
+        </button>
+      </div>
+    </form>
+  </div>
+</ng-template>

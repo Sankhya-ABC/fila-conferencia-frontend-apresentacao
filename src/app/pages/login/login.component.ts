@@ -7,6 +7,11 @@ import { MatError, MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth/auth.service';
+import { TemplateRef, ViewChild } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
+import { HttpClient } from '@angular/common/http';
+import { ModalComponent } from '../../shared/components/modal/modal.component';
+import { MatIcon } from '@angular/material/icon';
 
 @Component({
   selector: 'app-login',
@@ -19,6 +24,7 @@ import { AuthService } from '../../services/auth/auth.service';
     MatButtonModule,
     ReactiveFormsModule,
     MatError,
+    MatIcon,
   ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss',
@@ -28,8 +34,55 @@ export class LoginComponent {
     private fb: FormBuilder,
     private router: Router,
     private authService: AuthService,
+    private dialog: MatDialog,
+    private http: HttpClient,
   ) {}
 
+  // esqueci minha senha
+  @ViewChild('modalEsqueciSenha')
+  modalEsqueciSenhaTpl!: TemplateRef<any>;
+
+  loadingEsqueciSenha = false;
+  erroEsqueciSenha = '';
+
+  formEsqueciSenha = this.fb.nonNullable.group({
+    email: ['', [Validators.required, Validators.email]],
+  });
+
+  abrirModalEsqueciSenha() {
+    this.erroEsqueciSenha = '';
+    this.formEsqueciSenha.reset();
+
+    this.dialog.open(ModalComponent, {
+      data: {
+        template: this.modalEsqueciSenhaTpl,
+      },
+    });
+  }
+
+  enviarEsqueciSenha(fechar: () => void) {
+    if (this.formEsqueciSenha.invalid) return;
+
+    this.loadingEsqueciSenha = true;
+    this.erroEsqueciSenha = '';
+
+    this.http
+      .post('/api/esqueci-senha', {
+        email: this.formEsqueciSenha.value.email,
+      })
+      .subscribe({
+        next: () => {
+          this.loadingEsqueciSenha = false;
+          fechar();
+        },
+        error: () => {
+          this.loadingEsqueciSenha = false;
+          this.erroEsqueciSenha = 'Erro ao enviar email. Tente novamente.';
+        },
+      });
+  }
+
+  // login
   loading = false;
 
   form = this.fb.nonNullable.group({
