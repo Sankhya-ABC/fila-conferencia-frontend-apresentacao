@@ -32,8 +32,8 @@
       <button
         mat-button
         type="button"
-        class="link-esqueci"
-        (click)="abrirModalEsqueciSenha()"
+        class="button-link"
+        (click)="abrirModalEsqueciMinhaSenha()"
       >
         Esqueci minha senha
       </button>
@@ -48,53 +48,48 @@
 </form>
 
 <!-- TEMPLATE: MODAL ESQUECI MINHA SENHA -->
-<ng-template #modalEsqueciSenha let-fechar="fechar">
-  <div class="modal-esqueci-senha">
+<ng-template #modalEsqueciMinhaSenha let-fechar="fechar">
+  <div class="modal-esqueci-minha-senha">
     <mat-icon fontSet="material-symbols-outlined">lock_reset</mat-icon>
-
     <h4>Recuperar senha</h4>
-
     <p>Informe seu e-mail para receber as instruções</p>
 
-    <form [formGroup]="formEsqueciSenha">
+    <form [formGroup]="formEsqueciMinhaSenha">
       <mat-form-field appearance="outline" style="width: 100%">
         <mat-label>Email</mat-label>
         <input matInput formControlName="email" />
 
-        <mat-error *ngIf="formEsqueciSenha.controls.email.hasError('required')">
+        <mat-error
+          *ngIf="formEsqueciMinhaSenha.controls.email.hasError('required')"
+        >
           Email obrigatório
         </mat-error>
 
-        <mat-error *ngIf="formEsqueciSenha.controls.email.hasError('email')">
+        <mat-error
+          *ngIf="formEsqueciMinhaSenha.controls.email.hasError('email')"
+        >
           Email inválido
         </mat-error>
       </mat-form-field>
-
-      <p *ngIf="erroEsqueciSenha" class="erro">
-        {{ erroEsqueciSenha }}
-      </p>
-
-      <div class="grid buttons-container">
-        <button
-          mat-raised-button
-          color="warn"
-          type="button"
-          class="xs-12 sm-6"
-          (click)="fechar()"
-        >
-          Cancelar
-        </button>
-
-        <button
-          mat-raised-button
-          color="primary"
-          class="xs-12 sm-6"
-          [disabled]="formEsqueciSenha.invalid || loadingEsqueciSenha"
-          (click)="enviarEsqueciSenha(fechar)"
-        >
-          {{ loadingEsqueciSenha ? "Enviando..." : "Enviar" }}
-        </button>
-      </div>
     </form>
+
+    <div class="grid buttons-container">
+      <button
+        mat-raised-button
+        color="warn"
+        class="xs-12 sm-6"
+        (click)="fechar()"
+      >
+        Cancelar
+      </button>
+      <button
+        mat-raised-button
+        color="primary"
+        class="xs-12 sm-6"
+        (click)="enviarEsqueciMinhaSenha(fechar)"
+      >
+        Enviar
+      </button>
+    </div>
   </div>
 </ng-template>

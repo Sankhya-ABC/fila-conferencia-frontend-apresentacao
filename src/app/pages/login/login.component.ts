@@ -39,45 +39,41 @@ export class LoginComponent {
   ) {}
 
   // esqueci minha senha
-  @ViewChild('modalEsqueciSenha')
-  modalEsqueciSenhaTpl!: TemplateRef<any>;
+  @ViewChild('modalEsqueciMinhaSenha')
+  modalEsqueciMinhaSenhaTpl!: TemplateRef<any>;
 
-  loadingEsqueciSenha = false;
-  erroEsqueciSenha = '';
+  loadingEsqueciMinhaSenha = false;
 
-  formEsqueciSenha = this.fb.nonNullable.group({
+  formEsqueciMinhaSenha = this.fb.nonNullable.group({
     email: ['', [Validators.required, Validators.email]],
   });
 
-  abrirModalEsqueciSenha() {
-    this.erroEsqueciSenha = '';
-    this.formEsqueciSenha.reset();
+  abrirModalEsqueciMinhaSenha() {
+    this.formEsqueciMinhaSenha.reset();
 
     this.dialog.open(ModalComponent, {
       data: {
-        template: this.modalEsqueciSenhaTpl,
+        template: this.modalEsqueciMinhaSenhaTpl,
       },
     });
   }
 
-  enviarEsqueciSenha(fechar: () => void) {
-    if (this.formEsqueciSenha.invalid) return;
+  enviarEsqueciMinhaSenha(fechar: () => void) {
+    if (this.formEsqueciMinhaSenha.invalid) return;
 
-    this.loadingEsqueciSenha = true;
-    this.erroEsqueciSenha = '';
+    this.loadingEsqueciMinhaSenha = true;
 
     this.http
-      .post('/api/esqueci-senha', {
-        email: this.formEsqueciSenha.value.email,
+      .post('/api/esqueci-minha-senha', {
+        email: this.formEsqueciMinhaSenha.value.email,
       })
       .subscribe({
         next: () => {
-          this.loadingEsqueciSenha = false;
+          this.loadingEsqueciMinhaSenha = false;
           fechar();
         },
         error: () => {
-          this.loadingEsqueciSenha = false;
-          this.erroEsqueciSenha = 'Erro ao enviar email. Tente novamente.';
+          this.loadingEsqueciMinhaSenha = false;
         },
       });
   }

@@ -71,3 +71,19 @@ button {
   --mat-mdc-snack-bar-button-color: var(--color-text-primary);
   color: var(--color-text-primary);
 }
+
+.button-link {
+  padding: 0 !important;
+  height: auto !important;
+  text-align: left !important;
+  display: inline !important;
+  text-decoration: underline !important;
+  font-size: typography.$font-sm !important;
+  color: var(--color-text-secondary) !important;
+  min-width: 0px !important;
+
+  background-color: var(--color-surface) !important;
+  &:hover {
+    background-color: var(--color-surface) !important;
+  }
+}

@@ -79,21 +79,16 @@
 }
 
 // esqueci minha senha
-.link-esqueci {
-  margin-top: 10px;
-  padding: 0;
-  text-align: left;
-}
-
-.modal-esqueci-senha {
+.modal-esqueci-minha-senha {
   text-align: center;
-}
+  display: flex;
+  flex-direction: column;
+  gap: $space-12;
 
-.buttons-container {
-  margin-top: 15px;
-}
-
-.erro {
-  color: red;
-  margin-top: 10px;
+  h4,
+  mat-icon {
+    color: var(--color-primary);
+    text-align: center;
+    width: 100%;
+  }
 }
