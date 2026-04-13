@@ -90,3 +90,15 @@ button {
   align-self: flex-start;
   width: auto;
 }
+
+.image-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: var(--color-warn);
+  width: 65px;
+
+  img {
+    height: 65px;
+  }
+}

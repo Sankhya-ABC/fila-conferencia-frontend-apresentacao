@@ -17,11 +17,8 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSelectModule } from '@angular/material/select';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { Router } from '@angular/router';
-import { ArquivoService } from '../../services/arquivo/arquivo.service';
 import { Perfil } from '../../services/auth/auth.model';
 import { FilaConferenciaDTO } from '../../services/conferencia/conferencia.model';
-import { ConferenciaService } from '../../services/conferencia/conferencia.service';
 import { CodigoDescricao } from '../../services/dominio/dominio.model';
 import { UsuarioService } from '../../services/usuario/usuario.service';
 
@@ -56,7 +53,7 @@ export class UsuarioComponent implements OnInit {
 
   // tabela
   displayedColumns: string[] = [
-    'codigoUsuario',
+    'codigo',
     'foto',
     'nome',
     'email',
@@ -72,8 +69,14 @@ export class UsuarioComponent implements OnInit {
   total = 0;
 
   // selects
-  listPerfil: Perfil[] = Object.values(Perfil);
+  listPerfil: CodigoDescricao[] = [
+    { codigo: null, descricao: 'Todos' },
+    ...Object.values(Perfil).map((perfil) => {
+      return { codigo: perfil, descricao: perfil };
+    }),
+  ];
   listStatus: CodigoDescricao[] = [
+    { codigo: null, descricao: 'Todos' },
     { codigo: true, descricao: 'Ativo' },
     { codigo: false, descricao: 'Inativo' },
   ];
@@ -101,21 +104,29 @@ export class UsuarioComponent implements OnInit {
   applyFilter(): void {
     this.dataSource.data = [];
 
-    const rawParams = this.filters.value;
+    const { nomeEmail, perfil, status } = this.filters.value;
 
     const params: any = {
-      ...rawParams,
       page: this.page,
       perPage: this.perPage,
     };
 
-    // this.usuarioService.getUsuarios(params).subscribe({
-    //   next: (resp) => {
-    //     this.dataSource.data = resp.data;
-    //     this.total = resp.total;
-    //   },
-    //   error: () => (this.dataSource.data = []),
-    // });
+    if (nomeEmail) {
+      params.nomeEmail = nomeEmail;
+    }
+    if (perfil) {
+      params.perfil = perfil;
+    }
+    if (status) {
+      params.status = status;
+    }
+
+    this.usuarioService.getUsuarios(params).subscribe({
+      next: (resp: any) => {
+        this.dataSource.data = resp.data;
+        this.total = resp.total;
+      },
+    });
   }
 
   onPageChange(event: any) {
@@ -125,11 +136,13 @@ export class UsuarioComponent implements OnInit {
   }
 
   // requests
-  atualizarStatus(e: any): void {
-    //
+  atualizarStatus(usuario: any): void {
+    this.usuarioService.toggleStatus(usuario.codigo).subscribe(() => {
+      usuario.ativo = !usuario.ativo;
+    });
   }
 
-  redefinirSenha(e: any): void {
-    //
+  redefinirSenha(usuario: any): void {
+    this.usuarioService.resetSenha(usuario.codigo).subscribe();
   }
 }

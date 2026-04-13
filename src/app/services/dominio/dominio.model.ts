@@ -4,6 +4,6 @@ export interface IdNome {
 }
 
 export interface CodigoDescricao {
-  codigo: string | number | boolean;
+  codigo: string | number | boolean | null;
   descricao: string;
 }

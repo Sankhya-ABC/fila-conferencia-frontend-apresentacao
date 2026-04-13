@@ -1,23 +1,22 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Usuario } from './usuario.model';
 
 @Injectable({ providedIn: 'root' })
 export class UsuarioService {
   constructor(private http: HttpClient) {}
 
-  buscarPorEmail(email: string) {
-    return this.http.get(`/api/usuarios?email=${email}`);
+  getUsuarios(params: any) {
+    return this.http.get<{ data: Usuario[]; total: number }>('/usuarios', {
+      params,
+    });
   }
 
-  ativar(id: number) {
-    return this.http.patch(`/api/usuarios/${id}/ativar`, {});
+  toggleStatus(codigo: number) {
+    return this.http.patch(`/usuarios/${codigo}/status`, {});
   }
 
-  inativar(id: number) {
-    return this.http.patch(`/api/usuarios/${id}/inativar`, {});
-  }
-
-  enviarReset(email: string) {
-    return this.http.post(`/api/auths/esqueci-minha-senha`, { email });
+  resetSenha(codigo: number) {
+    return this.http.patch(`/usuarios/${codigo}/reset-senha`, {});
   }
 }

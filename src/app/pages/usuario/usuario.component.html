@@ -8,8 +8,8 @@
   <mat-form-field appearance="outline" class="xs-12 sm-6 md-3 lg-3 xl-2">
     <mat-label>Perfil</mat-label>
     <mat-select formControlName="perfil">
-      <mat-option *ngFor="let perfil of listPerfil" [value]="perfil">
-        {{ perfil }}
+      <mat-option *ngFor="let perfil of listPerfil" [value]="perfil.codigo">
+        {{ perfil.descricao }}
       </mat-option>
     </mat-select>
   </mat-form-field>
@@ -17,8 +17,8 @@
   <mat-form-field appearance="outline" class="xs-12 sm-6 md-3 lg-3 xl-2">
     <mat-label>Status</mat-label>
     <mat-select formControlName="status">
-      <mat-option *ngFor="let status of listStatus" [value]="status">
-        {{ status }}
+      <mat-option *ngFor="let status of listStatus" [value]="status.codigo">
+        {{ status.descricao }}
       </mat-option>
     </mat-select>
   </mat-form-field>
@@ -45,44 +45,56 @@
 <div class="table-container">
   <mat-table [dataSource]="dataSource" class="mat-elevation-z8">
     <ng-container matColumnDef="acoes" sticky>
-      <mat-header-cell *matHeaderCellDef>Status</mat-header-cell>
+      <mat-header-cell *matHeaderCellDef>Ações</mat-header-cell>
       <mat-cell *matCellDef="let e">
         <div class="acoes-container">
           <span
-            matTooltip="Ativar/Desativar"
+            matTooltip="{{ e.ativo ? 'Inativar' : 'Ativar' }}"
             matTooltipClass="tooltip"
             matTooltipPosition="above"
           >
             <button mat-icon-button (click)="atualizarStatus(e)">
-              <mat-icon fontSet="material-symbols-outlined">
-                deployed_code
+              <mat-icon *ngIf="!e.ativo" fontSet="material-symbols-outlined">
+                toggle_on
+              </mat-icon>
+              <mat-icon *ngIf="e.ativo" fontSet="material-symbols-outlined">
+                toggle_off
               </mat-icon>
             </button>
           </span>
 
           <span
-            matTooltip="Ativar/Desativar"
+            matTooltip="Redefinir Senha"
             matTooltipClass="tooltip"
             matTooltipPosition="above"
           >
             <button mat-icon-button (click)="redefinirSenha(e)">
-              <mat-icon fontSet="material-symbols-outlined">
-                deployed_code
-              </mat-icon>
+              <mat-icon fontSet="material-symbols-outlined"> replay </mat-icon>
             </button>
           </span>
         </div>
       </mat-cell>
     </ng-container>
 
-    <ng-container matColumnDef="codigoUsuario">
+    <ng-container matColumnDef="codigo">
       <mat-header-cell *matHeaderCellDef>Código Usuário</mat-header-cell>
-      <mat-cell *matCellDef="let data">{{ data.codigoUsuario }}</mat-cell>
+      <mat-cell *matCellDef="let data">{{ data.codigo }}</mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="foto">
       <mat-header-cell *matHeaderCellDef>Foto</mat-header-cell>
-      <mat-cell *matCellDef="let data">{{ data.foto }}</mat-cell>
+      <mat-cell *matCellDef="let data">
+        <div class="image-container">
+          <img
+            *ngIf="data.foto"
+            [src]="'data:image/png;base64,' + data.foto"
+            alt="Foto do usuário"
+          />
+          <mat-icon *ngIf="!data.foto" fontSet="material-symbols-outlined"
+            >hide_image</mat-icon
+          >
+        </div>
+      </mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="nome">
@@ -102,7 +114,9 @@
 
     <ng-container matColumnDef="ativo">
       <mat-header-cell *matHeaderCellDef>Ativo</mat-header-cell>
-      <mat-cell *matCellDef="let data">{{ data.ativo }}</mat-cell>
+      <mat-cell *matCellDef="let data">{{
+        data.ativo ? "Ativo" : "Inativo"
+      }}</mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="descricaoStatus">
@@ -112,12 +126,16 @@
 
     <ng-container matColumnDef="criadoEm">
       <mat-header-cell *matHeaderCellDef>Criado Em</mat-header-cell>
-      <mat-cell *matCellDef="let data">{{ data.criadoEm }}</mat-cell>
+      <mat-cell *matCellDef="let data">{{
+        data.criadoEm | date: "dd/MM/yyyy"
+      }}</mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="atualizadoEm">
       <mat-header-cell *matHeaderCellDef>Atualizado Em</mat-header-cell>
-      <mat-cell *matCellDef="let data">{{ data.atualizadoEm }}</mat-cell>
+      <mat-cell *matCellDef="let data">{{
+        data.atualizadoEm | date: "dd/MM/yyyy"
+      }}</mat-cell>
     </ng-container>
 
     <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>

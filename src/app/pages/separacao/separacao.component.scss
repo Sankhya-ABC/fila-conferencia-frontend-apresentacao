@@ -24,18 +24,6 @@ h4 {
   margin-bottom: $space-24;
 }
 
-.image-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  color: var(--color-warn);
-  width: 65px;
-
-  img {
-    height: 65px;
-  }
-}
-
 // DADOS GERAIS
 .dados-gerais {
   background-color: var(--color-primary);
