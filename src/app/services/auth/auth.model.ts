@@ -4,8 +4,8 @@ export interface LoginRequest {
 }
 
 export enum Perfil {
-  ADMINISTRADOR,
-  SEPARADOR,
+  ADMINISTRADOR = 'ADMINISTRADOR',
+  SEPARADOR = 'SEPARADOR',
 }
 
 export interface SessionData {

@@ -1,37 +1,133 @@
-<div class="usuarios-page">
-  <h2>Usuários</h2>
+<!-- Filtros -->
+<div class="filtros-container grid" [formGroup]="filters">
+  <mat-form-field appearance="outline" class="xs-12 sm-12 md-6 lg-6 xl-4">
+    <mat-label>Nome/E-mail</mat-label>
+    <input matInput formControlName="nomeEmail" />
+  </mat-form-field>
 
-  <form [formGroup]="form" (ngSubmit)="buscar()" class="search-form">
-    <mat-form-field appearance="outline">
-      <mat-label>Email</mat-label>
-      <input matInput formControlName="email" />
-    </mat-form-field>
+  <mat-form-field appearance="outline" class="xs-12 sm-6 md-3 lg-3 xl-2">
+    <mat-label>Perfil</mat-label>
+    <mat-select formControlName="perfil">
+      <mat-option *ngFor="let perfil of listPerfil" [value]="perfil">
+        {{ perfil }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
 
-    <button mat-raised-button color="primary" type="submit">Buscar</button>
-  </form>
+  <mat-form-field appearance="outline" class="xs-12 sm-6 md-3 lg-3 xl-2">
+    <mat-label>Status</mat-label>
+    <mat-select formControlName="status">
+      <mat-option *ngFor="let status of listStatus" [value]="status">
+        {{ status }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
 
-  <div *ngIf="usuarios.length > 0" class="lista">
-    <div class="usuario-card" *ngFor="let u of usuarios">
-      <div class="info">
-        <strong>{{ u.nome }}</strong>
-        <span>{{ u.email }}</span>
-        <span>Perfil: {{ u.perfil }}</span>
-        <span>Status: {{ u.ativo ? "Ativo" : "Inativo" }}</span>
-      </div>
+  <button
+    mat-raised-button
+    color="warn"
+    (click)="onLimparCampos()"
+    class="xs-12 sm-6 md-3 lg-3 xl-2"
+  >
+    Limpar campos
+  </button>
+  <button
+    mat-raised-button
+    color="primary"
+    (click)="applyFilter()"
+    class="xs-12 sm-6 md-3 lg-3 xl-2"
+  >
+    Pesquisar
+  </button>
+</div>
 
-      <div class="acoes">
-        <button mat-button color="primary" *ngIf="!u.ativo" (click)="ativar(u)">
-          Ativar
-        </button>
+<!-- Tabela -->
+<div class="table-container">
+  <mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+    <ng-container matColumnDef="acoes" sticky>
+      <mat-header-cell *matHeaderCellDef>Status</mat-header-cell>
+      <mat-cell *matCellDef="let e">
+        <div class="acoes-container">
+          <span
+            matTooltip="Ativar/Desativar"
+            matTooltipClass="tooltip"
+            matTooltipPosition="above"
+          >
+            <button mat-icon-button (click)="atualizarStatus(e)">
+              <mat-icon fontSet="material-symbols-outlined">
+                deployed_code
+              </mat-icon>
+            </button>
+          </span>
 
-        <button mat-button color="warn" *ngIf="u.ativo" (click)="inativar(u)">
-          Inativar
-        </button>
+          <span
+            matTooltip="Ativar/Desativar"
+            matTooltipClass="tooltip"
+            matTooltipPosition="above"
+          >
+            <button mat-icon-button (click)="redefinirSenha(e)">
+              <mat-icon fontSet="material-symbols-outlined">
+                deployed_code
+              </mat-icon>
+            </button>
+          </span>
+        </div>
+      </mat-cell>
+    </ng-container>
 
-        <button mat-stroked-button (click)="resetSenha(u)">
-          Resetar senha
-        </button>
-      </div>
-    </div>
-  </div>
+    <ng-container matColumnDef="codigoUsuario">
+      <mat-header-cell *matHeaderCellDef>Código Usuário</mat-header-cell>
+      <mat-cell *matCellDef="let data">{{ data.codigoUsuario }}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="foto">
+      <mat-header-cell *matHeaderCellDef>Foto</mat-header-cell>
+      <mat-cell *matCellDef="let data">{{ data.foto }}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="nome">
+      <mat-header-cell *matHeaderCellDef>Nome</mat-header-cell>
+      <mat-cell *matCellDef="let data">{{ data.nome }}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="email">
+      <mat-header-cell *matHeaderCellDef>Email</mat-header-cell>
+      <mat-cell *matCellDef="let data">{{ data.email }}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="perfil">
+      <mat-header-cell *matHeaderCellDef>Perfil</mat-header-cell>
+      <mat-cell *matCellDef="let data">{{ data.perfil }}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="ativo">
+      <mat-header-cell *matHeaderCellDef>Ativo</mat-header-cell>
+      <mat-cell *matCellDef="let data">{{ data.ativo }}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="descricaoStatus">
+      <mat-header-cell *matHeaderCellDef>Status</mat-header-cell>
+      <mat-cell *matCellDef="let data">{{ data.descricaoStatus }}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="criadoEm">
+      <mat-header-cell *matHeaderCellDef>Criado Em</mat-header-cell>
+      <mat-cell *matCellDef="let data">{{ data.criadoEm }}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="atualizadoEm">
+      <mat-header-cell *matHeaderCellDef>Atualizado Em</mat-header-cell>
+      <mat-cell *matCellDef="let data">{{ data.atualizadoEm }}</mat-cell>
+    </ng-container>
+
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
+  </mat-table>
+  <mat-paginator
+    [length]="total"
+    [pageSize]="perPage"
+    [pageSizeOptions]="[5, 10, 15, 25, 50]"
+    (page)="onPageChange($event)"
+  >
+  </mat-paginator>
 </div>
