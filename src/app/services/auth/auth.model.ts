@@ -14,3 +14,7 @@ export interface RedefinirSenhaParams {
   token: string;
   email: string;
 }
+
+export interface EsqueciMinhaSenhaParams {
+  email: string;
+}

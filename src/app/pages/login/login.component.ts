@@ -63,10 +63,8 @@ export class LoginComponent {
 
     this.loadingEsqueciMinhaSenha = true;
 
-    this.http
-      .post('/api/esqueci-minha-senha', {
-        email: this.formEsqueciMinhaSenha.value.email,
-      })
+    this.authService
+      .esqueciMinhaSenha(this.formEsqueciMinhaSenha.getRawValue())
       .subscribe({
         next: () => {
           this.loadingEsqueciMinhaSenha = false;

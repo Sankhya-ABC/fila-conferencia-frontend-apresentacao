@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { SESSION_KEYS } from '../../core/session';
 import {
+  EsqueciMinhaSenhaParams,
   LoginRequest,
   LoginResponse,
   RedefinirSenhaParams,
@@ -16,6 +17,12 @@ export class AuthService {
     private http: HttpClient,
     private router: Router,
   ) {}
+
+  esqueciMinhaSenha(body: EsqueciMinhaSenhaParams): Observable<null> {
+    return this.http.post<null>('/auths/esqueci-minha-senha', body, {
+      headers: { 'x-show-success': 'true' },
+    });
+  }
 
   redefinirSenha(body: RedefinirSenhaParams): Observable<null> {
     return this.http.post<null>('/auths/redefinir-senha', body);

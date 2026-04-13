@@ -6,11 +6,11 @@ import { ToastComponent } from '../../shared/components/toast/toast.component';
 export class ToastService {
   constructor(private snackBar: MatSnackBar) {}
 
-  error(title: string, message: string) {
+  open(title: string, message: string, type: 'success' | 'error') {
     this.snackBar.openFromComponent(ToastComponent, {
-      duration: 5000,
+      duration: 50000,
       data: { title, message },
-      panelClass: ['toast-error'],
+      panelClass: [`toast-${type}`],
       horizontalPosition: 'center',
       verticalPosition: 'top',
     });

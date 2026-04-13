@@ -72,6 +72,12 @@ button {
   color: var(--color-text-primary);
 }
 
+.toast-success.mat-mdc-snack-bar-container {
+  --mdc-snackbar-container-color: var(--color-primary);
+  --mat-mdc-snack-bar-button-color: var(--color-text-primary);
+  color: var(--color-text-primary);
+}
+
 .button-link {
   padding: 0 !important;
   height: auto !important;

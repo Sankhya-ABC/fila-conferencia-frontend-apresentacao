@@ -30,7 +30,7 @@ export class HttpErrorInterceptor implements HttpInterceptor {
             message = message.join(', ');
           }
 
-          this.toast.error(title, message);
+          this.toast.open(title, message, 'error');
         }
 
         return throwError(() => error);

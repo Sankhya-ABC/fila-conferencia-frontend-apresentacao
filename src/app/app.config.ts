@@ -12,6 +12,7 @@ import { apiInterceptor } from './core/interceptors/api.interceptor';
 import { authInterceptor } from './core/interceptors/auth.interceptor';
 import { HttpErrorInterceptor } from './core/interceptors/http-error.interceptor';
 import { HttpLoadingInterceptor } from './core/interceptors/http-loading.interceptor';
+import { HttpSuccessInterceptor } from './core/interceptors/http-success.interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -23,6 +24,11 @@ export const appConfig: ApplicationConfig = {
     {
       provide: HTTP_INTERCEPTORS,
       useClass: HttpErrorInterceptor,
+      multi: true,
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: HttpSuccessInterceptor,
       multi: true,
     },
     {
