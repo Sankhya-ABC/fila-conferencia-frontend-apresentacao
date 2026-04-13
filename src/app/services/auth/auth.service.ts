@@ -7,7 +7,7 @@ import { SESSION_KEYS } from '../../core/session';
 import {
   EsqueciMinhaSenhaParams,
   LoginRequest,
-  LoginResponse,
+  SessionData,
   RedefinirSenhaParams,
 } from './auth.model';
 
@@ -28,8 +28,8 @@ export class AuthService {
     return this.http.post<null>('/auths/redefinir-senha', body);
   }
 
-  login(body: LoginRequest): Observable<LoginResponse> {
-    return this.http.post<LoginResponse>('/auths/login', body).pipe(
+  login(body: LoginRequest): Observable<SessionData> {
+    return this.http.post<SessionData>('/auths/login', body).pipe(
       tap((resp) => {
         localStorage.setItem(SESSION_KEYS.AUTH_USER, JSON.stringify(resp));
       }),
@@ -41,7 +41,7 @@ export class AuthService {
     this.router.navigate(['/login']);
   }
 
-  getUser(): LoginResponse {
+  getUser(): SessionData {
     return JSON.parse(localStorage.getItem(SESSION_KEYS.AUTH_USER) || '{}');
   }
 

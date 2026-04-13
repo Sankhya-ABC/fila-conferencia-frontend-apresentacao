@@ -3,10 +3,16 @@ export interface LoginRequest {
   senha: string;
 }
 
-export interface LoginResponse {
+export enum Perfil {
+  ADMINISTRADOR,
+  SEPARADOR,
+}
+
+export interface SessionData {
+  token: string;
   nome: string;
   idUsuario: number;
-  token: string;
+  perfil: Perfil;
 }
 
 export interface RedefinirSenhaParams {
