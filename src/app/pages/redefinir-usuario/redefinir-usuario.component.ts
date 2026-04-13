@@ -19,6 +19,7 @@ import { MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { UsuarioService } from '../../services/usuario/usuario.service';
 import { MatChipsModule } from '@angular/material/chips';
+import { ToastService } from '../../services/toast/toast.service';
 
 @Component({
   selector: 'app-usuario',
@@ -48,6 +49,7 @@ export class RedefinirUsuarioComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private usuarioService: UsuarioService,
+    private toast: ToastService,
   ) {}
 
   // filters
@@ -88,8 +90,27 @@ export class RedefinirUsuarioComponent implements OnInit {
 
   redefinirAtivarLote() {
     this.usuarioService.redefinirAtivarLote(this.emails).subscribe({
-      next: (resp) => {
-        console.log(resp);
+      next: (resp: any) => {
+        if (resp.erro.length) {
+          this.toast.open(
+            'Parcial',
+            `Não encontrados: ${resp.erro.join(', ')}`,
+            'error',
+          );
+        }
+
+        if (resp.sucesso.length) {
+          setTimeout(
+            () => {
+              this.toast.open(
+                'Sucesso',
+                `Emails enviados: ${resp.sucesso.join(', ')}`,
+                'success',
+              );
+            },
+            resp.erro.length ? 1200 : 0,
+          );
+        }
       },
     });
   }
