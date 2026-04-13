@@ -17,6 +17,8 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSelectModule } from '@angular/material/select';
 import { MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { UsuarioService } from '../../services/usuario/usuario.service';
+import { MatChipsModule } from '@angular/material/chips';
 
 @Component({
   selector: 'app-usuario',
@@ -37,15 +39,38 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     MatIconModule,
     MatTooltipModule,
     MatButtonModule,
+    MatChipsModule,
   ],
   templateUrl: './redefinir-usuario.component.html',
   styleUrls: ['./redefinir-usuario.component.scss'],
 })
 export class RedefinirUsuarioComponent implements OnInit {
-  constructor(private fb: FormBuilder) {}
+  constructor(
+    private fb: FormBuilder,
+    private usuarioService: UsuarioService,
+  ) {}
 
   // filters
   filters!: FormGroup;
+  emails: string[] = [];
+
+  adicionarEmail(event: any) {
+    const value = (event.value || '').trim();
+
+    if (value && this.validarEmail(value)) {
+      this.emails.push(value);
+    }
+
+    event.chipInput!.clear();
+  }
+
+  removerEmail(email: string) {
+    this.emails = this.emails.filter((e) => e !== email);
+  }
+
+  validarEmail(email: string): boolean {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  }
 
   private criarForm(): void {
     this.filters = this.fb.group({
@@ -61,7 +86,11 @@ export class RedefinirUsuarioComponent implements OnInit {
     this.criarForm();
   }
 
-  redefinirAtivarLote(): void {
-    //
+  redefinirAtivarLote() {
+    this.usuarioService.redefinirAtivarLote(this.emails).subscribe({
+      next: (resp) => {
+        console.log(resp);
+      },
+    });
   }
 }

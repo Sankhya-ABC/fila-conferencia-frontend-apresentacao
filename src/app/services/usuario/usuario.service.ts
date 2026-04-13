@@ -16,7 +16,7 @@ export class UsuarioService {
     return this.http.patch(`/usuarios/${codigo}/status`, {});
   }
 
-  resetSenha(codigo: number) {
-    return this.http.patch(`/usuarios/${codigo}/reset-senha`, {});
+  redefinirAtivarLote(emails: string[]) {
+    return this.http.post(`/usuarios/redefinir-ativar-lote`, { emails });
   }
 }

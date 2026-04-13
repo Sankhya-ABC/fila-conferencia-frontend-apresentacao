@@ -1,8 +1,25 @@
-<!-- Filtros -->
 <div class="filtros-container grid" [formGroup]="filters">
   <mat-form-field appearance="outline" class="xs-12 sm-12 md-8 lg-8 xl-10">
-    <mat-label>E-mail</mat-label>
-    <input matInput formControlName="nomeEmail" />
+    <mat-label>E-mails</mat-label>
+
+    <mat-chip-grid #chipGrid>
+      <mat-chip-row
+        *ngFor="let email of emails"
+        (removed)="removerEmail(email)"
+      >
+        {{ email }}
+        <button matChipRemove>
+          <mat-icon>cancel</mat-icon>
+        </button>
+      </mat-chip-row>
+
+      <input
+        placeholder="Digite o e-mail e pressione Enter"
+        [matChipInputFor]="chipGrid"
+        [matChipInputSeparatorKeyCodes]="[13, 188]"
+        (matChipInputTokenEnd)="adicionarEmail($event)"
+      />
+    </mat-chip-grid>
   </mat-form-field>
 
   <button

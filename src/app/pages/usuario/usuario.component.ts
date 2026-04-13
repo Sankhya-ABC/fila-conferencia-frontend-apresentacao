@@ -142,7 +142,7 @@ export class UsuarioComponent implements OnInit {
     });
   }
 
-  redefinirSenha(usuario: any): void {
-    this.usuarioService.resetSenha(usuario.codigo).subscribe();
+  redefinirAtivarLote(emails: string[]): void {
+    this.usuarioService.redefinirAtivarLote(emails).subscribe();
   }
 }
