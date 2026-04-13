@@ -1,0 +1,40 @@
+.usuarios-page {
+  padding: 24px;
+
+  h2 {
+    margin-bottom: 16px;
+  }
+}
+
+.search-form {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.lista {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.usuario-card {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 12px;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.acoes {
+  display: flex;
+  gap: 8px;
+}

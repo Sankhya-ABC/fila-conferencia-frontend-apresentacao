@@ -5,6 +5,8 @@ import { FilaConferenciaComponent } from './pages/fila-conferencia/fila-conferen
 import { LoginComponent } from './pages/login/login.component';
 import { RedefinirSenhaComponent } from './pages/redefinir-senha/redefinir-senha.component';
 import { SeparacaoComponent } from './pages/separacao/separacao.component';
+import { adminGuard } from './core/guards/admin.guard';
+import { UsuarioComponent } from './pages/usuario/usuario.component';
 
 export const routes: Routes = [
   {
@@ -16,6 +18,12 @@ export const routes: Routes = [
   {
     path: 'redefinir-senha',
     component: RedefinirSenhaComponent,
+  },
+  {
+    canActivate: [adminGuard],
+    path: 'usuario',
+    title: 'Usuários',
+    component: UsuarioComponent,
   },
   {
     canActivate: [authGuard],

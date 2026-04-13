@@ -1,0 +1,37 @@
+<div class="usuarios-page">
+  <h2>Usuários</h2>
+
+  <form [formGroup]="form" (ngSubmit)="buscar()" class="search-form">
+    <mat-form-field appearance="outline">
+      <mat-label>Email</mat-label>
+      <input matInput formControlName="email" />
+    </mat-form-field>
+
+    <button mat-raised-button color="primary" type="submit">Buscar</button>
+  </form>
+
+  <div *ngIf="usuarios.length > 0" class="lista">
+    <div class="usuario-card" *ngFor="let u of usuarios">
+      <div class="info">
+        <strong>{{ u.nome }}</strong>
+        <span>{{ u.email }}</span>
+        <span>Perfil: {{ u.perfil }}</span>
+        <span>Status: {{ u.ativo ? "Ativo" : "Inativo" }}</span>
+      </div>
+
+      <div class="acoes">
+        <button mat-button color="primary" *ngIf="!u.ativo" (click)="ativar(u)">
+          Ativar
+        </button>
+
+        <button mat-button color="warn" *ngIf="u.ativo" (click)="inativar(u)">
+          Inativar
+        </button>
+
+        <button mat-stroked-button (click)="resetSenha(u)">
+          Resetar senha
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
