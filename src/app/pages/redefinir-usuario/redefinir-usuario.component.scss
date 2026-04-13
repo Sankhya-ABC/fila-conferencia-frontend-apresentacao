@@ -1,0 +1,7 @@
+@use "../../../styles/spacing" as *;
+@use "../../../styles/typography" as *;
+@use "../../../styles/breakpoints" as *;
+
+.filtros-container {
+  margin-bottom: $space-30;
+}

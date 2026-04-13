@@ -7,6 +7,7 @@ import { RedefinirSenhaComponent } from './pages/redefinir-senha/redefinir-senha
 import { SeparacaoComponent } from './pages/separacao/separacao.component';
 import { adminGuard } from './core/guards/admin.guard';
 import { UsuarioComponent } from './pages/usuario/usuario.component';
+import { RedefinirUsuarioComponent } from './pages/redefinir-usuario/redefinir-usuario.component';
 
 export const routes: Routes = [
   {
@@ -24,6 +25,12 @@ export const routes: Routes = [
     path: 'usuario',
     title: 'Usuários',
     component: UsuarioComponent,
+  },
+  {
+    canActivate: [adminGuard],
+    path: 'redefinir-usuario',
+    title: 'Redefinir Usuário',
+    component: RedefinirUsuarioComponent,
   },
   {
     canActivate: [authGuard],

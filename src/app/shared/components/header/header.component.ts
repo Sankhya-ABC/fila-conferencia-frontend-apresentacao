@@ -4,10 +4,12 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatToolbarModule } from '@angular/material/toolbar';
+import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { RouteStateService } from '../../../services/route-state/route-state.service';
 import { AuthService } from '../../../services/auth/auth.service';
+import { RouteStateService } from '../../../services/route-state/route-state.service';
+import { Perfil } from '../../../services/auth/auth.model';
 
 @Component({
   selector: 'app-header',
@@ -29,6 +31,8 @@ export class HeaderComponent {
 
   constructor(
     private routeState: RouteStateService,
+    private router: Router,
+
     private authService: AuthService,
   ) {
     this.hideContainer$ = this.routeState.hideContainer$.pipe(
@@ -38,6 +42,7 @@ export class HeaderComponent {
   }
 
   nome = this.authService.getUser().nome || '';
+  isAdmin = this.authService.getUser().perfil === Perfil.ADMINISTRADOR;
 
   logout() {
     this.authService.logout();
@@ -45,5 +50,17 @@ export class HeaderComponent {
 
   toggleTheme() {
     console.log('toggle theme');
+  }
+
+  usuario() {
+    this.router.navigate(['/usuario']);
+  }
+
+  filaDeConferencia() {
+    this.router.navigate(['/fila-conferencia']);
+  }
+
+  redefinirUsuario() {
+    this.router.navigate(['/redefinir-usuario']);
   }
 }

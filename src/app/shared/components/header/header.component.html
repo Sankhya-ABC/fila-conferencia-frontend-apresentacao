@@ -12,5 +12,17 @@
       <mat-icon>logout</mat-icon>
       <span>Sair</span>
     </button>
+    <button mat-menu-item (click)="filaDeConferencia()">
+      <mat-icon>view_list</mat-icon>
+      <span>Fila de Conferência</span>
+    </button>
+    <button *ngIf="isAdmin" mat-menu-item (click)="usuario()">
+      <mat-icon>person_search</mat-icon>
+      <span>Consultar Usuários</span>
+    </button>
+    <button *ngIf="isAdmin" mat-menu-item (click)="redefinirUsuario()">
+      <mat-icon>person_shield</mat-icon>
+      <span>Redefinir Usuários</span>
+    </button>
   </mat-menu>
 </mat-toolbar>
