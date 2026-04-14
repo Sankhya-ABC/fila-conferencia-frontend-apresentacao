@@ -4,7 +4,7 @@
   <span class="spacer"></span>
 
   <button mat-icon-button [matMenuTriggerFor]="menu" class="avatar-button">
-    <span class="avatar">{{ nome.substring(0, 2).toUpperCase() }}</span>
+    <span class="avatar">{{ nome$ | async }}</span>
   </button>
 
   <mat-menu #menu="matMenu">
@@ -16,11 +16,11 @@
       <mat-icon>view_list</mat-icon>
       <span>Fila de Conferência</span>
     </button>
-    <button *ngIf="isAdmin" mat-menu-item (click)="usuario()">
+    <button *ngIf="isAdmin$ | async" mat-menu-item (click)="usuario()">
       <mat-icon>person_search</mat-icon>
       <span>Consultar Usuários</span>
     </button>
-    <button *ngIf="isAdmin" mat-menu-item (click)="redefinirUsuario()">
+    <button *ngIf="isAdmin$ | async" mat-menu-item (click)="redefinirUsuario()">
       <mat-icon>person_shield</mat-icon>
       <span>Redefinir Usuários</span>
     </button>

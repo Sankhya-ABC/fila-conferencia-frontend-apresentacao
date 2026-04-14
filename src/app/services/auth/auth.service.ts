@@ -1,22 +1,33 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { SESSION_KEYS } from '../../core/session';
 import {
   EsqueciMinhaSenhaParams,
   LoginRequest,
-  SessionData,
   RedefinirSenhaParams,
+  SessionData,
 } from './auth.model';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
+  private userSubject = new BehaviorSubject<SessionData | null>(
+    this.getUserStorage(),
+  );
+
+  user$ = this.userSubject.asObservable();
+
   constructor(
     private http: HttpClient,
     private router: Router,
   ) {}
+
+  private getUserStorage(): SessionData | null {
+    const data = localStorage.getItem(SESSION_KEYS.AUTH_USER);
+    return data ? JSON.parse(data) : null;
+  }
 
   esqueciMinhaSenha(body: EsqueciMinhaSenhaParams): Observable<null> {
     return this.http.post<null>('/auths/esqueci-minha-senha', body, {
@@ -32,20 +43,22 @@ export class AuthService {
     return this.http.post<SessionData>('/auths/login', body).pipe(
       tap((resp) => {
         localStorage.setItem(SESSION_KEYS.AUTH_USER, JSON.stringify(resp));
+        this.userSubject.next(resp);
       }),
     );
   }
 
   logout(): void {
     localStorage.removeItem(SESSION_KEYS.AUTH_USER);
+    this.userSubject.next(null);
     this.router.navigate(['/login']);
   }
 
   getUser(): SessionData {
-    return JSON.parse(localStorage.getItem(SESSION_KEYS.AUTH_USER) || '{}');
+    return this.userSubject.value || ({} as SessionData);
   }
 
   isAuthenticated(): boolean {
-    return !!this.getUser().token;
+    return !!this.getUser()?.token;
   }
 }

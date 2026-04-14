@@ -41,8 +41,13 @@ export class HeaderComponent {
     this.title$ = this.routeState.routeTitle$;
   }
 
-  nome = this.authService.getUser().nome || '';
-  isAdmin = this.authService.getUser().perfil === Perfil.ADMINISTRADOR;
+  user$ = this.authService.user$;
+
+  nome$ = this.user$.pipe(map((user) => user?.nome || ''));
+
+  isAdmin$ = this.user$.pipe(
+    map((user) => user?.perfil === Perfil.ADMINISTRADOR),
+  );
 
   logout() {
     this.authService.logout();
