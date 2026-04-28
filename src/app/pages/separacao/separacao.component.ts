@@ -226,9 +226,9 @@ export class SeparacaoComponent implements OnInit {
       next: (dados) => {
         this.dadosGerais = dados;
 
-        if (dados.codigoStatus !== 'AC' && dados.codigoStatus !== 'A') {
-          this.router.navigate(['/fila-conferencia']);
-        }
+        //if (dados.codigoStatus !== 'AC' && dados.codigoStatus !== 'A') {
+          //this.router.navigate(['/fila-conferencia']);
+        //}
 
         if (dados.codigoStatus === 'AC') {
           this.iniciarConferencia(dados.numeroUnico);
@@ -248,9 +248,11 @@ export class SeparacaoComponent implements OnInit {
         numeroUnico,
       })
       .subscribe({
-        next: () => {
-          this.inicializarConferencia();
-        },
+          next: (res) => {
+            this.dadosGerais.numeroConferencia = res.numeroConferencia;
+
+            this.carregarEstadoConferencia();
+          },
         error: (err) => console.error(err),
       });
   }

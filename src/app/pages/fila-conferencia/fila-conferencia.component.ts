@@ -72,7 +72,6 @@ export class FilaConferenciaComponent implements OnInit {
     'acoes',
     'numeroUnico',
     'numeroNota',
-    'numeroModial',
     'numeroConferencia',
     'valorNota',
     'volume',
@@ -84,7 +83,6 @@ export class FilaConferenciaComponent implements OnInit {
     // 'codigoTipoOperacao',
     'descricaoTipoOperacao',
     // 'codigoTipoEntrega',
-    'descricaoTipoEntrega',
     // 'idEmpresa',
     'nomeEmpresa',
     // 'idParceiro',
@@ -166,7 +164,6 @@ export class FilaConferenciaComponent implements OnInit {
   private criarForm(): void {
     this.filters = this.fb.group({
       codigoStatus: [['A', 'AC', 'R', 'RA', 'RD', 'Z']],
-      numeroModial: [],
       numeroNota: [],
       numeroUnico: [],
       dataInicio: [],

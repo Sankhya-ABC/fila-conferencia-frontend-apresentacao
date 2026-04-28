@@ -1,139 +1,119 @@
-<!-- Filtros -->
-<div class="filtros-container grid" [formGroup]="filters">
-  <mat-form-field appearance="outline" class="xs-12 sm-6 md-3 lg-3 xl-2">
-    <mat-label>Status</mat-label>
-    <mat-select formControlName="codigoStatus" multiple>
-      <mat-option *ngFor="let status of listStatus" [value]="status.codigo">
-        {{ status.descricao }}
-      </mat-option>
-    </mat-select>
-  </mat-form-field>
+<!-- Filtros reorganizados em 3 linhas -->
+<div class="filtros-container" [formGroup]="filters">
+  <!-- Linha 1: Número Único, Número Nota, Data Início, Data Fim -->
+  <div class="filtros-row">
+    <mat-form-field appearance="outline">
+      <mat-label>Número Único</mat-label>
+      <input matInput formControlName="numeroUnico" />
+    </mat-form-field>
 
-  <mat-form-field appearance="outline" class="xs-12 sm-6 md-3 lg-3 xl-2">
-    <mat-label>Número Modial</mat-label>
-    <input matInput formControlName="numeroModial" />
-  </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Número Nota</mat-label>
+      <input matInput formControlName="numeroNota" />
+    </mat-form-field>
 
-  <mat-form-field appearance="outline" class="xs-12 sm-6 md-3 lg-3 xl-2">
-    <mat-label>Número Nota</mat-label>
-    <input matInput formControlName="numeroNota" />
-  </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Data Início</mat-label>
+      <input
+        matInput
+        [matDatepicker]="pickerInicio"
+        formControlName="dataInicio"
+      />
+      <mat-datepicker-toggle matSuffix [for]="pickerInicio"></mat-datepicker-toggle>
+      <mat-datepicker #pickerInicio></mat-datepicker>
+    </mat-form-field>
 
-  <mat-form-field appearance="outline" class="xs-12 sm-6 md-3 lg-3 xl-2">
-    <mat-label>Número Único</mat-label>
-    <input matInput formControlName="numeroUnico" />
-  </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Data Fim</mat-label>
+      <input matInput [matDatepicker]="pickerFim" formControlName="dataFim" />
+      <mat-datepicker-toggle matSuffix [for]="pickerFim"></mat-datepicker-toggle>
+      <mat-datepicker #pickerFim></mat-datepicker>
+    </mat-form-field>
+  </div>
 
-  <mat-form-field appearance="outline" class="xs-12 sm-6 md-3 lg-3 xl-2">
-    <mat-label>Data Início</mat-label>
-    <input
-      matInput
-      [matDatepicker]="pickerInicio"
-      formControlName="dataInicio"
-    />
-    <mat-datepicker-toggle
-      matSuffix
-      [for]="pickerInicio"
-    ></mat-datepicker-toggle>
-    <mat-datepicker #pickerInicio></mat-datepicker>
-  </mat-form-field>
+  <!-- Linha 2: Status, Tipo Operação, Tipo Movimento -->
+  <div class="filtros-row">
+    <mat-form-field appearance="outline">
+      <mat-label>Status</mat-label>
+      <mat-select formControlName="codigoStatus" multiple>
+        <mat-option *ngFor="let status of listStatus" [value]="status.codigo">
+          {{ status.descricao }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
 
-  <mat-form-field appearance="outline" class="xs-12 sm-6 md-3 lg-3 xl-2">
-    <mat-label>Data Fim</mat-label>
-    <input matInput [matDatepicker]="pickerFim" formControlName="dataFim" />
-    <mat-datepicker-toggle matSuffix [for]="pickerFim"></mat-datepicker-toggle>
-    <mat-datepicker #pickerFim></mat-datepicker>
-  </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Tipo Operação</mat-label>
+      <mat-select formControlName="codigoTipoOperacao" multiple>
+        <mat-option [value]="null">Todos</mat-option>
+        <mat-option
+          *ngFor="let tipoOperacao of listTipoOperacao"
+          [value]="tipoOperacao.codigo"
+        >
+          {{ tipoOperacao.descricao }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
 
-  <mat-form-field appearance="outline" class="xs-12 sm-6 md-3 lg-3 xl-2">
-    <mat-label>Tipo Movimento</mat-label>
-    <mat-select formControlName="codigoTipoMovimento" multiple>
-      <mat-option [value]="null">Todos</mat-option>
-      <mat-option
-        *ngFor="let tipoMovimento of listTipoMovimento"
-        [value]="tipoMovimento.codigo"
+    <mat-form-field appearance="outline">
+      <mat-label>Tipo Movimento</mat-label>
+      <mat-select formControlName="codigoTipoMovimento" multiple>
+        <mat-option [value]="null">Todos</mat-option>
+        <mat-option
+          *ngFor="let tipoMovimento of listTipoMovimento"
+          [value]="tipoMovimento.codigo"
+        >
+          {{ tipoMovimento.descricao }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+  <!-- Linha 3: Empresa, Parceiro e Botões -->
+  <div class="filtros-row">
+    <mat-form-field appearance="outline">
+      <mat-label>Empresa</mat-label>
+      <input
+        matInput
+        formControlName="idEmpresa"
+        [matAutocomplete]="autoEmpresa"
+      />
+      <mat-autocomplete
+        #autoEmpresa="matAutocomplete"
+        [displayWith]="displayEmpresa"
       >
-        {{ tipoMovimento.descricao }}
-      </mat-option>
-    </mat-select>
-  </mat-form-field>
+        <mat-option *ngFor="let empresa of listEmpresa" [value]="empresa">
+          {{ displayEmpresa(empresa) }}
+        </mat-option>
+      </mat-autocomplete>
+    </mat-form-field>
 
-  <mat-form-field appearance="outline" class="xs-12 sm-6 md-3 lg-3 xl-2">
-    <mat-label>Tipo Operação</mat-label>
-    <mat-select formControlName="codigoTipoOperacao" multiple>
-      <mat-option [value]="null">Todos</mat-option>
-      <mat-option
-        *ngFor="let tipoOperacao of listTipoOperacao"
-        [value]="tipoOperacao.codigo"
+    <mat-form-field appearance="outline">
+      <mat-label>Parceiro</mat-label>
+      <input
+        matInput
+        formControlName="idParceiro"
+        [matAutocomplete]="autoParceiro"
+      />
+      <mat-autocomplete
+        #autoParceiro="matAutocomplete"
+        [displayWith]="displayParceiro"
       >
-        {{ tipoOperacao.descricao }}
-      </mat-option>
-    </mat-select>
-  </mat-form-field>
+        <mat-option *ngFor="let parceiro of listParceiro" [value]="parceiro">
+          {{ displayParceiro(parceiro) }}
+        </mat-option>
+      </mat-autocomplete>
+    </mat-form-field>
 
-  <mat-form-field appearance="outline" class="xs-12 sm-12 md-6 lg-6 xl-4">
-    <mat-label>Empresa</mat-label>
-    <input
-      matInput
-      formControlName="idEmpresa"
-      [matAutocomplete]="autoEmpresa"
-    />
-    <mat-autocomplete
-      #autoEmpresa="matAutocomplete"
-      [displayWith]="displayEmpresa"
-    >
-      <mat-option *ngFor="let empresa of listEmpresa" [value]="empresa">
-        {{ displayEmpresa(empresa) }}
-      </mat-option>
-    </mat-autocomplete>
-  </mat-form-field>
-
-  <mat-form-field appearance="outline" class="xs-12 sm-12 md-6 lg-6 xl-4">
-    <mat-label>Parceiro</mat-label>
-    <input
-      matInput
-      formControlName="idParceiro"
-      [matAutocomplete]="autoParceiro"
-    />
-    <mat-autocomplete
-      #autoParceiro="matAutocomplete"
-      [displayWith]="displayParceiro"
-    >
-      <mat-option *ngFor="let parceiro of listParceiro" [value]="parceiro">
-        {{ displayParceiro(parceiro) }}
-      </mat-option>
-    </mat-autocomplete>
-  </mat-form-field>
-
-  <mat-form-field appearance="outline" class="xs-12 sm-6 md-3 lg-3 xl-2">
-    <mat-label>Tipo Entrega</mat-label>
-    <mat-select formControlName="codigoTipoEntrega" multiple>
-      <mat-option [value]="null">Todos</mat-option>
-      <mat-option
-        *ngFor="let tipoEntrega of listTipoEntrega"
-        [value]="tipoEntrega.codigo"
-      >
-        {{ tipoEntrega.descricao }}
-      </mat-option>
-    </mat-select>
-  </mat-form-field>
-
-  <button
-    mat-raised-button
-    color="warn"
-    (click)="onLimparCampos()"
-    class="xs-12 sm-6 md-3 lg-3 xl-2"
-  >
-    Limpar campos
-  </button>
-  <button
-    mat-raised-button
-    color="primary"
-    (click)="applyFilter()"
-    class="xs-12 sm-6 md-3 lg-3 xl-2"
-  >
-    Pesquisar
-  </button>
+    <div class="botoes-container">
+      <button mat-raised-button color="warn" (click)="onLimparCampos()">
+        Limpar campos
+      </button>
+      <button mat-raised-button color="primary" (click)="applyFilter()">
+        Pesquisar
+      </button>
+    </div>
+  </div>
 </div>
 
 <!-- Tabela -->
@@ -184,11 +164,6 @@
     <ng-container matColumnDef="numeroNota">
       <mat-header-cell *matHeaderCellDef>Nº Nota</mat-header-cell>
       <mat-cell *matCellDef="let data">{{ data.numeroNota }}</mat-cell>
-    </ng-container>
-
-    <ng-container matColumnDef="numeroModial">
-      <mat-header-cell *matHeaderCellDef>Nº Modial</mat-header-cell>
-      <mat-cell *matCellDef="let data">{{ data.numeroModial }}</mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="numeroConferencia">
@@ -246,18 +221,6 @@
       <mat-header-cell *matHeaderCellDef>Tipo Operação</mat-header-cell>
       <mat-cell *matCellDef="let data">{{
         data.descricaoTipoOperacao
-      }}</mat-cell>
-    </ng-container>
-
-    <ng-container matColumnDef="codigoTipoEntrega">
-      <mat-header-cell *matHeaderCellDef>Código Tipo Entrega</mat-header-cell>
-      <mat-cell *matCellDef="let data">{{ data.codigoTipoEntrega }}</mat-cell>
-    </ng-container>
-
-    <ng-container matColumnDef="descricaoTipoEntrega">
-      <mat-header-cell *matHeaderCellDef>Tipo Entrega</mat-header-cell>
-      <mat-cell *matCellDef="let data">{{
-        data.descricaoTipoEntrega
       }}</mat-cell>
     </ng-container>
 

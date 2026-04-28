@@ -4,4 +4,41 @@
 
 .filtros-container {
   margin-bottom: $space-30;
+
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
 }
+
+.filtros-row {
+  display: grid;
+  gap: 16px;
+}
+
+/* Linha 1 → 4 colunas iguais */
+.filtros-row:nth-child(1) {
+  grid-template-columns: repeat(4, 1fr);
+}
+
+/* Linha 2 → 3 colunas iguais */
+.filtros-row:nth-child(2) {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+/* Linha 3 → 2 campos + botões */
+.filtros-row:nth-child(3) {
+  grid-template-columns: 1fr 1fr auto;
+}
+
+/* Garantir que os campos ocupem tudo */
+mat-form-field {
+  width: 100%;
+}
+
+/* Botões alinhados */
+.botoes-container {
+  display: flex;
+  align-items: flex-end;
+  gap: 12px;
+}
+
